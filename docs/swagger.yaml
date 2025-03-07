@@ -1,0 +1,19 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: support@witchslounge.com
+    name: API Support
+  description: Witch's Lounge Backend API Server
+  title: Witch's Lounge API
+  version: "1.0"
+paths: {}
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
