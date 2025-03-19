@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent"
 	"github.com/witchs-lounge_backend/ent/user"
 	"github.com/witchs-lounge_backend/internal/domain/entity"
@@ -11,8 +12,8 @@ import (
 
 type UserRepository interface {
 	Create(ctx context.Context, user *entity.User) (*entity.User, error)
-	FindAll(ctx context.Context) ([]*entity.User, error)
-	FindByEmail(ctx context.Context, email string) (*entity.User, error)
+	FindBySteamID(ctx context.Context, steamID string) (*entity.User, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*entity.User, error)
 }
 
 type userRepository struct {
@@ -32,23 +33,20 @@ func (r *userRepository) Create(ctx context.Context, user *entity.User) (*entity
 	return entity.FromEntUser(entUser), nil
 }
 
-func (r *userRepository) FindAll(ctx context.Context) ([]*entity.User, error) {
-	entUsers, err := r.client.User.Query().All(ctx)
+func (r *userRepository) FindBySteamID(ctx context.Context, steamID string) (*entity.User, error) {
+	entUser, err := r.client.User.Query().
+		Where(user.SteamID(steamID)).
+		Only(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var users []*entity.User
-	for _, entUser := range entUsers {
-		users = append(users, entity.FromEntUser(entUser))
-	}
-
-	return users, nil
+	return entity.FromEntUser(entUser), nil
 }
 
-func (r *userRepository) FindByEmail(ctx context.Context, email string) (*entity.User, error) {
+func (r *userRepository) FindByID(ctx context.Context, id uuid.UUID) (*entity.User, error) {
 	entUser, err := r.client.User.Query().
-		Where(user.Email(email)).
+		Where(user.ID(id)).
 		Only(ctx)
 	if err != nil {
 		return nil, err

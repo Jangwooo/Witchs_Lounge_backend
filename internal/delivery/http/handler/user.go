@@ -33,14 +33,3 @@ func (h *UserHandler) Create(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(user)
 }
-
-func (h *UserHandler) GetAll(c *fiber.Ctx) error {
-	users, err := h.userUseCase.GetAll(c.Context())
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to get users",
-		})
-	}
-
-	return c.JSON(users)
-}

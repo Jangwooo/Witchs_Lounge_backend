@@ -3,13 +3,15 @@ package usecase
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/internal/domain/entity"
 	"github.com/witchs-lounge_backend/internal/domain/repository"
 )
 
 type UserUseCase interface {
 	Create(ctx context.Context, req *entity.CreateUserRequest) (*entity.UserResponse, error)
-	GetAll(ctx context.Context) ([]*entity.UserResponse, error)
+	FindBySteamID(ctx context.Context, steamID string) (*entity.UserResponse, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error)
 }
 
 type userUseCase struct {
@@ -24,9 +26,8 @@ func NewUserUseCase(userRepo repository.UserRepository) UserUseCase {
 
 func (u *userUseCase) Create(ctx context.Context, req *entity.CreateUserRequest) (*entity.UserResponse, error) {
 	user := &entity.User{
-		Email:    req.Email,
-		Password: req.Password,
-		Name:     req.Name,
+		Nickname: req.Nickname,
+		SteamID:  req.SteamID,
 	}
 
 	createdUser, err := u.userRepo.Create(ctx, user)
@@ -36,29 +37,39 @@ func (u *userUseCase) Create(ctx context.Context, req *entity.CreateUserRequest)
 
 	return &entity.UserResponse{
 		ID:        createdUser.ID,
-		Email:     createdUser.Email,
-		Name:      createdUser.Name,
+		Nickname:  createdUser.Nickname,
+		SteamID:   createdUser.SteamID,
 		CreatedAt: createdUser.CreatedAt,
 		UpdatedAt: createdUser.UpdatedAt,
 	}, nil
 }
 
-func (u *userUseCase) GetAll(ctx context.Context) ([]*entity.UserResponse, error) {
-	users, err := u.userRepo.FindAll(ctx)
+func (u *userUseCase) FindBySteamID(ctx context.Context, steamID string) (*entity.UserResponse, error) {
+	user, err := u.userRepo.FindBySteamID(ctx, steamID)
 	if err != nil {
 		return nil, err
 	}
 
-	var responses []*entity.UserResponse
-	for _, user := range users {
-		responses = append(responses, &entity.UserResponse{
-			ID:        user.ID,
-			Email:     user.Email,
-			Name:      user.Name,
-			CreatedAt: user.CreatedAt,
-			UpdatedAt: user.UpdatedAt,
-		})
+	return &entity.UserResponse{
+		ID:        user.ID,
+		Nickname:  user.Nickname,
+		SteamID:   user.SteamID,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
+}
+
+func (u *userUseCase) FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error) {
+	user, err := u.userRepo.FindByID(ctx, id)
+	if err != nil {
+		return nil, err
 	}
 
-	return responses, nil
+	return &entity.UserResponse{
+		ID:        user.ID,
+		Nickname:  user.Nickname,
+		SteamID:   user.SteamID,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
 }

@@ -6,67 +6,73 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.User {
+func ID(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.User {
+func IDEQ(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.User {
+func IDNEQ(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.User {
+func IDIn(ids ...uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.User {
+func IDNotIn(ids ...uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.User {
+func IDGT(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.User {
+func IDGTE(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.User {
+func IDLT(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.User {
+func IDLTE(id uuid.UUID) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldID, id))
 }
 
-// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
-func Email(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldEmail, v))
+// Nickname applies equality check predicate on the "nickname" field. It's identical to NicknameEQ.
+func Nickname(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNickname, v))
 }
 
-// Password applies equality check predicate on the "password" field. It's identical to PasswordEQ.
-func Password(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldPassword, v))
+// SteamID applies equality check predicate on the "steam_id" field. It's identical to SteamIDEQ.
+func SteamID(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamID, v))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldName, v))
+// SteamAvatarURL applies equality check predicate on the "steam_avatar_url" field. It's identical to SteamAvatarURLEQ.
+func SteamAvatarURL(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamAvatarURL, v))
+}
+
+// SteamDefaultLanguage applies equality check predicate on the "steam_default_language" field. It's identical to SteamDefaultLanguageEQ.
+func SteamDefaultLanguage(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamDefaultLanguage, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -79,199 +85,279 @@ func UpdatedAt(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldEmail, v))
+// LastLoginAt applies equality check predicate on the "last_login_at" field. It's identical to LastLoginAtEQ.
+func LastLoginAt(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLastLoginAt, v))
 }
 
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldEmail, v))
+// NicknameEQ applies the EQ predicate on the "nickname" field.
+func NicknameEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldNickname, v))
 }
 
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldEmail, vs...))
+// NicknameNEQ applies the NEQ predicate on the "nickname" field.
+func NicknameNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldNickname, v))
 }
 
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldEmail, vs...))
+// NicknameIn applies the In predicate on the "nickname" field.
+func NicknameIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldNickname, vs...))
 }
 
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldEmail, v))
+// NicknameNotIn applies the NotIn predicate on the "nickname" field.
+func NicknameNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldNickname, vs...))
 }
 
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldEmail, v))
+// NicknameGT applies the GT predicate on the "nickname" field.
+func NicknameGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldNickname, v))
 }
 
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldEmail, v))
+// NicknameGTE applies the GTE predicate on the "nickname" field.
+func NicknameGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldNickname, v))
 }
 
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldEmail, v))
+// NicknameLT applies the LT predicate on the "nickname" field.
+func NicknameLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldNickname, v))
 }
 
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldEmail, v))
+// NicknameLTE applies the LTE predicate on the "nickname" field.
+func NicknameLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldNickname, v))
 }
 
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldEmail, v))
+// NicknameContains applies the Contains predicate on the "nickname" field.
+func NicknameContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldNickname, v))
 }
 
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldEmail, v))
+// NicknameHasPrefix applies the HasPrefix predicate on the "nickname" field.
+func NicknameHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldNickname, v))
 }
 
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldEmail, v))
+// NicknameHasSuffix applies the HasSuffix predicate on the "nickname" field.
+func NicknameHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldNickname, v))
 }
 
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldEmail, v))
+// NicknameEqualFold applies the EqualFold predicate on the "nickname" field.
+func NicknameEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldNickname, v))
 }
 
-// PasswordEQ applies the EQ predicate on the "password" field.
-func PasswordEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldPassword, v))
+// NicknameContainsFold applies the ContainsFold predicate on the "nickname" field.
+func NicknameContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldNickname, v))
 }
 
-// PasswordNEQ applies the NEQ predicate on the "password" field.
-func PasswordNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldPassword, v))
+// SteamIDEQ applies the EQ predicate on the "steam_id" field.
+func SteamIDEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamID, v))
 }
 
-// PasswordIn applies the In predicate on the "password" field.
-func PasswordIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldPassword, vs...))
+// SteamIDNEQ applies the NEQ predicate on the "steam_id" field.
+func SteamIDNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSteamID, v))
 }
 
-// PasswordNotIn applies the NotIn predicate on the "password" field.
-func PasswordNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldPassword, vs...))
+// SteamIDIn applies the In predicate on the "steam_id" field.
+func SteamIDIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSteamID, vs...))
 }
 
-// PasswordGT applies the GT predicate on the "password" field.
-func PasswordGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldPassword, v))
+// SteamIDNotIn applies the NotIn predicate on the "steam_id" field.
+func SteamIDNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSteamID, vs...))
 }
 
-// PasswordGTE applies the GTE predicate on the "password" field.
-func PasswordGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldPassword, v))
+// SteamIDGT applies the GT predicate on the "steam_id" field.
+func SteamIDGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSteamID, v))
 }
 
-// PasswordLT applies the LT predicate on the "password" field.
-func PasswordLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldPassword, v))
+// SteamIDGTE applies the GTE predicate on the "steam_id" field.
+func SteamIDGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSteamID, v))
 }
 
-// PasswordLTE applies the LTE predicate on the "password" field.
-func PasswordLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldPassword, v))
+// SteamIDLT applies the LT predicate on the "steam_id" field.
+func SteamIDLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSteamID, v))
 }
 
-// PasswordContains applies the Contains predicate on the "password" field.
-func PasswordContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldPassword, v))
+// SteamIDLTE applies the LTE predicate on the "steam_id" field.
+func SteamIDLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSteamID, v))
 }
 
-// PasswordHasPrefix applies the HasPrefix predicate on the "password" field.
-func PasswordHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldPassword, v))
+// SteamIDContains applies the Contains predicate on the "steam_id" field.
+func SteamIDContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldSteamID, v))
 }
 
-// PasswordHasSuffix applies the HasSuffix predicate on the "password" field.
-func PasswordHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldPassword, v))
+// SteamIDHasPrefix applies the HasPrefix predicate on the "steam_id" field.
+func SteamIDHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldSteamID, v))
 }
 
-// PasswordEqualFold applies the EqualFold predicate on the "password" field.
-func PasswordEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldPassword, v))
+// SteamIDHasSuffix applies the HasSuffix predicate on the "steam_id" field.
+func SteamIDHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldSteamID, v))
 }
 
-// PasswordContainsFold applies the ContainsFold predicate on the "password" field.
-func PasswordContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldPassword, v))
+// SteamIDEqualFold applies the EqualFold predicate on the "steam_id" field.
+func SteamIDEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldSteamID, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.User {
-	return predicate.User(sql.FieldEQ(FieldName, v))
+// SteamIDContainsFold applies the ContainsFold predicate on the "steam_id" field.
+func SteamIDContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldSteamID, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.User {
-	return predicate.User(sql.FieldNEQ(FieldName, v))
+// SteamAvatarURLEQ applies the EQ predicate on the "steam_avatar_url" field.
+func SteamAvatarURLEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamAvatarURL, v))
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldIn(FieldName, vs...))
+// SteamAvatarURLNEQ applies the NEQ predicate on the "steam_avatar_url" field.
+func SteamAvatarURLNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSteamAvatarURL, v))
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.User {
-	return predicate.User(sql.FieldNotIn(FieldName, vs...))
+// SteamAvatarURLIn applies the In predicate on the "steam_avatar_url" field.
+func SteamAvatarURLIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSteamAvatarURL, vs...))
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.User {
-	return predicate.User(sql.FieldGT(FieldName, v))
+// SteamAvatarURLNotIn applies the NotIn predicate on the "steam_avatar_url" field.
+func SteamAvatarURLNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSteamAvatarURL, vs...))
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.User {
-	return predicate.User(sql.FieldGTE(FieldName, v))
+// SteamAvatarURLGT applies the GT predicate on the "steam_avatar_url" field.
+func SteamAvatarURLGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSteamAvatarURL, v))
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.User {
-	return predicate.User(sql.FieldLT(FieldName, v))
+// SteamAvatarURLGTE applies the GTE predicate on the "steam_avatar_url" field.
+func SteamAvatarURLGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSteamAvatarURL, v))
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.User {
-	return predicate.User(sql.FieldLTE(FieldName, v))
+// SteamAvatarURLLT applies the LT predicate on the "steam_avatar_url" field.
+func SteamAvatarURLLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSteamAvatarURL, v))
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.User {
-	return predicate.User(sql.FieldContains(FieldName, v))
+// SteamAvatarURLLTE applies the LTE predicate on the "steam_avatar_url" field.
+func SteamAvatarURLLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSteamAvatarURL, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.User {
-	return predicate.User(sql.FieldHasPrefix(FieldName, v))
+// SteamAvatarURLContains applies the Contains predicate on the "steam_avatar_url" field.
+func SteamAvatarURLContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldSteamAvatarURL, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.User {
-	return predicate.User(sql.FieldHasSuffix(FieldName, v))
+// SteamAvatarURLHasPrefix applies the HasPrefix predicate on the "steam_avatar_url" field.
+func SteamAvatarURLHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldSteamAvatarURL, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.User {
-	return predicate.User(sql.FieldEqualFold(FieldName, v))
+// SteamAvatarURLHasSuffix applies the HasSuffix predicate on the "steam_avatar_url" field.
+func SteamAvatarURLHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldSteamAvatarURL, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.User {
-	return predicate.User(sql.FieldContainsFold(FieldName, v))
+// SteamAvatarURLIsNil applies the IsNil predicate on the "steam_avatar_url" field.
+func SteamAvatarURLIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldSteamAvatarURL))
+}
+
+// SteamAvatarURLNotNil applies the NotNil predicate on the "steam_avatar_url" field.
+func SteamAvatarURLNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldSteamAvatarURL))
+}
+
+// SteamAvatarURLEqualFold applies the EqualFold predicate on the "steam_avatar_url" field.
+func SteamAvatarURLEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldSteamAvatarURL, v))
+}
+
+// SteamAvatarURLContainsFold applies the ContainsFold predicate on the "steam_avatar_url" field.
+func SteamAvatarURLContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldSteamAvatarURL, v))
+}
+
+// SteamDefaultLanguageEQ applies the EQ predicate on the "steam_default_language" field.
+func SteamDefaultLanguageEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageNEQ applies the NEQ predicate on the "steam_default_language" field.
+func SteamDefaultLanguageNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageIn applies the In predicate on the "steam_default_language" field.
+func SteamDefaultLanguageIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSteamDefaultLanguage, vs...))
+}
+
+// SteamDefaultLanguageNotIn applies the NotIn predicate on the "steam_default_language" field.
+func SteamDefaultLanguageNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSteamDefaultLanguage, vs...))
+}
+
+// SteamDefaultLanguageGT applies the GT predicate on the "steam_default_language" field.
+func SteamDefaultLanguageGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageGTE applies the GTE predicate on the "steam_default_language" field.
+func SteamDefaultLanguageGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageLT applies the LT predicate on the "steam_default_language" field.
+func SteamDefaultLanguageLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageLTE applies the LTE predicate on the "steam_default_language" field.
+func SteamDefaultLanguageLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageContains applies the Contains predicate on the "steam_default_language" field.
+func SteamDefaultLanguageContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageHasPrefix applies the HasPrefix predicate on the "steam_default_language" field.
+func SteamDefaultLanguageHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageHasSuffix applies the HasSuffix predicate on the "steam_default_language" field.
+func SteamDefaultLanguageHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageEqualFold applies the EqualFold predicate on the "steam_default_language" field.
+func SteamDefaultLanguageEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldSteamDefaultLanguage, v))
+}
+
+// SteamDefaultLanguageContainsFold applies the ContainsFold predicate on the "steam_default_language" field.
+func SteamDefaultLanguageContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldSteamDefaultLanguage, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -352,6 +438,46 @@ func UpdatedAtLT(v time.Time) predicate.User {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// LastLoginAtEQ applies the EQ predicate on the "last_login_at" field.
+func LastLoginAtEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldLastLoginAt, v))
+}
+
+// LastLoginAtNEQ applies the NEQ predicate on the "last_login_at" field.
+func LastLoginAtNEQ(v time.Time) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldLastLoginAt, v))
+}
+
+// LastLoginAtIn applies the In predicate on the "last_login_at" field.
+func LastLoginAtIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldIn(FieldLastLoginAt, vs...))
+}
+
+// LastLoginAtNotIn applies the NotIn predicate on the "last_login_at" field.
+func LastLoginAtNotIn(vs ...time.Time) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldLastLoginAt, vs...))
+}
+
+// LastLoginAtGT applies the GT predicate on the "last_login_at" field.
+func LastLoginAtGT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGT(FieldLastLoginAt, v))
+}
+
+// LastLoginAtGTE applies the GTE predicate on the "last_login_at" field.
+func LastLoginAtGTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldLastLoginAt, v))
+}
+
+// LastLoginAtLT applies the LT predicate on the "last_login_at" field.
+func LastLoginAtLT(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLT(FieldLastLoginAt, v))
+}
+
+// LastLoginAtLTE applies the LTE predicate on the "last_login_at" field.
+func LastLoginAtLTE(v time.Time) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldLastLoginAt, v))
 }
 
 // And groups predicates with the AND operator between them.

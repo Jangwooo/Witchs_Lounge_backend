@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent/schema"
 	"github.com/witchs-lounge_backend/ent/user"
 )
@@ -15,14 +16,26 @@ import (
 func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescSteamDefaultLanguage is the schema descriptor for steam_default_language field.
+	userDescSteamDefaultLanguage := userFields[4].Descriptor()
+	// user.DefaultSteamDefaultLanguage holds the default value on creation for the steam_default_language field.
+	user.DefaultSteamDefaultLanguage = userDescSteamDefaultLanguage.Default.(string)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[3].Descriptor()
+	userDescCreatedAt := userFields[5].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[4].Descriptor()
+	userDescUpdatedAt := userFields[6].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescLastLoginAt is the schema descriptor for last_login_at field.
+	userDescLastLoginAt := userFields[7].Descriptor()
+	// user.DefaultLastLoginAt holds the default value on creation for the last_login_at field.
+	user.DefaultLastLoginAt = userDescLastLoginAt.Default.(func() time.Time)
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

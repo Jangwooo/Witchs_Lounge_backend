@@ -18,5 +18,4 @@ import (
 func NewUserRouter(app *fiber.App, userHandler *handler.UserHandler) {
 	users := app.Group("/api/v1/users")
 	users.Post("/", userHandler.Create)
-	users.Get("/", userHandler.GetAll)
 }

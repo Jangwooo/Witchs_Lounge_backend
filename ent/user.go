@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent/user"
 )
 
@@ -16,17 +17,21 @@ import (
 type User struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
-	// Email holds the value of the "email" field.
-	Email string `json:"email,omitempty"`
-	// Password holds the value of the "password" field.
-	Password string `json:"password,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// Nickname holds the value of the "nickname" field.
+	Nickname string `json:"nickname,omitempty"`
+	// SteamID holds the value of the "steam_id" field.
+	SteamID string `json:"steam_id,omitempty"`
+	// SteamAvatarURL holds the value of the "steam_avatar_url" field.
+	SteamAvatarURL string `json:"steam_avatar_url,omitempty"`
+	// SteamDefaultLanguage holds the value of the "steam_default_language" field.
+	SteamDefaultLanguage string `json:"steam_default_language,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// LastLoginAt holds the value of the "last_login_at" field.
+	LastLoginAt  time.Time `json:"last_login_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -35,12 +40,12 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID:
-			values[i] = new(sql.NullInt64)
-		case user.FieldEmail, user.FieldPassword, user.FieldName:
+		case user.FieldNickname, user.FieldSteamID, user.FieldSteamAvatarURL, user.FieldSteamDefaultLanguage:
 			values[i] = new(sql.NullString)
-		case user.FieldCreatedAt, user.FieldUpdatedAt:
+		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldLastLoginAt:
 			values[i] = new(sql.NullTime)
+		case user.FieldID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -57,28 +62,34 @@ func (u *User) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case user.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				u.ID = *value
 			}
-			u.ID = int(value.Int64)
-		case user.FieldEmail:
+		case user.FieldNickname:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email", values[i])
+				return fmt.Errorf("unexpected type %T for field nickname", values[i])
 			} else if value.Valid {
-				u.Email = value.String
+				u.Nickname = value.String
 			}
-		case user.FieldPassword:
+		case user.FieldSteamID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field password", values[i])
+				return fmt.Errorf("unexpected type %T for field steam_id", values[i])
 			} else if value.Valid {
-				u.Password = value.String
+				u.SteamID = value.String
 			}
-		case user.FieldName:
+		case user.FieldSteamAvatarURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
+				return fmt.Errorf("unexpected type %T for field steam_avatar_url", values[i])
 			} else if value.Valid {
-				u.Name = value.String
+				u.SteamAvatarURL = value.String
+			}
+		case user.FieldSteamDefaultLanguage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field steam_default_language", values[i])
+			} else if value.Valid {
+				u.SteamDefaultLanguage = value.String
 			}
 		case user.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -91,6 +102,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				u.UpdatedAt = value.Time
+			}
+		case user.FieldLastLoginAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
+			} else if value.Valid {
+				u.LastLoginAt = value.Time
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -128,20 +145,26 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
-	builder.WriteString("email=")
-	builder.WriteString(u.Email)
+	builder.WriteString("nickname=")
+	builder.WriteString(u.Nickname)
 	builder.WriteString(", ")
-	builder.WriteString("password=")
-	builder.WriteString(u.Password)
+	builder.WriteString("steam_id=")
+	builder.WriteString(u.SteamID)
 	builder.WriteString(", ")
-	builder.WriteString("name=")
-	builder.WriteString(u.Name)
+	builder.WriteString("steam_avatar_url=")
+	builder.WriteString(u.SteamAvatarURL)
+	builder.WriteString(", ")
+	builder.WriteString("steam_default_language=")
+	builder.WriteString(u.SteamDefaultLanguage)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("last_login_at=")
+	builder.WriteString(u.LastLoginAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

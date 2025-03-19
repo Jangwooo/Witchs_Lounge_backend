@@ -8,26 +8,24 @@ import (
 
 // User represents the domain entity for a user
 type User struct {
-	ID        int       `json:"id"`
-	Email     string    `json:"email"`
-	Password  string    `json:"-"`
-	Name      string    `json:"name"`
+	ID        string    `json:"id"`
+	Nickname  string    `json:"nickname"`
+	SteamID   string    `json:"steam_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // CreateUserRequest represents the request for creating a new user
 type CreateUserRequest struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,min=6"`
-	Name     string `json:"name" validate:"required"`
+	Nickname string `json:"nickname" validate:"required"`
+	SteamID  string `json:"steam_id" validate:"required"`
 }
 
 // UserResponse represents the response for user data
 type UserResponse struct {
-	ID        int       `json:"id"`
-	Email     string    `json:"email"`
-	Name      string    `json:"name"`
+	ID        string    `json:"id"`
+	Nickname  string    `json:"nickname"`
+	SteamID   string    `json:"steam_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -35,10 +33,9 @@ type UserResponse struct {
 // FromEntUser converts an ent.User to our domain User
 func FromEntUser(entUser *ent.User) *User {
 	return &User{
-		ID:        entUser.ID,
-		Email:     entUser.Email,
-		Password:  entUser.Password,
-		Name:      entUser.Name,
+		ID:        entUser.ID.String(),
+		Nickname:  entUser.Nickname,
+		SteamID:   entUser.SteamID,
 		CreatedAt: entUser.CreatedAt,
 		UpdatedAt: entUser.UpdatedAt,
 	}
@@ -47,7 +44,6 @@ func FromEntUser(entUser *ent.User) *User {
 // ToEntUser converts our domain User to ent.User creation parameters
 func (u *User) ToEntUser(client *ent.Client) *ent.UserCreate {
 	return client.User.Create().
-		SetEmail(u.Email).
-		SetPassword(u.Password).
-		SetName(u.Name)
+		SetNickname(u.Nickname).
+		SetSteamID(u.SteamID)
 }

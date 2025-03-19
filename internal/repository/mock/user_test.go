@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/witchs-lounge_backend/ent"
 )
@@ -14,12 +15,9 @@ func TestUserRepository_Create(t *testing.T) {
 	ctx := context.Background()
 
 	expectedUser := &ent.User{
-		ID:        1,
-		Email:     "test@example.com",
-		Password:  "password123",
-		Name:      "Test User",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:        uuid.New(),
+		Nickname:  "test",
+		SteamID:   "1234567890",
 	}
 
 	mockRepo.On("Create", ctx, "test@example.com", "password123", "Test User").
@@ -38,18 +36,16 @@ func TestUserRepository_FindAll(t *testing.T) {
 
 	expectedUsers := []*ent.User{
 		{
-			ID:        1,
-			Email:     "test1@example.com",
-			Password:  "password123",
-			Name:      "Test User 1",
+			ID:        uuid.New(),
+			Nickname:  "test1",
+			SteamID:   "1234567890",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
 		{
-			ID:        2,
-			Email:     "test2@example.com",
-			Password:  "password123",
-			Name:      "Test User 2",
+			ID:        uuid.New(),
+			Nickname:  "test2",
+			SteamID:   "1234567890",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now(),
 		},
@@ -70,10 +66,9 @@ func TestUserRepository_FindByEmail(t *testing.T) {
 	ctx := context.Background()
 
 	expectedUser := &ent.User{
-		ID:        1,
-		Email:     "test@example.com",
-		Password:  "password123",
-		Name:      "Test User",
+		ID:        uuid.New(),
+		Nickname:  "test",
+		SteamID:   "1234567890",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

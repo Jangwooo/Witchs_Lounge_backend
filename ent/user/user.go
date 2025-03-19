@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -13,16 +14,20 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldEmail holds the string denoting the email field in the database.
-	FieldEmail = "email"
-	// FieldPassword holds the string denoting the password field in the database.
-	FieldPassword = "password"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
+	// FieldNickname holds the string denoting the nickname field in the database.
+	FieldNickname = "nickname"
+	// FieldSteamID holds the string denoting the steam_id field in the database.
+	FieldSteamID = "steam_id"
+	// FieldSteamAvatarURL holds the string denoting the steam_avatar_url field in the database.
+	FieldSteamAvatarURL = "steam_avatar_url"
+	// FieldSteamDefaultLanguage holds the string denoting the steam_default_language field in the database.
+	FieldSteamDefaultLanguage = "steam_default_language"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
+	FieldLastLoginAt = "last_login_at"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -30,11 +35,13 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
-	FieldEmail,
-	FieldPassword,
-	FieldName,
+	FieldNickname,
+	FieldSteamID,
+	FieldSteamAvatarURL,
+	FieldSteamDefaultLanguage,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldLastLoginAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -48,12 +55,18 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultSteamDefaultLanguage holds the default value on creation for the "steam_default_language" field.
+	DefaultSteamDefaultLanguage string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultLastLoginAt holds the default value on creation for the "last_login_at" field.
+	DefaultLastLoginAt func() time.Time
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the User queries.
@@ -64,19 +77,24 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByEmail orders the results by the email field.
-func ByEmail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+// ByNickname orders the results by the nickname field.
+func ByNickname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNickname, opts...).ToFunc()
 }
 
-// ByPassword orders the results by the password field.
-func ByPassword(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPassword, opts...).ToFunc()
+// BySteamID orders the results by the steam_id field.
+func BySteamID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSteamID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
+// BySteamAvatarURL orders the results by the steam_avatar_url field.
+func BySteamAvatarURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSteamAvatarURL, opts...).ToFunc()
+}
+
+// BySteamDefaultLanguage orders the results by the steam_default_language field.
+func BySteamDefaultLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSteamDefaultLanguage, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.
@@ -87,4 +105,9 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByLastLoginAt orders the results by the last_login_at field.
+func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
 }
