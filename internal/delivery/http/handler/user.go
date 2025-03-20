@@ -16,18 +16,19 @@ func NewUserHandler(userUseCase usecase.UserUseCase) *UserHandler {
 	}
 }
 
-func (h *UserHandler) Create(c *fiber.Ctx) error {
-	var req entity.CreateUserRequest
+func (h *UserHandler) SignIn(c *fiber.Ctx) error {
+	var req entity.SignInRequest
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid request body",
 		})
 	}
 
-	user, err := h.userUseCase.Create(c.Context(), &req)
+	user, err := h.userUseCase.VerifyAppTicket(c.Context(), req.AppID, req.Ticket)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to create user",
+			"message": "Failed to create user",
+			"error":   err.Error(),
 		})
 	}
 

@@ -15,7 +15,6 @@ func NewEntClient(config *Config) (*ent.Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed opening connection to postgres: %v", err)
 	}
-	defer drv.Close()
 
 	client := ent.NewClient(ent.Driver(drv))
 

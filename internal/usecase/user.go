@@ -9,7 +9,7 @@ import (
 )
 
 type UserUseCase interface {
-	Create(ctx context.Context, req *entity.CreateUserRequest) (*entity.UserResponse, error)
+	VerifyAppTicket(ctx context.Context, appID, ticket string) (*entity.User, error)
 	FindBySteamID(ctx context.Context, steamID string) (*entity.UserResponse, error)
 	FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error)
 }
@@ -24,24 +24,8 @@ func NewUserUseCase(userRepo repository.UserRepository) UserUseCase {
 	}
 }
 
-func (u *userUseCase) Create(ctx context.Context, req *entity.CreateUserRequest) (*entity.UserResponse, error) {
-	user := &entity.User{
-		Nickname: req.Nickname,
-		SteamID:  req.SteamID,
-	}
-
-	createdUser, err := u.userRepo.Create(ctx, user)
-	if err != nil {
-		return nil, err
-	}
-
-	return &entity.UserResponse{
-		ID:        createdUser.ID,
-		Nickname:  createdUser.Nickname,
-		SteamID:   createdUser.SteamID,
-		CreatedAt: createdUser.CreatedAt,
-		UpdatedAt: createdUser.UpdatedAt,
-	}, nil
+func (u *userUseCase) VerifyAppTicket(ctx context.Context, appID, ticket string) (*entity.User, error) {
+	return u.userRepo.VerifyAppTicket(ctx, appID, ticket)
 }
 
 func (u *userUseCase) FindBySteamID(ctx context.Context, steamID string) (*entity.UserResponse, error) {
@@ -50,13 +34,7 @@ func (u *userUseCase) FindBySteamID(ctx context.Context, steamID string) (*entit
 		return nil, err
 	}
 
-	return &entity.UserResponse{
-		ID:        user.ID,
-		Nickname:  user.Nickname,
-		SteamID:   user.SteamID,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+	return user.ToResponse(), nil
 }
 
 func (u *userUseCase) FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error) {
@@ -65,11 +43,5 @@ func (u *userUseCase) FindByID(ctx context.Context, id uuid.UUID) (*entity.UserR
 		return nil, err
 	}
 
-	return &entity.UserResponse{
-		ID:        user.ID,
-		Nickname:  user.Nickname,
-		SteamID:   user.SteamID,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+	return user.ToResponse(), nil
 }

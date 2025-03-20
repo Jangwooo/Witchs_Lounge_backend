@@ -3,47 +3,53 @@ package entity
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent"
 )
 
 // User represents the domain entity for a user
 type User struct {
-	ID        string    `json:"id"`
-	Nickname  string    `json:"nickname"`
-	SteamID   string    `json:"steam_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	*ent.User // ent 엔티티 임베드
 }
 
-// CreateUserRequest represents the request for creating a new user
-type CreateUserRequest struct {
-	Nickname string `json:"nickname" validate:"required"`
-	SteamID  string `json:"steam_id" validate:"required"`
+// SignInRequest represents the request for creating a new user
+type SignInRequest struct {
+	AppID  string `json:"appID"`
+	Ticket string `json:"ticket"`
 }
 
 // UserResponse represents the response for user data
 type UserResponse struct {
-	ID        string    `json:"id"`
-	Nickname  string    `json:"nickname"`
-	SteamID   string    `json:"steam_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID             uuid.UUID `json:"id"`
+	Nickname       string    `json:"nickname"`
+	SteamID        string    `json:"steam_id"`
+	SteamAvatarURL string    `json:"steam_avatar_url"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+// NewUser creates a new User instance
+func NewUser(entUser *ent.User) *User {
+	return &User{
+		User: entUser,
+	}
+}
+
+// ToResponse converts User to UserResponse
+func (u *User) ToResponse() *UserResponse {
+	return &UserResponse{
+		ID:             u.ID,
+		Nickname:       u.Nickname,
+		SteamID:        u.SteamID,
+		SteamAvatarURL: u.SteamAvatarURL,
+		CreatedAt:      u.CreatedAt,
+		UpdatedAt:      u.UpdatedAt,
+	}
 }
 
 // FromEntUser converts an ent.User to our domain User
 func FromEntUser(entUser *ent.User) *User {
 	return &User{
-		ID:        entUser.ID.String(),
-		Nickname:  entUser.Nickname,
-		SteamID:   entUser.SteamID,
-		CreatedAt: entUser.CreatedAt,
-		UpdatedAt: entUser.UpdatedAt,
+		User: entUser,
 	}
-}
-
-// ToEntUser converts our domain User to ent.User creation parameters
-func (u *User) ToEntUser(client *ent.Client) *ent.UserCreate {
-	return client.User.Create().
-		SetNickname(u.Nickname).
-		SetSteamID(u.SteamID)
 }

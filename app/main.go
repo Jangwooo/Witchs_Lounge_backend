@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
 	"github.com/witchs-lounge_backend/internal/delivery/http/handler"
 	"github.com/witchs-lounge_backend/internal/delivery/http/router"
@@ -51,6 +52,8 @@ func main() {
 
 	// Create Fiber app
 	app := fiber.New()
+
+	app.Use(logger.New())
 
 	// Swagger documentation
 	app.Get("/swagger/*", swagger.HandlerDefault)
