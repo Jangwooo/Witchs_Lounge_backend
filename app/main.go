@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -29,7 +30,12 @@ import (
 
 func main() {
 	// Load database configuration
-	dbConfig, err := database.LoadConfig()
+	mode := flag.String("mode", "prod", "mode")
+	flag.Parse()
+
+	log.Printf("Current mode is: %s\n", *mode)
+
+	dbConfig, err := database.LoadConfig(mode)
 	if err != nil {
 		log.Fatalf("Failed to load database config: %v", err)
 	}
@@ -61,7 +67,8 @@ func main() {
 	// Health check
 	app.Get("/api/v1/health", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
-			"status": "ok",
+			"status":      "ok",
+			"server_mode": *mode,
 		})
 	})
 

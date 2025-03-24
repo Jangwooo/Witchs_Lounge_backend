@@ -15,9 +15,17 @@ type Config struct {
 	SSLMode  string
 }
 
-func LoadConfig() (*Config, error) {
-	viper.SetConfigFile(".env")
+func LoadConfig(mode *string) (*Config, error) {
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
 	viper.AutomaticEnv()
+
+	switch *mode {
+	case "dev":
+		viper.SetConfigName(".env")
+	default:
+		viper.SetConfigName(".env.prod")
+	}
 
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("error reading config file: %w", err)
