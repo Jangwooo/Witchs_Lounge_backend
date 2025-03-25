@@ -25,6 +25,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+      - TZ=${DB_TZ}
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -33,6 +34,8 @@ services:
     platform: linux/x86_64 # m1 MacOS의 경우
     image: redis:6.2
     container_name: redis-cluster
+    environment:
+      - TZ=${DB_TZ}
     volumes: # 작성한 설정 파일을 볼륨을 통해 컨테이너에 공유
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -46,6 +49,8 @@ services:
     platform: linux/x86_64
     image: redis:6.2
     container_name: redis-node1
+    environment:
+      - TZ=${DB_TZ}
     volumes:
       - ./redis/redis1.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -64,6 +69,8 @@ services:
     platform: linux/x86_64
     image: redis:6.2
     container_name: redis-cluster-entry
+    environment:
+      - TZ=${DB_TZ}
     command: redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 --cluster-yes
     depends_on:
       - redis-cluster
