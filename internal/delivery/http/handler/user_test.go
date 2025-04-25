@@ -6,12 +6,14 @@ import (
 	"encoding/json"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/witchs-lounge_backend/ent"
+	"github.com/stretchr/testify/require"
 	"github.com/witchs-lounge_backend/internal/domain/entity"
 )
 
@@ -19,12 +21,12 @@ type MockUserUseCase struct {
 	mock.Mock
 }
 
-func (m *MockUserUseCase) VerifyAppTicket(ctx context.Context, appID, ticket string) (*entity.User, error) {
+func (m *MockUserUseCase) VerifyAppTicket(ctx context.Context, appID, ticket string) (*entity.SessionResponse, error) {
 	args := m.Called(ctx, appID, ticket)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
-	return args.Get(0).(*entity.User), args.Error(1)
+	return args.Get(0).(*entity.SessionResponse), args.Error(1)
 }
 
 func (m *MockUserUseCase) FindBySteamID(ctx context.Context, steamID string) (*entity.UserResponse, error) {
@@ -57,44 +59,94 @@ func setupTest() (*fiber.App, *MockUserUseCase) {
 func TestUserHandler_SignIn(t *testing.T) {
 	app, mockUseCase := setupTest()
 
+	// UUID 생성
+	testUUID := uuid.New()
+	testUUID2 := uuid.New()
+	testTime := time.Now()
+
 	tests := []struct {
 		name           string
 		appID          string
 		ticket         string
-		mockUser       *entity.User
-		mockError      error
 		expectedStatus int
 		expectedBody   map[string]interface{}
+		expectCall     func(mockUseCase *MockUserUseCase)
 	}{
 		{
-			name:   "성공_로그인",
-			appID:  "730",
-			ticket: "valid_ticket",
-			mockUser: &entity.User{
-				User: &ent.User{
-					SteamID: "12345",
-				},
-			},
-			mockError:      nil,
+			name:           "성공_로그인",
+			appID:          "123456",
+			ticket:         "76561199380928730", // 티켓 값으로 steam_id 사용
 			expectedStatus: fiber.StatusCreated,
+			expectCall: func(mockUseCase *MockUserUseCase) {
+				userResponse := &entity.UserResponse{
+					ID:             testUUID,
+					SteamID:        "76561199380928730",
+					Nickname:       "User_76561",
+					SteamAvatarURL: "",
+					CreatedAt:      testTime,
+					UpdatedAt:      testTime,
+				}
+				sessionResponse := &entity.SessionResponse{
+					SessionID: "test-session-id",
+					User:      *userResponse,
+				}
+				mockUseCase.On("VerifyAppTicket", mock.Anything, "123456", "76561199380928730").Return(sessionResponse, nil)
+			},
 			expectedBody: map[string]interface{}{
-				"id":            "00000000-0000-0000-0000-000000000000",
-				"steam_id":      "12345",
-				"created_at":    "0001-01-01T00:00:00Z",
-				"updated_at":    "0001-01-01T00:00:00Z",
-				"last_login_at": "0001-01-01T00:00:00Z",
+				"session_id": "test-session-id",
+				"user": map[string]interface{}{
+					"id":               testUUID.String(),
+					"steam_id":         "76561199380928730",
+					"nickname":         "User_76561",
+					"steam_avatar_url": "",
+					"created_at":       mock.Anything,
+					"updated_at":       mock.Anything,
+				},
 			},
 		},
 		{
-			name:           "실패_잘못된_티켓",
-			appID:          "730",
+			name:           "성공_짧은_티켓_로그인",
+			appID:          "123456",
+			ticket:         "1234", // 5글자 미만의 짧은 티켓
+			expectedStatus: fiber.StatusCreated,
+			expectCall: func(mockUseCase *MockUserUseCase) {
+				userResponse := &entity.UserResponse{
+					ID:             testUUID2,
+					SteamID:        "1234",
+					Nickname:       "User_1234", // 전체 ID 사용
+					SteamAvatarURL: "",
+					CreatedAt:      testTime,
+					UpdatedAt:      testTime,
+				}
+				sessionResponse := &entity.SessionResponse{
+					SessionID: "test-session-id-2",
+					User:      *userResponse,
+				}
+				mockUseCase.On("VerifyAppTicket", mock.Anything, "123456", "1234").Return(sessionResponse, nil)
+			},
+			expectedBody: map[string]interface{}{
+				"session_id": "test-session-id-2",
+				"user": map[string]interface{}{
+					"id":               testUUID2.String(),
+					"steam_id":         "1234",
+					"nickname":         "User_1234",
+					"steam_avatar_url": "",
+					"created_at":       mock.Anything,
+					"updated_at":       mock.Anything,
+				},
+			},
+		},
+		{
+			name:           "실패_로그인",
+			appID:          "123456",
 			ticket:         "invalid_ticket",
-			mockUser:       nil,
-			mockError:      fiber.NewError(fiber.StatusBadRequest, "invalid ticket"),
 			expectedStatus: fiber.StatusInternalServerError,
+			expectCall: func(mockUseCase *MockUserUseCase) {
+				mockUseCase.On("VerifyAppTicket", mock.Anything, "123456", "invalid_ticket").Return(nil, errors.New("사용자 조회 중 오류 발생"))
+			},
 			expectedBody: map[string]interface{}{
 				"message": "Failed to create user",
-				"error":   "invalid ticket",
+				"error":   "사용자 조회 중 오류 발생",
 			},
 		},
 	}
@@ -102,7 +154,7 @@ func TestUserHandler_SignIn(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Mock setup
-			mockUseCase.On("VerifyAppTicket", mock.Anything, tt.appID, tt.ticket).Return(tt.mockUser, tt.mockError)
+			tt.expectCall(mockUseCase)
 
 			// Create request
 			reqBody := map[string]string{
@@ -126,7 +178,27 @@ func TestUserHandler_SignIn(t *testing.T) {
 			assert.NoError(t, err)
 
 			// Check response body
-			assert.Equal(t, tt.expectedBody, result)
+			if tt.name == "성공_로그인" || tt.name == "성공_짧은_티켓_로그인" {
+				// 세션 ID 확인
+				require.Equal(t, tt.expectedBody["session_id"], result["session_id"])
+
+				// 사용자 정보 확인
+				userResult := result["user"].(map[string]interface{})
+				userExpected := tt.expectedBody["user"].(map[string]interface{})
+
+				for k, v := range userExpected {
+					if k == "created_at" || k == "updated_at" {
+						require.Contains(t, userResult, k)
+					} else {
+						require.Equal(t, v, userResult[k])
+					}
+				}
+			} else {
+				// 에러 케이스
+				for k, v := range tt.expectedBody {
+					require.Equal(t, v, result[k])
+				}
+			}
 		})
 	}
 }

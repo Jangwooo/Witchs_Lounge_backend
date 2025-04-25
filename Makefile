@@ -1,13 +1,13 @@
 SHELL = /bin/bash
 
-dev-compose-start:
+dev-start:
 	docker-compose --env-file .env.prod -f docker-compose.dev.yml up --build
 
-prod-compose-start:
+prod-start:
 	docker pull kjw2262/witchs_lounge_backend:latest
 	docker-compose --env-file .env.prod -f docker-compose.prod.yml up --build
 
-manual-docker-hub-push:
+manual-push:
 	docker build -f Dockerfile.prod -t kjw2262/witchs_lounge_backend:latest .
 	docker push kjw2262/witchs_lounge_backend:latest
 

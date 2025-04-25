@@ -33,51 +33,18 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
-  redis-cluster:
+  redis:
     platform: linux/x86_64 # m1 MacOS의 경우
     image: redis:6.2
-    container_name: redis-cluster
+    container_name: redis
     environment:
       - TZ=${DB_TZ}
-    volumes: # 작성한 설정 파일을 볼륨을 통해 컨테이너에 공유
+    volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - "6380:6380"
-      - "6381:6381"
       - "6379:6379"
+    restart: unless-stopped
 
-  redis-node-1:
-    network_mode: "service:redis-cluster"
-    platform: linux/x86_64
-    image: redis:6.2
-    container_name: redis-node1
-    environment:
-      - TZ=${DB_TZ}
-    volumes:
-      - ./redis/redis1.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
-
-  redis-node-2:
-    network_mode: "service:redis-cluster"
-    platform: linux/x86_64
-    image: redis:6.2
-    container_name: redis-node2
-    volumes:
-      - ./redis/redis2.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
-
-  redis-cluster-entry:
-    network_mode: "service:redis-cluster"
-    platform: linux/x86_64
-    image: redis:6.2
-    container_name: redis-cluster-entry
-    environment:
-      - TZ=${DB_TZ}
-    command: redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 --cluster-yes
-    depends_on:
-      - redis-cluster
-      - redis-node-1
-      - redis-node-2
 volumes:
   postgres_data:
