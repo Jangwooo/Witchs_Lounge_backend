@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -28,8 +29,37 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
 	FieldLastLoginAt = "last_login_at"
+	// FieldCustomizeData holds the string denoting the customize_data field in the database.
+	FieldCustomizeData = "customize_data"
+	// FieldSaveData holds the string denoting the save_data field in the database.
+	FieldSaveData = "save_data"
+	// EdgePurchasedProducts holds the string denoting the purchased_products edge name in mutations.
+	EdgePurchasedProducts = "purchased_products"
+	// EdgeRecords holds the string denoting the records edge name in mutations.
+	EdgeRecords = "records"
+	// EdgeUserPurchases holds the string denoting the user_purchases edge name in mutations.
+	EdgeUserPurchases = "user_purchases"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// PurchasedProductsTable is the table that holds the purchased_products relation/edge. The primary key declared below.
+	PurchasedProductsTable = "user_purchases"
+	// PurchasedProductsInverseTable is the table name for the Product entity.
+	// It exists in this package in order to avoid circular dependency with the "product" package.
+	PurchasedProductsInverseTable = "products"
+	// RecordsTable is the table that holds the records relation/edge.
+	RecordsTable = "records"
+	// RecordsInverseTable is the table name for the Record entity.
+	// It exists in this package in order to avoid circular dependency with the "record" package.
+	RecordsInverseTable = "records"
+	// RecordsColumn is the table column denoting the records relation/edge.
+	RecordsColumn = "user_id"
+	// UserPurchasesTable is the table that holds the user_purchases relation/edge.
+	UserPurchasesTable = "user_purchases"
+	// UserPurchasesInverseTable is the table name for the UserPurchase entity.
+	// It exists in this package in order to avoid circular dependency with the "userpurchase" package.
+	UserPurchasesInverseTable = "user_purchases"
+	// UserPurchasesColumn is the table column denoting the user_purchases relation/edge.
+	UserPurchasesColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -42,7 +72,15 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldLastLoginAt,
+	FieldCustomizeData,
+	FieldSaveData,
 }
+
+var (
+	// PurchasedProductsPrimaryKey and PurchasedProductsColumn2 are the table columns denoting the
+	// primary key for the purchased_products relation (M2M).
+	PurchasedProductsPrimaryKey = []string{"user_id", "product_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -65,6 +103,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultLastLoginAt holds the default value on creation for the "last_login_at" field.
 	DefaultLastLoginAt func() time.Time
+	// DefaultCustomizeData holds the default value on creation for the "customize_data" field.
+	DefaultCustomizeData string
+	// DefaultSaveData holds the default value on creation for the "save_data" field.
+	DefaultSaveData string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -110,4 +152,77 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLastLoginAt orders the results by the last_login_at field.
 func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
+}
+
+// ByCustomizeData orders the results by the customize_data field.
+func ByCustomizeData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCustomizeData, opts...).ToFunc()
+}
+
+// BySaveData orders the results by the save_data field.
+func BySaveData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSaveData, opts...).ToFunc()
+}
+
+// ByPurchasedProductsCount orders the results by purchased_products count.
+func ByPurchasedProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPurchasedProductsStep(), opts...)
+	}
+}
+
+// ByPurchasedProducts orders the results by purchased_products terms.
+func ByPurchasedProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPurchasedProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRecordsCount orders the results by records count.
+func ByRecordsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRecordsStep(), opts...)
+	}
+}
+
+// ByRecords orders the results by records terms.
+func ByRecords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRecordsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByUserPurchasesCount orders the results by user_purchases count.
+func ByUserPurchasesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserPurchasesStep(), opts...)
+	}
+}
+
+// ByUserPurchases orders the results by user_purchases terms.
+func ByUserPurchases(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserPurchasesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newPurchasedProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PurchasedProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PurchasedProductsTable, PurchasedProductsPrimaryKey...),
+	)
+}
+func newRecordsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RecordsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RecordsTable, RecordsColumn),
+	)
+}
+func newUserPurchasesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserPurchasesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, UserPurchasesTable, UserPurchasesColumn),
+	)
 }

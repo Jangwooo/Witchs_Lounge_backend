@@ -12,7 +12,15 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/witchs-lounge_backend/ent/character"
+	"github.com/witchs-lounge_backend/ent/item"
+	"github.com/witchs-lounge_backend/ent/music"
+	"github.com/witchs-lounge_backend/ent/product"
+	"github.com/witchs-lounge_backend/ent/quest"
+	"github.com/witchs-lounge_backend/ent/record"
+	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -73,7 +81,15 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			user.Table: user.ValidColumn,
+			character.Table:    character.ValidColumn,
+			item.Table:         item.ValidColumn,
+			music.Table:        music.ValidColumn,
+			product.Table:      product.ValidColumn,
+			quest.Table:        quest.ValidColumn,
+			record.Table:       record.ValidColumn,
+			stage.Table:        stage.ValidColumn,
+			user.Table:         user.ValidColumn,
+			userpurchase.Table: userpurchase.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

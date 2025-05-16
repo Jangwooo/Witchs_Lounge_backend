@@ -31,8 +31,55 @@ type User struct {
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// LastLoginAt holds the value of the "last_login_at" field.
-	LastLoginAt  time.Time `json:"last_login_at,omitempty"`
+	LastLoginAt time.Time `json:"last_login_at,omitempty"`
+	// CustomizeData holds the value of the "customize_data" field.
+	CustomizeData *string `json:"customize_data,omitempty"`
+	// SaveData holds the value of the "save_data" field.
+	SaveData *string `json:"save_data,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// PurchasedProducts holds the value of the purchased_products edge.
+	PurchasedProducts []*Product `json:"purchased_products,omitempty"`
+	// Records holds the value of the records edge.
+	Records []*Record `json:"records,omitempty"`
+	// UserPurchases holds the value of the user_purchases edge.
+	UserPurchases []*UserPurchase `json:"user_purchases,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [3]bool
+}
+
+// PurchasedProductsOrErr returns the PurchasedProducts value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) PurchasedProductsOrErr() ([]*Product, error) {
+	if e.loadedTypes[0] {
+		return e.PurchasedProducts, nil
+	}
+	return nil, &NotLoadedError{edge: "purchased_products"}
+}
+
+// RecordsOrErr returns the Records value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) RecordsOrErr() ([]*Record, error) {
+	if e.loadedTypes[1] {
+		return e.Records, nil
+	}
+	return nil, &NotLoadedError{edge: "records"}
+}
+
+// UserPurchasesOrErr returns the UserPurchases value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) UserPurchasesOrErr() ([]*UserPurchase, error) {
+	if e.loadedTypes[2] {
+		return e.UserPurchases, nil
+	}
+	return nil, &NotLoadedError{edge: "user_purchases"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -40,7 +87,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldNickname, user.FieldSteamID, user.FieldSteamAvatarURL, user.FieldSteamDefaultLanguage:
+		case user.FieldNickname, user.FieldSteamID, user.FieldSteamAvatarURL, user.FieldSteamDefaultLanguage, user.FieldCustomizeData, user.FieldSaveData:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt, user.FieldLastLoginAt:
 			values[i] = new(sql.NullTime)
@@ -109,6 +156,20 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.LastLoginAt = value.Time
 			}
+		case user.FieldCustomizeData:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field customize_data", values[i])
+			} else if value.Valid {
+				u.CustomizeData = new(string)
+				*u.CustomizeData = value.String
+			}
+		case user.FieldSaveData:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field save_data", values[i])
+			} else if value.Valid {
+				u.SaveData = new(string)
+				*u.SaveData = value.String
+			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
 		}
@@ -120,6 +181,21 @@ func (u *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (u *User) Value(name string) (ent.Value, error) {
 	return u.selectValues.Get(name)
+}
+
+// QueryPurchasedProducts queries the "purchased_products" edge of the User entity.
+func (u *User) QueryPurchasedProducts() *ProductQuery {
+	return NewUserClient(u.config).QueryPurchasedProducts(u)
+}
+
+// QueryRecords queries the "records" edge of the User entity.
+func (u *User) QueryRecords() *RecordQuery {
+	return NewUserClient(u.config).QueryRecords(u)
+}
+
+// QueryUserPurchases queries the "user_purchases" edge of the User entity.
+func (u *User) QueryUserPurchases() *UserPurchaseQuery {
+	return NewUserClient(u.config).QueryUserPurchases(u)
 }
 
 // Update returns a builder for updating this User.
@@ -165,6 +241,16 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_login_at=")
 	builder.WriteString(u.LastLoginAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := u.CustomizeData; v != nil {
+		builder.WriteString("customize_data=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := u.SaveData; v != nil {
+		builder.WriteString("save_data=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

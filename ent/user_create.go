@@ -11,7 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/product"
+	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -103,6 +106,34 @@ func (uc *UserCreate) SetNillableLastLoginAt(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetCustomizeData sets the "customize_data" field.
+func (uc *UserCreate) SetCustomizeData(s string) *UserCreate {
+	uc.mutation.SetCustomizeData(s)
+	return uc
+}
+
+// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCustomizeData(s *string) *UserCreate {
+	if s != nil {
+		uc.SetCustomizeData(*s)
+	}
+	return uc
+}
+
+// SetSaveData sets the "save_data" field.
+func (uc *UserCreate) SetSaveData(s string) *UserCreate {
+	uc.mutation.SetSaveData(s)
+	return uc
+}
+
+// SetNillableSaveData sets the "save_data" field if the given value is not nil.
+func (uc *UserCreate) SetNillableSaveData(s *string) *UserCreate {
+	if s != nil {
+		uc.SetSaveData(*s)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
 	uc.mutation.SetID(u)
@@ -115,6 +146,51 @@ func (uc *UserCreate) SetNillableID(u *uuid.UUID) *UserCreate {
 		uc.SetID(*u)
 	}
 	return uc
+}
+
+// AddPurchasedProductIDs adds the "purchased_products" edge to the Product entity by IDs.
+func (uc *UserCreate) AddPurchasedProductIDs(ids ...uuid.UUID) *UserCreate {
+	uc.mutation.AddPurchasedProductIDs(ids...)
+	return uc
+}
+
+// AddPurchasedProducts adds the "purchased_products" edges to the Product entity.
+func (uc *UserCreate) AddPurchasedProducts(p ...*Product) *UserCreate {
+	ids := make([]uuid.UUID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uc.AddPurchasedProductIDs(ids...)
+}
+
+// AddRecordIDs adds the "records" edge to the Record entity by IDs.
+func (uc *UserCreate) AddRecordIDs(ids ...uuid.UUID) *UserCreate {
+	uc.mutation.AddRecordIDs(ids...)
+	return uc
+}
+
+// AddRecords adds the "records" edges to the Record entity.
+func (uc *UserCreate) AddRecords(r ...*Record) *UserCreate {
+	ids := make([]uuid.UUID, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uc.AddRecordIDs(ids...)
+}
+
+// AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
+func (uc *UserCreate) AddUserPurchaseIDs(ids ...uuid.UUID) *UserCreate {
+	uc.mutation.AddUserPurchaseIDs(ids...)
+	return uc
+}
+
+// AddUserPurchases adds the "user_purchases" edges to the UserPurchase entity.
+func (uc *UserCreate) AddUserPurchases(u ...*UserPurchase) *UserCreate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uc.AddUserPurchaseIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -167,6 +243,14 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.LastLoginAt(); !ok {
 		v := user.DefaultLastLoginAt()
 		uc.mutation.SetLastLoginAt(v)
+	}
+	if _, ok := uc.mutation.CustomizeData(); !ok {
+		v := user.DefaultCustomizeData
+		uc.mutation.SetCustomizeData(v)
+	}
+	if _, ok := uc.mutation.SaveData(); !ok {
+		v := user.DefaultSaveData
+		uc.mutation.SetSaveData(v)
 	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
@@ -256,6 +340,69 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 		_node.LastLoginAt = value
+	}
+	if value, ok := uc.mutation.CustomizeData(); ok {
+		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
+		_node.CustomizeData = &value
+	}
+	if value, ok := uc.mutation.SaveData(); ok {
+		_spec.SetField(user.FieldSaveData, field.TypeString, value)
+		_node.SaveData = &value
+	}
+	if nodes := uc.mutation.PurchasedProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &UserPurchaseCreate{config: uc.config, mutation: newUserPurchaseMutation(uc.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.RecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserPurchasesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

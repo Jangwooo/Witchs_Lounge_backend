@@ -6,5 +6,29 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Character is the predicate function for character builders.
+type Character func(*sql.Selector)
+
+// Item is the predicate function for item builders.
+type Item func(*sql.Selector)
+
+// Music is the predicate function for music builders.
+type Music func(*sql.Selector)
+
+// Product is the predicate function for product builders.
+type Product func(*sql.Selector)
+
+// Quest is the predicate function for quest builders.
+type Quest func(*sql.Selector)
+
+// Record is the predicate function for record builders.
+type Record func(*sql.Selector)
+
+// Stage is the predicate function for stage builders.
+type Stage func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// UserPurchase is the predicate function for userpurchase builders.
+type UserPurchase func(*sql.Selector)

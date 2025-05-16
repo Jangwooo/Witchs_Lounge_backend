@@ -11,8 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent/predicate"
+	"github.com/witchs-lounge_backend/ent/product"
+	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -96,9 +100,157 @@ func (uu *UserUpdate) SetNillableLastLoginAt(t *time.Time) *UserUpdate {
 	return uu
 }
 
+// SetCustomizeData sets the "customize_data" field.
+func (uu *UserUpdate) SetCustomizeData(s string) *UserUpdate {
+	uu.mutation.SetCustomizeData(s)
+	return uu
+}
+
+// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCustomizeData(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetCustomizeData(*s)
+	}
+	return uu
+}
+
+// ClearCustomizeData clears the value of the "customize_data" field.
+func (uu *UserUpdate) ClearCustomizeData() *UserUpdate {
+	uu.mutation.ClearCustomizeData()
+	return uu
+}
+
+// SetSaveData sets the "save_data" field.
+func (uu *UserUpdate) SetSaveData(s string) *UserUpdate {
+	uu.mutation.SetSaveData(s)
+	return uu
+}
+
+// SetNillableSaveData sets the "save_data" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableSaveData(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetSaveData(*s)
+	}
+	return uu
+}
+
+// ClearSaveData clears the value of the "save_data" field.
+func (uu *UserUpdate) ClearSaveData() *UserUpdate {
+	uu.mutation.ClearSaveData()
+	return uu
+}
+
+// AddPurchasedProductIDs adds the "purchased_products" edge to the Product entity by IDs.
+func (uu *UserUpdate) AddPurchasedProductIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.AddPurchasedProductIDs(ids...)
+	return uu
+}
+
+// AddPurchasedProducts adds the "purchased_products" edges to the Product entity.
+func (uu *UserUpdate) AddPurchasedProducts(p ...*Product) *UserUpdate {
+	ids := make([]uuid.UUID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.AddPurchasedProductIDs(ids...)
+}
+
+// AddRecordIDs adds the "records" edge to the Record entity by IDs.
+func (uu *UserUpdate) AddRecordIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.AddRecordIDs(ids...)
+	return uu
+}
+
+// AddRecords adds the "records" edges to the Record entity.
+func (uu *UserUpdate) AddRecords(r ...*Record) *UserUpdate {
+	ids := make([]uuid.UUID, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uu.AddRecordIDs(ids...)
+}
+
+// AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
+func (uu *UserUpdate) AddUserPurchaseIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.AddUserPurchaseIDs(ids...)
+	return uu
+}
+
+// AddUserPurchases adds the "user_purchases" edges to the UserPurchase entity.
+func (uu *UserUpdate) AddUserPurchases(u ...*UserPurchase) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.AddUserPurchaseIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
+}
+
+// ClearPurchasedProducts clears all "purchased_products" edges to the Product entity.
+func (uu *UserUpdate) ClearPurchasedProducts() *UserUpdate {
+	uu.mutation.ClearPurchasedProducts()
+	return uu
+}
+
+// RemovePurchasedProductIDs removes the "purchased_products" edge to Product entities by IDs.
+func (uu *UserUpdate) RemovePurchasedProductIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.RemovePurchasedProductIDs(ids...)
+	return uu
+}
+
+// RemovePurchasedProducts removes "purchased_products" edges to Product entities.
+func (uu *UserUpdate) RemovePurchasedProducts(p ...*Product) *UserUpdate {
+	ids := make([]uuid.UUID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.RemovePurchasedProductIDs(ids...)
+}
+
+// ClearRecords clears all "records" edges to the Record entity.
+func (uu *UserUpdate) ClearRecords() *UserUpdate {
+	uu.mutation.ClearRecords()
+	return uu
+}
+
+// RemoveRecordIDs removes the "records" edge to Record entities by IDs.
+func (uu *UserUpdate) RemoveRecordIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.RemoveRecordIDs(ids...)
+	return uu
+}
+
+// RemoveRecords removes "records" edges to Record entities.
+func (uu *UserUpdate) RemoveRecords(r ...*Record) *UserUpdate {
+	ids := make([]uuid.UUID, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uu.RemoveRecordIDs(ids...)
+}
+
+// ClearUserPurchases clears all "user_purchases" edges to the UserPurchase entity.
+func (uu *UserUpdate) ClearUserPurchases() *UserUpdate {
+	uu.mutation.ClearUserPurchases()
+	return uu
+}
+
+// RemoveUserPurchaseIDs removes the "user_purchases" edge to UserPurchase entities by IDs.
+func (uu *UserUpdate) RemoveUserPurchaseIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.RemoveUserPurchaseIDs(ids...)
+	return uu
+}
+
+// RemoveUserPurchases removes "user_purchases" edges to UserPurchase entities.
+func (uu *UserUpdate) RemoveUserPurchases(u ...*UserPurchase) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.RemoveUserPurchaseIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -163,6 +315,174 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
+	}
+	if value, ok := uu.mutation.CustomizeData(); ok {
+		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
+	}
+	if uu.mutation.CustomizeDataCleared() {
+		_spec.ClearField(user.FieldCustomizeData, field.TypeString)
+	}
+	if value, ok := uu.mutation.SaveData(); ok {
+		_spec.SetField(user.FieldSaveData, field.TypeString, value)
+	}
+	if uu.mutation.SaveDataCleared() {
+		_spec.ClearField(user.FieldSaveData, field.TypeString)
+	}
+	if uu.mutation.PurchasedProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		createE := &UserPurchaseCreate{config: uu.config, mutation: newUserPurchaseMutation(uu.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedPurchasedProductsIDs(); len(nodes) > 0 && !uu.mutation.PurchasedProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &UserPurchaseCreate{config: uu.config, mutation: newUserPurchaseMutation(uu.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.PurchasedProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &UserPurchaseCreate{config: uu.config, mutation: newUserPurchaseMutation(uu.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.RecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedRecordsIDs(); len(nodes) > 0 && !uu.mutation.RecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.UserPurchasesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserPurchasesIDs(); len(nodes) > 0 && !uu.mutation.UserPurchasesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserPurchasesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -252,9 +572,157 @@ func (uuo *UserUpdateOne) SetNillableLastLoginAt(t *time.Time) *UserUpdateOne {
 	return uuo
 }
 
+// SetCustomizeData sets the "customize_data" field.
+func (uuo *UserUpdateOne) SetCustomizeData(s string) *UserUpdateOne {
+	uuo.mutation.SetCustomizeData(s)
+	return uuo
+}
+
+// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCustomizeData(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetCustomizeData(*s)
+	}
+	return uuo
+}
+
+// ClearCustomizeData clears the value of the "customize_data" field.
+func (uuo *UserUpdateOne) ClearCustomizeData() *UserUpdateOne {
+	uuo.mutation.ClearCustomizeData()
+	return uuo
+}
+
+// SetSaveData sets the "save_data" field.
+func (uuo *UserUpdateOne) SetSaveData(s string) *UserUpdateOne {
+	uuo.mutation.SetSaveData(s)
+	return uuo
+}
+
+// SetNillableSaveData sets the "save_data" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableSaveData(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetSaveData(*s)
+	}
+	return uuo
+}
+
+// ClearSaveData clears the value of the "save_data" field.
+func (uuo *UserUpdateOne) ClearSaveData() *UserUpdateOne {
+	uuo.mutation.ClearSaveData()
+	return uuo
+}
+
+// AddPurchasedProductIDs adds the "purchased_products" edge to the Product entity by IDs.
+func (uuo *UserUpdateOne) AddPurchasedProductIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.AddPurchasedProductIDs(ids...)
+	return uuo
+}
+
+// AddPurchasedProducts adds the "purchased_products" edges to the Product entity.
+func (uuo *UserUpdateOne) AddPurchasedProducts(p ...*Product) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.AddPurchasedProductIDs(ids...)
+}
+
+// AddRecordIDs adds the "records" edge to the Record entity by IDs.
+func (uuo *UserUpdateOne) AddRecordIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.AddRecordIDs(ids...)
+	return uuo
+}
+
+// AddRecords adds the "records" edges to the Record entity.
+func (uuo *UserUpdateOne) AddRecords(r ...*Record) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uuo.AddRecordIDs(ids...)
+}
+
+// AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
+func (uuo *UserUpdateOne) AddUserPurchaseIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.AddUserPurchaseIDs(ids...)
+	return uuo
+}
+
+// AddUserPurchases adds the "user_purchases" edges to the UserPurchase entity.
+func (uuo *UserUpdateOne) AddUserPurchases(u ...*UserPurchase) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.AddUserPurchaseIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
+}
+
+// ClearPurchasedProducts clears all "purchased_products" edges to the Product entity.
+func (uuo *UserUpdateOne) ClearPurchasedProducts() *UserUpdateOne {
+	uuo.mutation.ClearPurchasedProducts()
+	return uuo
+}
+
+// RemovePurchasedProductIDs removes the "purchased_products" edge to Product entities by IDs.
+func (uuo *UserUpdateOne) RemovePurchasedProductIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.RemovePurchasedProductIDs(ids...)
+	return uuo
+}
+
+// RemovePurchasedProducts removes "purchased_products" edges to Product entities.
+func (uuo *UserUpdateOne) RemovePurchasedProducts(p ...*Product) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.RemovePurchasedProductIDs(ids...)
+}
+
+// ClearRecords clears all "records" edges to the Record entity.
+func (uuo *UserUpdateOne) ClearRecords() *UserUpdateOne {
+	uuo.mutation.ClearRecords()
+	return uuo
+}
+
+// RemoveRecordIDs removes the "records" edge to Record entities by IDs.
+func (uuo *UserUpdateOne) RemoveRecordIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.RemoveRecordIDs(ids...)
+	return uuo
+}
+
+// RemoveRecords removes "records" edges to Record entities.
+func (uuo *UserUpdateOne) RemoveRecords(r ...*Record) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return uuo.RemoveRecordIDs(ids...)
+}
+
+// ClearUserPurchases clears all "user_purchases" edges to the UserPurchase entity.
+func (uuo *UserUpdateOne) ClearUserPurchases() *UserUpdateOne {
+	uuo.mutation.ClearUserPurchases()
+	return uuo
+}
+
+// RemoveUserPurchaseIDs removes the "user_purchases" edge to UserPurchase entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserPurchaseIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.RemoveUserPurchaseIDs(ids...)
+	return uuo
+}
+
+// RemoveUserPurchases removes "user_purchases" edges to UserPurchase entities.
+func (uuo *UserUpdateOne) RemoveUserPurchases(u ...*UserPurchase) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.RemoveUserPurchaseIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -349,6 +817,174 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
+	}
+	if value, ok := uuo.mutation.CustomizeData(); ok {
+		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
+	}
+	if uuo.mutation.CustomizeDataCleared() {
+		_spec.ClearField(user.FieldCustomizeData, field.TypeString)
+	}
+	if value, ok := uuo.mutation.SaveData(); ok {
+		_spec.SetField(user.FieldSaveData, field.TypeString, value)
+	}
+	if uuo.mutation.SaveDataCleared() {
+		_spec.ClearField(user.FieldSaveData, field.TypeString)
+	}
+	if uuo.mutation.PurchasedProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		createE := &UserPurchaseCreate{config: uuo.config, mutation: newUserPurchaseMutation(uuo.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedPurchasedProductsIDs(); len(nodes) > 0 && !uuo.mutation.PurchasedProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &UserPurchaseCreate{config: uuo.config, mutation: newUserPurchaseMutation(uuo.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.PurchasedProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.PurchasedProductsTable,
+			Columns: user.PurchasedProductsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &UserPurchaseCreate{config: uuo.config, mutation: newUserPurchaseMutation(uuo.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.RecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedRecordsIDs(); len(nodes) > 0 && !uuo.mutation.RecordsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RecordsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.RecordsTable,
+			Columns: []string{user.RecordsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserPurchasesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserPurchasesIDs(); len(nodes) > 0 && !uuo.mutation.UserPurchasesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserPurchasesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.UserPurchasesTable,
+			Columns: []string{user.UserPurchasesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userpurchase.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

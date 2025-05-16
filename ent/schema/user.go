@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
@@ -25,6 +26,9 @@ func (User) Fields() []ent.Field {
 		field.Time("created_at").Immutable().Default(time.Now),
 		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 		field.Time("last_login_at").Default(time.Now),
+
+		field.Text("customize_data").Default("{}").Nillable().Optional(),
+		field.Text("save_data").Default("{}").Nillable().Optional(),
 	}
 }
 
@@ -32,6 +36,9 @@ func (User) Fields() []ent.Field {
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		// Add edges here
+		edge.To("purchased_products", Product.Type).
+			Through("user_purchases", UserPurchase.Type),
+		edge.To("records", Record.Type),
 	}
 }
 

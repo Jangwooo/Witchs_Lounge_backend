@@ -6,14 +6,109 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/character"
+	"github.com/witchs-lounge_backend/ent/item"
+	"github.com/witchs-lounge_backend/ent/music"
+	"github.com/witchs-lounge_backend/ent/product"
+	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/schema"
+	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	characterFields := schema.Character{}.Fields()
+	_ = characterFields
+	// characterDescName is the schema descriptor for name field.
+	characterDescName := characterFields[1].Descriptor()
+	// character.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	character.NameValidator = characterDescName.Validators[0].(func(string) error)
+	// characterDescID is the schema descriptor for id field.
+	characterDescID := characterFields[0].Descriptor()
+	// character.DefaultID holds the default value on creation for the id field.
+	character.DefaultID = characterDescID.Default.(func() uuid.UUID)
+	itemFields := schema.Item{}.Fields()
+	_ = itemFields
+	// itemDescName is the schema descriptor for name field.
+	itemDescName := itemFields[1].Descriptor()
+	// item.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	item.NameValidator = itemDescName.Validators[0].(func(string) error)
+	// itemDescID is the schema descriptor for id field.
+	itemDescID := itemFields[0].Descriptor()
+	// item.DefaultID holds the default value on creation for the id field.
+	item.DefaultID = itemDescID.Default.(func() uuid.UUID)
+	musicFields := schema.Music{}.Fields()
+	_ = musicFields
+	// musicDescID is the schema descriptor for id field.
+	musicDescID := musicFields[0].Descriptor()
+	// music.DefaultID holds the default value on creation for the id field.
+	music.DefaultID = musicDescID.Default.(func() uuid.UUID)
+	productFields := schema.Product{}.Fields()
+	_ = productFields
+	// productDescName is the schema descriptor for name field.
+	productDescName := productFields[1].Descriptor()
+	// product.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	product.NameValidator = productDescName.Validators[0].(func(string) error)
+	// productDescPrice is the schema descriptor for price field.
+	productDescPrice := productFields[3].Descriptor()
+	// product.PriceValidator is a validator for the "price" field. It is called by the builders before save.
+	product.PriceValidator = productDescPrice.Validators[0].(func(float64) error)
+	// productDescID is the schema descriptor for id field.
+	productDescID := productFields[0].Descriptor()
+	// product.DefaultID holds the default value on creation for the id field.
+	product.DefaultID = productDescID.Default.(func() uuid.UUID)
+	recordFields := schema.Record{}.Fields()
+	_ = recordFields
+	// recordDescPerfectCount is the schema descriptor for perfect_count field.
+	recordDescPerfectCount := recordFields[6].Descriptor()
+	// record.DefaultPerfectCount holds the default value on creation for the perfect_count field.
+	record.DefaultPerfectCount = recordDescPerfectCount.Default.(int)
+	// recordDescGoodCount is the schema descriptor for good_count field.
+	recordDescGoodCount := recordFields[7].Descriptor()
+	// record.DefaultGoodCount holds the default value on creation for the good_count field.
+	record.DefaultGoodCount = recordDescGoodCount.Default.(int)
+	// recordDescBadCount is the schema descriptor for bad_count field.
+	recordDescBadCount := recordFields[8].Descriptor()
+	// record.DefaultBadCount holds the default value on creation for the bad_count field.
+	record.DefaultBadCount = recordDescBadCount.Default.(int)
+	// recordDescMissCount is the schema descriptor for miss_count field.
+	recordDescMissCount := recordFields[9].Descriptor()
+	// record.DefaultMissCount holds the default value on creation for the miss_count field.
+	record.DefaultMissCount = recordDescMissCount.Default.(int)
+	// recordDescPlayedAt is the schema descriptor for played_at field.
+	recordDescPlayedAt := recordFields[10].Descriptor()
+	// record.DefaultPlayedAt holds the default value on creation for the played_at field.
+	record.DefaultPlayedAt = recordDescPlayedAt.Default.(func() time.Time)
+	// recordDescAccuracy is the schema descriptor for accuracy field.
+	recordDescAccuracy := recordFields[11].Descriptor()
+	// record.DefaultAccuracy holds the default value on creation for the accuracy field.
+	record.DefaultAccuracy = recordDescAccuracy.Default.(float64)
+	// recordDescID is the schema descriptor for id field.
+	recordDescID := recordFields[0].Descriptor()
+	// record.DefaultID holds the default value on creation for the id field.
+	record.DefaultID = recordDescID.Default.(func() uuid.UUID)
+	stageFields := schema.Stage{}.Fields()
+	_ = stageFields
+	// stageDescLevelName is the schema descriptor for level_name field.
+	stageDescLevelName := stageFields[2].Descriptor()
+	// stage.LevelNameValidator is a validator for the "level_name" field. It is called by the builders before save.
+	stage.LevelNameValidator = stageDescLevelName.Validators[0].(func(string) error)
+	// stageDescLevelAddress is the schema descriptor for level_address field.
+	stageDescLevelAddress := stageFields[3].Descriptor()
+	// stage.LevelAddressValidator is a validator for the "level_address" field. It is called by the builders before save.
+	stage.LevelAddressValidator = stageDescLevelAddress.Validators[0].(func(string) error)
+	// stageDescJacketAddress is the schema descriptor for jacket_address field.
+	stageDescJacketAddress := stageFields[4].Descriptor()
+	// stage.JacketAddressValidator is a validator for the "jacket_address" field. It is called by the builders before save.
+	stage.JacketAddressValidator = stageDescJacketAddress.Validators[0].(func(string) error)
+	// stageDescID is the schema descriptor for id field.
+	stageDescID := stageFields[0].Descriptor()
+	// stage.DefaultID holds the default value on creation for the id field.
+	stage.DefaultID = stageDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescSteamDefaultLanguage is the schema descriptor for steam_default_language field.
@@ -34,8 +129,26 @@ func init() {
 	userDescLastLoginAt := userFields[7].Descriptor()
 	// user.DefaultLastLoginAt holds the default value on creation for the last_login_at field.
 	user.DefaultLastLoginAt = userDescLastLoginAt.Default.(func() time.Time)
+	// userDescCustomizeData is the schema descriptor for customize_data field.
+	userDescCustomizeData := userFields[8].Descriptor()
+	// user.DefaultCustomizeData holds the default value on creation for the customize_data field.
+	user.DefaultCustomizeData = userDescCustomizeData.Default.(string)
+	// userDescSaveData is the schema descriptor for save_data field.
+	userDescSaveData := userFields[9].Descriptor()
+	// user.DefaultSaveData holds the default value on creation for the save_data field.
+	user.DefaultSaveData = userDescSaveData.Default.(string)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() uuid.UUID)
+	userpurchaseFields := schema.UserPurchase{}.Fields()
+	_ = userpurchaseFields
+	// userpurchaseDescPurchaseDate is the schema descriptor for purchase_date field.
+	userpurchaseDescPurchaseDate := userpurchaseFields[3].Descriptor()
+	// userpurchase.DefaultPurchaseDate holds the default value on creation for the purchase_date field.
+	userpurchase.DefaultPurchaseDate = userpurchaseDescPurchaseDate.Default.(func() time.Time)
+	// userpurchaseDescID is the schema descriptor for id field.
+	userpurchaseDescID := userpurchaseFields[0].Descriptor()
+	// userpurchase.DefaultID holds the default value on creation for the id field.
+	userpurchase.DefaultID = userpurchaseDescID.Default.(func() uuid.UUID)
 }

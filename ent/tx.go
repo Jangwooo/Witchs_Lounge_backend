@@ -12,8 +12,24 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// Character is the client for interacting with the Character builders.
+	Character *CharacterClient
+	// Item is the client for interacting with the Item builders.
+	Item *ItemClient
+	// Music is the client for interacting with the Music builders.
+	Music *MusicClient
+	// Product is the client for interacting with the Product builders.
+	Product *ProductClient
+	// Quest is the client for interacting with the Quest builders.
+	Quest *QuestClient
+	// Record is the client for interacting with the Record builders.
+	Record *RecordClient
+	// Stage is the client for interacting with the Stage builders.
+	Stage *StageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserPurchase is the client for interacting with the UserPurchase builders.
+	UserPurchase *UserPurchaseClient
 
 	// lazily loaded.
 	client     *Client
@@ -145,7 +161,15 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.Character = NewCharacterClient(tx.config)
+	tx.Item = NewItemClient(tx.config)
+	tx.Music = NewMusicClient(tx.config)
+	tx.Product = NewProductClient(tx.config)
+	tx.Quest = NewQuestClient(tx.config)
+	tx.Record = NewRecordClient(tx.config)
+	tx.Stage = NewStageClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.UserPurchase = NewUserPurchaseClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -155,7 +179,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: User.QueryXXX(), the query will be executed
+// applies a query, for example: Character.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

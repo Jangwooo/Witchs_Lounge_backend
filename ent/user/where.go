@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 	"github.com/witchs-lounge_backend/ent/predicate"
 )
@@ -88,6 +89,16 @@ func UpdatedAt(v time.Time) predicate.User {
 // LastLoginAt applies equality check predicate on the "last_login_at" field. It's identical to LastLoginAtEQ.
 func LastLoginAt(v time.Time) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldLastLoginAt, v))
+}
+
+// CustomizeData applies equality check predicate on the "customize_data" field. It's identical to CustomizeDataEQ.
+func CustomizeData(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCustomizeData, v))
+}
+
+// SaveData applies equality check predicate on the "save_data" field. It's identical to SaveDataEQ.
+func SaveData(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSaveData, v))
 }
 
 // NicknameEQ applies the EQ predicate on the "nickname" field.
@@ -478,6 +489,225 @@ func LastLoginAtLT(v time.Time) predicate.User {
 // LastLoginAtLTE applies the LTE predicate on the "last_login_at" field.
 func LastLoginAtLTE(v time.Time) predicate.User {
 	return predicate.User(sql.FieldLTE(FieldLastLoginAt, v))
+}
+
+// CustomizeDataEQ applies the EQ predicate on the "customize_data" field.
+func CustomizeDataEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldCustomizeData, v))
+}
+
+// CustomizeDataNEQ applies the NEQ predicate on the "customize_data" field.
+func CustomizeDataNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldCustomizeData, v))
+}
+
+// CustomizeDataIn applies the In predicate on the "customize_data" field.
+func CustomizeDataIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldCustomizeData, vs...))
+}
+
+// CustomizeDataNotIn applies the NotIn predicate on the "customize_data" field.
+func CustomizeDataNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldCustomizeData, vs...))
+}
+
+// CustomizeDataGT applies the GT predicate on the "customize_data" field.
+func CustomizeDataGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldCustomizeData, v))
+}
+
+// CustomizeDataGTE applies the GTE predicate on the "customize_data" field.
+func CustomizeDataGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldCustomizeData, v))
+}
+
+// CustomizeDataLT applies the LT predicate on the "customize_data" field.
+func CustomizeDataLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldCustomizeData, v))
+}
+
+// CustomizeDataLTE applies the LTE predicate on the "customize_data" field.
+func CustomizeDataLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldCustomizeData, v))
+}
+
+// CustomizeDataContains applies the Contains predicate on the "customize_data" field.
+func CustomizeDataContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldCustomizeData, v))
+}
+
+// CustomizeDataHasPrefix applies the HasPrefix predicate on the "customize_data" field.
+func CustomizeDataHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldCustomizeData, v))
+}
+
+// CustomizeDataHasSuffix applies the HasSuffix predicate on the "customize_data" field.
+func CustomizeDataHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldCustomizeData, v))
+}
+
+// CustomizeDataIsNil applies the IsNil predicate on the "customize_data" field.
+func CustomizeDataIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldCustomizeData))
+}
+
+// CustomizeDataNotNil applies the NotNil predicate on the "customize_data" field.
+func CustomizeDataNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldCustomizeData))
+}
+
+// CustomizeDataEqualFold applies the EqualFold predicate on the "customize_data" field.
+func CustomizeDataEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldCustomizeData, v))
+}
+
+// CustomizeDataContainsFold applies the ContainsFold predicate on the "customize_data" field.
+func CustomizeDataContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldCustomizeData, v))
+}
+
+// SaveDataEQ applies the EQ predicate on the "save_data" field.
+func SaveDataEQ(v string) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldSaveData, v))
+}
+
+// SaveDataNEQ applies the NEQ predicate on the "save_data" field.
+func SaveDataNEQ(v string) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldSaveData, v))
+}
+
+// SaveDataIn applies the In predicate on the "save_data" field.
+func SaveDataIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldIn(FieldSaveData, vs...))
+}
+
+// SaveDataNotIn applies the NotIn predicate on the "save_data" field.
+func SaveDataNotIn(vs ...string) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldSaveData, vs...))
+}
+
+// SaveDataGT applies the GT predicate on the "save_data" field.
+func SaveDataGT(v string) predicate.User {
+	return predicate.User(sql.FieldGT(FieldSaveData, v))
+}
+
+// SaveDataGTE applies the GTE predicate on the "save_data" field.
+func SaveDataGTE(v string) predicate.User {
+	return predicate.User(sql.FieldGTE(FieldSaveData, v))
+}
+
+// SaveDataLT applies the LT predicate on the "save_data" field.
+func SaveDataLT(v string) predicate.User {
+	return predicate.User(sql.FieldLT(FieldSaveData, v))
+}
+
+// SaveDataLTE applies the LTE predicate on the "save_data" field.
+func SaveDataLTE(v string) predicate.User {
+	return predicate.User(sql.FieldLTE(FieldSaveData, v))
+}
+
+// SaveDataContains applies the Contains predicate on the "save_data" field.
+func SaveDataContains(v string) predicate.User {
+	return predicate.User(sql.FieldContains(FieldSaveData, v))
+}
+
+// SaveDataHasPrefix applies the HasPrefix predicate on the "save_data" field.
+func SaveDataHasPrefix(v string) predicate.User {
+	return predicate.User(sql.FieldHasPrefix(FieldSaveData, v))
+}
+
+// SaveDataHasSuffix applies the HasSuffix predicate on the "save_data" field.
+func SaveDataHasSuffix(v string) predicate.User {
+	return predicate.User(sql.FieldHasSuffix(FieldSaveData, v))
+}
+
+// SaveDataIsNil applies the IsNil predicate on the "save_data" field.
+func SaveDataIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldSaveData))
+}
+
+// SaveDataNotNil applies the NotNil predicate on the "save_data" field.
+func SaveDataNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldSaveData))
+}
+
+// SaveDataEqualFold applies the EqualFold predicate on the "save_data" field.
+func SaveDataEqualFold(v string) predicate.User {
+	return predicate.User(sql.FieldEqualFold(FieldSaveData, v))
+}
+
+// SaveDataContainsFold applies the ContainsFold predicate on the "save_data" field.
+func SaveDataContainsFold(v string) predicate.User {
+	return predicate.User(sql.FieldContainsFold(FieldSaveData, v))
+}
+
+// HasPurchasedProducts applies the HasEdge predicate on the "purchased_products" edge.
+func HasPurchasedProducts() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PurchasedProductsTable, PurchasedProductsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPurchasedProductsWith applies the HasEdge predicate on the "purchased_products" edge with a given conditions (other predicates).
+func HasPurchasedProductsWith(preds ...predicate.Product) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newPurchasedProductsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRecords applies the HasEdge predicate on the "records" edge.
+func HasRecords() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RecordsTable, RecordsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRecordsWith applies the HasEdge predicate on the "records" edge with a given conditions (other predicates).
+func HasRecordsWith(preds ...predicate.Record) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newRecordsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUserPurchases applies the HasEdge predicate on the "user_purchases" edge.
+func HasUserPurchases() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, UserPurchasesTable, UserPurchasesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserPurchasesWith applies the HasEdge predicate on the "user_purchases" edge with a given conditions (other predicates).
+func HasUserPurchasesWith(preds ...predicate.UserPurchase) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newUserPurchasesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

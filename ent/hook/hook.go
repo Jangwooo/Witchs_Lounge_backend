@@ -9,6 +9,90 @@ import (
 	"github.com/witchs-lounge_backend/ent"
 )
 
+// The CharacterFunc type is an adapter to allow the use of ordinary
+// function as Character mutator.
+type CharacterFunc func(context.Context, *ent.CharacterMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CharacterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CharacterMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CharacterMutation", m)
+}
+
+// The ItemFunc type is an adapter to allow the use of ordinary
+// function as Item mutator.
+type ItemFunc func(context.Context, *ent.ItemMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ItemFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ItemMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ItemMutation", m)
+}
+
+// The MusicFunc type is an adapter to allow the use of ordinary
+// function as Music mutator.
+type MusicFunc func(context.Context, *ent.MusicMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MusicFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MusicMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MusicMutation", m)
+}
+
+// The ProductFunc type is an adapter to allow the use of ordinary
+// function as Product mutator.
+type ProductFunc func(context.Context, *ent.ProductMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProductFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProductMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
+}
+
+// The QuestFunc type is an adapter to allow the use of ordinary
+// function as Quest mutator.
+type QuestFunc func(context.Context, *ent.QuestMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f QuestFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.QuestMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.QuestMutation", m)
+}
+
+// The RecordFunc type is an adapter to allow the use of ordinary
+// function as Record mutator.
+type RecordFunc func(context.Context, *ent.RecordMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RecordFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.RecordMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RecordMutation", m)
+}
+
+// The StageFunc type is an adapter to allow the use of ordinary
+// function as Stage mutator.
+type StageFunc func(context.Context, *ent.StageMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f StageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.StageMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.StageMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
@@ -19,6 +103,18 @@ func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error)
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+}
+
+// The UserPurchaseFunc type is an adapter to allow the use of ordinary
+// function as UserPurchase mutator.
+type UserPurchaseFunc func(context.Context, *ent.UserPurchaseMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UserPurchaseFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.UserPurchaseMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserPurchaseMutation", m)
 }
 
 // Condition is a hook condition function.
