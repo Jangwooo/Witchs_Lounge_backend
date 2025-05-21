@@ -21,134 +21,228 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	characterMixin := schema.Character{}.Mixin()
+	characterMixinFields0 := characterMixin[0].Fields()
+	_ = characterMixinFields0
 	characterFields := schema.Character{}.Fields()
 	_ = characterFields
+	// characterDescCreatedAt is the schema descriptor for created_at field.
+	characterDescCreatedAt := characterMixinFields0[1].Descriptor()
+	// character.DefaultCreatedAt holds the default value on creation for the created_at field.
+	character.DefaultCreatedAt = characterDescCreatedAt.Default.(func() time.Time)
+	// characterDescUpdatedAt is the schema descriptor for updated_at field.
+	characterDescUpdatedAt := characterMixinFields0[2].Descriptor()
+	// character.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	character.DefaultUpdatedAt = characterDescUpdatedAt.Default.(func() time.Time)
+	// character.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	character.UpdateDefaultUpdatedAt = characterDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// characterDescName is the schema descriptor for name field.
-	characterDescName := characterFields[1].Descriptor()
+	characterDescName := characterFields[0].Descriptor()
 	// character.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	character.NameValidator = characterDescName.Validators[0].(func(string) error)
 	// characterDescID is the schema descriptor for id field.
-	characterDescID := characterFields[0].Descriptor()
+	characterDescID := characterMixinFields0[0].Descriptor()
 	// character.DefaultID holds the default value on creation for the id field.
 	character.DefaultID = characterDescID.Default.(func() uuid.UUID)
+	itemMixin := schema.Item{}.Mixin()
+	itemMixinFields0 := itemMixin[0].Fields()
+	_ = itemMixinFields0
 	itemFields := schema.Item{}.Fields()
 	_ = itemFields
+	// itemDescCreatedAt is the schema descriptor for created_at field.
+	itemDescCreatedAt := itemMixinFields0[1].Descriptor()
+	// item.DefaultCreatedAt holds the default value on creation for the created_at field.
+	item.DefaultCreatedAt = itemDescCreatedAt.Default.(func() time.Time)
+	// itemDescUpdatedAt is the schema descriptor for updated_at field.
+	itemDescUpdatedAt := itemMixinFields0[2].Descriptor()
+	// item.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	item.DefaultUpdatedAt = itemDescUpdatedAt.Default.(func() time.Time)
+	// item.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	item.UpdateDefaultUpdatedAt = itemDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// itemDescName is the schema descriptor for name field.
-	itemDescName := itemFields[1].Descriptor()
+	itemDescName := itemFields[0].Descriptor()
 	// item.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	item.NameValidator = itemDescName.Validators[0].(func(string) error)
 	// itemDescID is the schema descriptor for id field.
-	itemDescID := itemFields[0].Descriptor()
+	itemDescID := itemMixinFields0[0].Descriptor()
 	// item.DefaultID holds the default value on creation for the id field.
 	item.DefaultID = itemDescID.Default.(func() uuid.UUID)
+	musicMixin := schema.Music{}.Mixin()
+	musicMixinFields0 := musicMixin[0].Fields()
+	_ = musicMixinFields0
 	musicFields := schema.Music{}.Fields()
 	_ = musicFields
+	// musicDescCreatedAt is the schema descriptor for created_at field.
+	musicDescCreatedAt := musicMixinFields0[1].Descriptor()
+	// music.DefaultCreatedAt holds the default value on creation for the created_at field.
+	music.DefaultCreatedAt = musicDescCreatedAt.Default.(func() time.Time)
+	// musicDescUpdatedAt is the schema descriptor for updated_at field.
+	musicDescUpdatedAt := musicMixinFields0[2].Descriptor()
+	// music.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	music.DefaultUpdatedAt = musicDescUpdatedAt.Default.(func() time.Time)
+	// music.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	music.UpdateDefaultUpdatedAt = musicDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// musicDescID is the schema descriptor for id field.
-	musicDescID := musicFields[0].Descriptor()
+	musicDescID := musicMixinFields0[0].Descriptor()
 	// music.DefaultID holds the default value on creation for the id field.
 	music.DefaultID = musicDescID.Default.(func() uuid.UUID)
+	productMixin := schema.Product{}.Mixin()
+	productMixinFields0 := productMixin[0].Fields()
+	_ = productMixinFields0
 	productFields := schema.Product{}.Fields()
 	_ = productFields
+	// productDescCreatedAt is the schema descriptor for created_at field.
+	productDescCreatedAt := productMixinFields0[1].Descriptor()
+	// product.DefaultCreatedAt holds the default value on creation for the created_at field.
+	product.DefaultCreatedAt = productDescCreatedAt.Default.(func() time.Time)
+	// productDescUpdatedAt is the schema descriptor for updated_at field.
+	productDescUpdatedAt := productMixinFields0[2].Descriptor()
+	// product.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	product.DefaultUpdatedAt = productDescUpdatedAt.Default.(func() time.Time)
+	// product.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	product.UpdateDefaultUpdatedAt = productDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// productDescName is the schema descriptor for name field.
-	productDescName := productFields[1].Descriptor()
+	productDescName := productFields[0].Descriptor()
 	// product.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	product.NameValidator = productDescName.Validators[0].(func(string) error)
 	// productDescPrice is the schema descriptor for price field.
-	productDescPrice := productFields[3].Descriptor()
+	productDescPrice := productFields[2].Descriptor()
 	// product.PriceValidator is a validator for the "price" field. It is called by the builders before save.
 	product.PriceValidator = productDescPrice.Validators[0].(func(float64) error)
 	// productDescID is the schema descriptor for id field.
-	productDescID := productFields[0].Descriptor()
+	productDescID := productMixinFields0[0].Descriptor()
 	// product.DefaultID holds the default value on creation for the id field.
 	product.DefaultID = productDescID.Default.(func() uuid.UUID)
+	recordMixin := schema.Record{}.Mixin()
+	recordMixinFields0 := recordMixin[0].Fields()
+	_ = recordMixinFields0
 	recordFields := schema.Record{}.Fields()
 	_ = recordFields
+	// recordDescCreatedAt is the schema descriptor for created_at field.
+	recordDescCreatedAt := recordMixinFields0[1].Descriptor()
+	// record.DefaultCreatedAt holds the default value on creation for the created_at field.
+	record.DefaultCreatedAt = recordDescCreatedAt.Default.(func() time.Time)
+	// recordDescUpdatedAt is the schema descriptor for updated_at field.
+	recordDescUpdatedAt := recordMixinFields0[2].Descriptor()
+	// record.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	record.DefaultUpdatedAt = recordDescUpdatedAt.Default.(func() time.Time)
+	// record.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	record.UpdateDefaultUpdatedAt = recordDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// recordDescPerfectCount is the schema descriptor for perfect_count field.
-	recordDescPerfectCount := recordFields[6].Descriptor()
+	recordDescPerfectCount := recordFields[5].Descriptor()
 	// record.DefaultPerfectCount holds the default value on creation for the perfect_count field.
 	record.DefaultPerfectCount = recordDescPerfectCount.Default.(int)
 	// recordDescGoodCount is the schema descriptor for good_count field.
-	recordDescGoodCount := recordFields[7].Descriptor()
+	recordDescGoodCount := recordFields[6].Descriptor()
 	// record.DefaultGoodCount holds the default value on creation for the good_count field.
 	record.DefaultGoodCount = recordDescGoodCount.Default.(int)
 	// recordDescBadCount is the schema descriptor for bad_count field.
-	recordDescBadCount := recordFields[8].Descriptor()
+	recordDescBadCount := recordFields[7].Descriptor()
 	// record.DefaultBadCount holds the default value on creation for the bad_count field.
 	record.DefaultBadCount = recordDescBadCount.Default.(int)
 	// recordDescMissCount is the schema descriptor for miss_count field.
-	recordDescMissCount := recordFields[9].Descriptor()
+	recordDescMissCount := recordFields[8].Descriptor()
 	// record.DefaultMissCount holds the default value on creation for the miss_count field.
 	record.DefaultMissCount = recordDescMissCount.Default.(int)
 	// recordDescPlayedAt is the schema descriptor for played_at field.
-	recordDescPlayedAt := recordFields[10].Descriptor()
+	recordDescPlayedAt := recordFields[9].Descriptor()
 	// record.DefaultPlayedAt holds the default value on creation for the played_at field.
 	record.DefaultPlayedAt = recordDescPlayedAt.Default.(func() time.Time)
 	// recordDescAccuracy is the schema descriptor for accuracy field.
-	recordDescAccuracy := recordFields[11].Descriptor()
+	recordDescAccuracy := recordFields[10].Descriptor()
 	// record.DefaultAccuracy holds the default value on creation for the accuracy field.
 	record.DefaultAccuracy = recordDescAccuracy.Default.(float64)
 	// recordDescID is the schema descriptor for id field.
-	recordDescID := recordFields[0].Descriptor()
+	recordDescID := recordMixinFields0[0].Descriptor()
 	// record.DefaultID holds the default value on creation for the id field.
 	record.DefaultID = recordDescID.Default.(func() uuid.UUID)
+	stageMixin := schema.Stage{}.Mixin()
+	stageMixinFields0 := stageMixin[0].Fields()
+	_ = stageMixinFields0
 	stageFields := schema.Stage{}.Fields()
 	_ = stageFields
+	// stageDescCreatedAt is the schema descriptor for created_at field.
+	stageDescCreatedAt := stageMixinFields0[1].Descriptor()
+	// stage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	stage.DefaultCreatedAt = stageDescCreatedAt.Default.(func() time.Time)
+	// stageDescUpdatedAt is the schema descriptor for updated_at field.
+	stageDescUpdatedAt := stageMixinFields0[2].Descriptor()
+	// stage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	stage.DefaultUpdatedAt = stageDescUpdatedAt.Default.(func() time.Time)
+	// stage.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	stage.UpdateDefaultUpdatedAt = stageDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// stageDescLevelName is the schema descriptor for level_name field.
-	stageDescLevelName := stageFields[2].Descriptor()
+	stageDescLevelName := stageFields[1].Descriptor()
 	// stage.LevelNameValidator is a validator for the "level_name" field. It is called by the builders before save.
 	stage.LevelNameValidator = stageDescLevelName.Validators[0].(func(string) error)
 	// stageDescLevelAddress is the schema descriptor for level_address field.
-	stageDescLevelAddress := stageFields[3].Descriptor()
+	stageDescLevelAddress := stageFields[2].Descriptor()
 	// stage.LevelAddressValidator is a validator for the "level_address" field. It is called by the builders before save.
 	stage.LevelAddressValidator = stageDescLevelAddress.Validators[0].(func(string) error)
 	// stageDescJacketAddress is the schema descriptor for jacket_address field.
-	stageDescJacketAddress := stageFields[4].Descriptor()
+	stageDescJacketAddress := stageFields[3].Descriptor()
 	// stage.JacketAddressValidator is a validator for the "jacket_address" field. It is called by the builders before save.
 	stage.JacketAddressValidator = stageDescJacketAddress.Validators[0].(func(string) error)
 	// stageDescID is the schema descriptor for id field.
-	stageDescID := stageFields[0].Descriptor()
+	stageDescID := stageMixinFields0[0].Descriptor()
 	// stage.DefaultID holds the default value on creation for the id field.
 	stage.DefaultID = stageDescID.Default.(func() uuid.UUID)
+	userMixin := schema.User{}.Mixin()
+	userMixinFields0 := userMixin[0].Fields()
+	_ = userMixinFields0
 	userFields := schema.User{}.Fields()
 	_ = userFields
-	// userDescSteamDefaultLanguage is the schema descriptor for steam_default_language field.
-	userDescSteamDefaultLanguage := userFields[4].Descriptor()
-	// user.DefaultSteamDefaultLanguage holds the default value on creation for the steam_default_language field.
-	user.DefaultSteamDefaultLanguage = userDescSteamDefaultLanguage.Default.(string)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[5].Descriptor()
+	userDescCreatedAt := userMixinFields0[1].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[6].Descriptor()
+	userDescUpdatedAt := userMixinFields0[2].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescSteamDefaultLanguage is the schema descriptor for steam_default_language field.
+	userDescSteamDefaultLanguage := userFields[3].Descriptor()
+	// user.DefaultSteamDefaultLanguage holds the default value on creation for the steam_default_language field.
+	user.DefaultSteamDefaultLanguage = userDescSteamDefaultLanguage.Default.(string)
 	// userDescLastLoginAt is the schema descriptor for last_login_at field.
-	userDescLastLoginAt := userFields[7].Descriptor()
+	userDescLastLoginAt := userFields[4].Descriptor()
 	// user.DefaultLastLoginAt holds the default value on creation for the last_login_at field.
 	user.DefaultLastLoginAt = userDescLastLoginAt.Default.(func() time.Time)
 	// userDescCustomizeData is the schema descriptor for customize_data field.
-	userDescCustomizeData := userFields[8].Descriptor()
+	userDescCustomizeData := userFields[5].Descriptor()
 	// user.DefaultCustomizeData holds the default value on creation for the customize_data field.
 	user.DefaultCustomizeData = userDescCustomizeData.Default.(string)
 	// userDescSaveData is the schema descriptor for save_data field.
-	userDescSaveData := userFields[9].Descriptor()
+	userDescSaveData := userFields[6].Descriptor()
 	// user.DefaultSaveData holds the default value on creation for the save_data field.
 	user.DefaultSaveData = userDescSaveData.Default.(string)
 	// userDescID is the schema descriptor for id field.
-	userDescID := userFields[0].Descriptor()
+	userDescID := userMixinFields0[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() uuid.UUID)
+	userpurchaseMixin := schema.UserPurchase{}.Mixin()
+	userpurchaseMixinFields0 := userpurchaseMixin[0].Fields()
+	_ = userpurchaseMixinFields0
 	userpurchaseFields := schema.UserPurchase{}.Fields()
 	_ = userpurchaseFields
+	// userpurchaseDescCreatedAt is the schema descriptor for created_at field.
+	userpurchaseDescCreatedAt := userpurchaseMixinFields0[1].Descriptor()
+	// userpurchase.DefaultCreatedAt holds the default value on creation for the created_at field.
+	userpurchase.DefaultCreatedAt = userpurchaseDescCreatedAt.Default.(func() time.Time)
+	// userpurchaseDescUpdatedAt is the schema descriptor for updated_at field.
+	userpurchaseDescUpdatedAt := userpurchaseMixinFields0[2].Descriptor()
+	// userpurchase.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	userpurchase.DefaultUpdatedAt = userpurchaseDescUpdatedAt.Default.(func() time.Time)
+	// userpurchase.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	userpurchase.UpdateDefaultUpdatedAt = userpurchaseDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// userpurchaseDescPurchaseDate is the schema descriptor for purchase_date field.
-	userpurchaseDescPurchaseDate := userpurchaseFields[3].Descriptor()
+	userpurchaseDescPurchaseDate := userpurchaseFields[2].Descriptor()
 	// userpurchase.DefaultPurchaseDate holds the default value on creation for the purchase_date field.
 	userpurchase.DefaultPurchaseDate = userpurchaseDescPurchaseDate.Default.(func() time.Time)
 	// userpurchaseDescID is the schema descriptor for id field.
-	userpurchaseDescID := userpurchaseFields[0].Descriptor()
+	userpurchaseDescID := userpurchaseMixinFields0[0].Descriptor()
 	// userpurchase.DefaultID holds the default value on creation for the id field.
 	userpurchase.DefaultID = userpurchaseDescID.Default.(func() uuid.UUID)
 }

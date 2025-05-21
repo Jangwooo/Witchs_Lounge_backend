@@ -57,18 +57,6 @@ func (f ProductFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
 }
 
-// The QuestFunc type is an adapter to allow the use of ordinary
-// function as Quest mutator.
-type QuestFunc func(context.Context, *ent.QuestMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f QuestFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.QuestMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.QuestMutation", m)
-}
-
 // The RecordFunc type is an adapter to allow the use of ordinary
 // function as Record mutator.
 type RecordFunc func(context.Context, *ent.RecordMutation) (ent.Value, error)

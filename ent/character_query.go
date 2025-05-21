@@ -336,12 +336,12 @@ func (cq *CharacterQuery) WithRecords(opts ...func(*RecordQuery)) *CharacterQuer
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Character.Query().
-//		GroupBy(character.FieldName).
+//		GroupBy(character.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGroupBy {
@@ -359,11 +359,11 @@ func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGrou
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Character.Query().
-//		Select(character.FieldName).
+//		Select(character.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (cq *CharacterQuery) Select(fields ...string) *CharacterSelect {
 	cq.ctx.Fields = append(cq.ctx.Fields, fields...)

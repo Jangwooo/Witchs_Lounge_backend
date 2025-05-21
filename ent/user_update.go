@@ -32,6 +32,12 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return uu
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
+	uu.mutation.SetUpdatedAt(t)
+	return uu
+}
+
 // SetNickname sets the "nickname" field.
 func (uu *UserUpdate) SetNickname(s string) *UserUpdate {
 	uu.mutation.SetNickname(s)
@@ -77,12 +83,6 @@ func (uu *UserUpdate) SetNillableSteamDefaultLanguage(s *string) *UserUpdate {
 	if s != nil {
 		uu.SetSteamDefaultLanguage(*s)
 	}
-	return uu
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
-	uu.mutation.SetUpdatedAt(t)
 	return uu
 }
 
@@ -298,6 +298,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := uu.mutation.UpdatedAt(); ok {
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if value, ok := uu.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
 	}
@@ -309,9 +312,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.SteamDefaultLanguage(); ok {
 		_spec.SetField(user.FieldSteamDefaultLanguage, field.TypeString, value)
-	}
-	if value, ok := uu.mutation.UpdatedAt(); ok {
-		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uu.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
@@ -504,6 +504,12 @@ type UserUpdateOne struct {
 	mutation *UserMutation
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetUpdatedAt(t)
+	return uuo
+}
+
 // SetNickname sets the "nickname" field.
 func (uuo *UserUpdateOne) SetNickname(s string) *UserUpdateOne {
 	uuo.mutation.SetNickname(s)
@@ -549,12 +555,6 @@ func (uuo *UserUpdateOne) SetNillableSteamDefaultLanguage(s *string) *UserUpdate
 	if s != nil {
 		uuo.SetSteamDefaultLanguage(*s)
 	}
-	return uuo
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetUpdatedAt(t)
 	return uuo
 }
 
@@ -800,6 +800,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			}
 		}
 	}
+	if value, ok := uuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if value, ok := uuo.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
 	}
@@ -811,9 +814,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.SteamDefaultLanguage(); ok {
 		_spec.SetField(user.FieldSteamDefaultLanguage, field.TypeString, value)
-	}
-	if value, ok := uuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := uuo.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)

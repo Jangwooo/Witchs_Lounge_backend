@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/schema/mixin"
 )
 
 // User holds the schema definition for the User entity.
@@ -15,16 +15,20 @@ type User struct {
 	ent.Schema
 }
 
+// Mixin of the User.
+func (User) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.GlobalMixin{},
+	}
+}
+
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.Text("nickname"),
 		field.Text("steam_id").Immutable().Unique(),
 		field.Text("steam_avatar_url").Optional(),
 		field.Text("steam_default_language").Default("ko"),
-		field.Time("created_at").Immutable().Default(time.Now),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
 		field.Time("last_login_at").Default(time.Now),
 
 		field.Text("customize_data").Default("{}").Nillable().Optional(),

@@ -335,12 +335,12 @@ func (upq *UserPurchaseQuery) WithProduct(opts ...func(*ProductQuery)) *UserPurc
 // Example:
 //
 //	var v []struct {
-//		UserID uuid.UUID `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.UserPurchase.Query().
-//		GroupBy(userpurchase.FieldUserID).
+//		GroupBy(userpurchase.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (upq *UserPurchaseQuery) GroupBy(field string, fields ...string) *UserPurchaseGroupBy {
@@ -358,11 +358,11 @@ func (upq *UserPurchaseQuery) GroupBy(field string, fields ...string) *UserPurch
 // Example:
 //
 //	var v []struct {
-//		UserID uuid.UUID `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.UserPurchase.Query().
-//		Select(userpurchase.FieldUserID).
+//		Select(userpurchase.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (upq *UserPurchaseQuery) Select(fields ...string) *UserPurchaseSelect {
 	upq.ctx.Fields = append(upq.ctx.Fields, fields...)

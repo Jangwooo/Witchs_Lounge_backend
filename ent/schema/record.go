@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/schema/mixin"
 )
 
 // Record holds the schema definition for the Record entity.
@@ -15,10 +16,16 @@ type Record struct {
 	ent.Schema
 }
 
+// Mixin of the Record.
+func (Record) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.GlobalMixin{},
+	}
+}
+
 // Fields of the Record.
 func (Record) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.UUID("user_id", uuid.UUID{}),
 		field.UUID("music_id", uuid.UUID{}),
 		field.UUID("stage_id", uuid.UUID{}),

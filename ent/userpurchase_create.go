@@ -23,6 +23,34 @@ type UserPurchaseCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (upc *UserPurchaseCreate) SetCreatedAt(t time.Time) *UserPurchaseCreate {
+	upc.mutation.SetCreatedAt(t)
+	return upc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (upc *UserPurchaseCreate) SetNillableCreatedAt(t *time.Time) *UserPurchaseCreate {
+	if t != nil {
+		upc.SetCreatedAt(*t)
+	}
+	return upc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (upc *UserPurchaseCreate) SetUpdatedAt(t time.Time) *UserPurchaseCreate {
+	upc.mutation.SetUpdatedAt(t)
+	return upc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (upc *UserPurchaseCreate) SetNillableUpdatedAt(t *time.Time) *UserPurchaseCreate {
+	if t != nil {
+		upc.SetUpdatedAt(*t)
+	}
+	return upc
+}
+
 // SetUserID sets the "user_id" field.
 func (upc *UserPurchaseCreate) SetUserID(u uuid.UUID) *UserPurchaseCreate {
 	upc.mutation.SetUserID(u)
@@ -108,6 +136,14 @@ func (upc *UserPurchaseCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (upc *UserPurchaseCreate) defaults() {
+	if _, ok := upc.mutation.CreatedAt(); !ok {
+		v := userpurchase.DefaultCreatedAt()
+		upc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := upc.mutation.UpdatedAt(); !ok {
+		v := userpurchase.DefaultUpdatedAt()
+		upc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := upc.mutation.PurchaseDate(); !ok {
 		v := userpurchase.DefaultPurchaseDate()
 		upc.mutation.SetPurchaseDate(v)
@@ -120,6 +156,12 @@ func (upc *UserPurchaseCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (upc *UserPurchaseCreate) check() error {
+	if _, ok := upc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "UserPurchase.created_at"`)}
+	}
+	if _, ok := upc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "UserPurchase.updated_at"`)}
+	}
 	if _, ok := upc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "UserPurchase.user_id"`)}
 	}
@@ -169,6 +211,14 @@ func (upc *UserPurchaseCreate) createSpec() (*UserPurchase, *sqlgraph.CreateSpec
 	if id, ok := upc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := upc.mutation.CreatedAt(); ok {
+		_spec.SetField(userpurchase.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := upc.mutation.UpdatedAt(); ok {
+		_spec.SetField(userpurchase.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := upc.mutation.PurchaseDate(); ok {
 		_spec.SetField(userpurchase.FieldPurchaseDate, field.TypeTime, value)

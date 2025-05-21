@@ -18,9 +18,6 @@ type Music func(*sql.Selector)
 // Product is the predicate function for product builders.
 type Product func(*sql.Selector)
 
-// Quest is the predicate function for quest builders.
-type Quest func(*sql.Selector)
-
 // Record is the predicate function for record builders.
 type Record func(*sql.Selector)
 

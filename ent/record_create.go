@@ -25,6 +25,34 @@ type RecordCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (rc *RecordCreate) SetCreatedAt(t time.Time) *RecordCreate {
+	rc.mutation.SetCreatedAt(t)
+	return rc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableCreatedAt(t *time.Time) *RecordCreate {
+	if t != nil {
+		rc.SetCreatedAt(*t)
+	}
+	return rc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (rc *RecordCreate) SetUpdatedAt(t time.Time) *RecordCreate {
+	rc.mutation.SetUpdatedAt(t)
+	return rc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableUpdatedAt(t *time.Time) *RecordCreate {
+	if t != nil {
+		rc.SetUpdatedAt(*t)
+	}
+	return rc
+}
+
 // SetUserID sets the "user_id" field.
 func (rc *RecordCreate) SetUserID(u uuid.UUID) *RecordCreate {
 	rc.mutation.SetUserID(u)
@@ -222,6 +250,14 @@ func (rc *RecordCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (rc *RecordCreate) defaults() {
+	if _, ok := rc.mutation.CreatedAt(); !ok {
+		v := record.DefaultCreatedAt()
+		rc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := rc.mutation.UpdatedAt(); !ok {
+		v := record.DefaultUpdatedAt()
+		rc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := rc.mutation.PerfectCount(); !ok {
 		v := record.DefaultPerfectCount
 		rc.mutation.SetPerfectCount(v)
@@ -254,6 +290,12 @@ func (rc *RecordCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RecordCreate) check() error {
+	if _, ok := rc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Record.created_at"`)}
+	}
+	if _, ok := rc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Record.updated_at"`)}
+	}
 	if _, ok := rc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Record.user_id"`)}
 	}
@@ -333,6 +375,14 @@ func (rc *RecordCreate) createSpec() (*Record, *sqlgraph.CreateSpec) {
 	if id, ok := rc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := rc.mutation.CreatedAt(); ok {
+		_spec.SetField(record.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := rc.mutation.UpdatedAt(); ok {
+		_spec.SetField(record.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := rc.mutation.Score(); ok {
 		_spec.SetField(record.FieldScore, field.TypeInt, value)

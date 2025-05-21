@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,12 @@ type CharacterUpdate struct {
 // Where appends a list predicates to the CharacterUpdate builder.
 func (cu *CharacterUpdate) Where(ps ...predicate.Character) *CharacterUpdate {
 	cu.mutation.Where(ps...)
+	return cu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cu *CharacterUpdate) SetUpdatedAt(t time.Time) *CharacterUpdate {
+	cu.mutation.SetUpdatedAt(t)
 	return cu
 }
 
@@ -157,6 +164,7 @@ func (cu *CharacterUpdate) RemoveRecords(r ...*Record) *CharacterUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CharacterUpdate) Save(ctx context.Context) (int, error) {
+	cu.defaults()
 	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
@@ -182,6 +190,14 @@ func (cu *CharacterUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (cu *CharacterUpdate) defaults() {
+	if _, ok := cu.mutation.UpdatedAt(); !ok {
+		v := character.UpdateDefaultUpdatedAt()
+		cu.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (cu *CharacterUpdate) check() error {
 	if v, ok := cu.mutation.Name(); ok {
@@ -203,6 +219,9 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cu.mutation.UpdatedAt(); ok {
+		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
@@ -324,6 +343,12 @@ type CharacterUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *CharacterMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cuo *CharacterUpdateOne) SetUpdatedAt(t time.Time) *CharacterUpdateOne {
+	cuo.mutation.SetUpdatedAt(t)
+	return cuo
 }
 
 // SetName sets the "name" field.
@@ -466,6 +491,7 @@ func (cuo *CharacterUpdateOne) Select(field string, fields ...string) *Character
 
 // Save executes the query and returns the updated Character entity.
 func (cuo *CharacterUpdateOne) Save(ctx context.Context) (*Character, error) {
+	cuo.defaults()
 	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
@@ -488,6 +514,14 @@ func (cuo *CharacterUpdateOne) Exec(ctx context.Context) error {
 func (cuo *CharacterUpdateOne) ExecX(ctx context.Context) {
 	if err := cuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cuo *CharacterUpdateOne) defaults() {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+		v := character.UpdateDefaultUpdatedAt()
+		cuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -529,6 +563,9 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := cuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)

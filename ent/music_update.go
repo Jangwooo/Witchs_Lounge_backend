@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,12 @@ type MusicUpdate struct {
 // Where appends a list predicates to the MusicUpdate builder.
 func (mu *MusicUpdate) Where(ps ...predicate.Music) *MusicUpdate {
 	mu.mutation.Where(ps...)
+	return mu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (mu *MusicUpdate) SetUpdatedAt(t time.Time) *MusicUpdate {
+	mu.mutation.SetUpdatedAt(t)
 	return mu
 }
 
@@ -186,6 +193,7 @@ func (mu *MusicUpdate) RemoveRecords(r ...*Record) *MusicUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mu *MusicUpdate) Save(ctx context.Context) (int, error) {
+	mu.defaults()
 	return withHooks(ctx, mu.sqlSave, mu.mutation, mu.hooks)
 }
 
@@ -211,6 +219,14 @@ func (mu *MusicUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (mu *MusicUpdate) defaults() {
+	if _, ok := mu.mutation.UpdatedAt(); !ok {
+		v := music.UpdateDefaultUpdatedAt()
+		mu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (mu *MusicUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(music.Table, music.Columns, sqlgraph.NewFieldSpec(music.FieldID, field.TypeUUID))
 	if ps := mu.mutation.predicates; len(ps) > 0 {
@@ -219,6 +235,9 @@ func (mu *MusicUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := mu.mutation.UpdatedAt(); ok {
+		_spec.SetField(music.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := mu.mutation.Name(); ok {
 		_spec.SetField(music.FieldName, field.TypeString, value)
@@ -346,6 +365,12 @@ type MusicUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *MusicMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (muo *MusicUpdateOne) SetUpdatedAt(t time.Time) *MusicUpdateOne {
+	muo.mutation.SetUpdatedAt(t)
+	return muo
 }
 
 // SetName sets the "name" field.
@@ -517,6 +542,7 @@ func (muo *MusicUpdateOne) Select(field string, fields ...string) *MusicUpdateOn
 
 // Save executes the query and returns the updated Music entity.
 func (muo *MusicUpdateOne) Save(ctx context.Context) (*Music, error) {
+	muo.defaults()
 	return withHooks(ctx, muo.sqlSave, muo.mutation, muo.hooks)
 }
 
@@ -539,6 +565,14 @@ func (muo *MusicUpdateOne) Exec(ctx context.Context) error {
 func (muo *MusicUpdateOne) ExecX(ctx context.Context) {
 	if err := muo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (muo *MusicUpdateOne) defaults() {
+	if _, ok := muo.mutation.UpdatedAt(); !ok {
+		v := music.UpdateDefaultUpdatedAt()
+		muo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -567,6 +601,9 @@ func (muo *MusicUpdateOne) sqlSave(ctx context.Context) (_node *Music, err error
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := muo.mutation.UpdatedAt(); ok {
+		_spec.SetField(music.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := muo.mutation.Name(); ok {
 		_spec.SetField(music.FieldName, field.TypeString, value)

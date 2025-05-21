@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,6 +20,34 @@ type ItemCreate struct {
 	config
 	mutation *ItemMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (ic *ItemCreate) SetCreatedAt(t time.Time) *ItemCreate {
+	ic.mutation.SetCreatedAt(t)
+	return ic
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (ic *ItemCreate) SetNillableCreatedAt(t *time.Time) *ItemCreate {
+	if t != nil {
+		ic.SetCreatedAt(*t)
+	}
+	return ic
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ic *ItemCreate) SetUpdatedAt(t time.Time) *ItemCreate {
+	ic.mutation.SetUpdatedAt(t)
+	return ic
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (ic *ItemCreate) SetNillableUpdatedAt(t *time.Time) *ItemCreate {
+	if t != nil {
+		ic.SetUpdatedAt(*t)
+	}
+	return ic
 }
 
 // SetName sets the "name" field.
@@ -131,6 +160,14 @@ func (ic *ItemCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ic *ItemCreate) defaults() {
+	if _, ok := ic.mutation.CreatedAt(); !ok {
+		v := item.DefaultCreatedAt()
+		ic.mutation.SetCreatedAt(v)
+	}
+	if _, ok := ic.mutation.UpdatedAt(); !ok {
+		v := item.DefaultUpdatedAt()
+		ic.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := ic.mutation.ID(); !ok {
 		v := item.DefaultID()
 		ic.mutation.SetID(v)
@@ -139,6 +176,12 @@ func (ic *ItemCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ic *ItemCreate) check() error {
+	if _, ok := ic.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Item.created_at"`)}
+	}
+	if _, ok := ic.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Item.updated_at"`)}
+	}
 	if _, ok := ic.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Item.name"`)}
 	}
@@ -192,6 +235,14 @@ func (ic *ItemCreate) createSpec() (*Item, *sqlgraph.CreateSpec) {
 	if id, ok := ic.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := ic.mutation.CreatedAt(); ok {
+		_spec.SetField(item.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := ic.mutation.UpdatedAt(); ok {
+		_spec.SetField(item.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := ic.mutation.Name(); ok {
 		_spec.SetField(item.FieldName, field.TypeString, value)

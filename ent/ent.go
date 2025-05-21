@@ -16,7 +16,6 @@ import (
 	"github.com/witchs-lounge_backend/ent/item"
 	"github.com/witchs-lounge_backend/ent/music"
 	"github.com/witchs-lounge_backend/ent/product"
-	"github.com/witchs-lounge_backend/ent/quest"
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
@@ -85,7 +84,6 @@ func checkColumn(table, column string) error {
 			item.Table:         item.ValidColumn,
 			music.Table:        music.ValidColumn,
 			product.Table:      product.ValidColumn,
-			quest.Table:        quest.ValidColumn,
 			record.Table:       record.ValidColumn,
 			stage.Table:        stage.ValidColumn,
 			user.Table:         user.ValidColumn,

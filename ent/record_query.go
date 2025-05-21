@@ -407,12 +407,12 @@ func (rq *RecordQuery) WithCharacter(opts ...func(*CharacterQuery)) *RecordQuery
 // Example:
 //
 //	var v []struct {
-//		UserID uuid.UUID `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Record.Query().
-//		GroupBy(record.FieldUserID).
+//		GroupBy(record.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (rq *RecordQuery) GroupBy(field string, fields ...string) *RecordGroupBy {
@@ -430,11 +430,11 @@ func (rq *RecordQuery) GroupBy(field string, fields ...string) *RecordGroupBy {
 // Example:
 //
 //	var v []struct {
-//		UserID uuid.UUID `json:"user_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Record.Query().
-//		Select(record.FieldUserID).
+//		Select(record.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (rq *RecordQuery) Select(fields ...string) *RecordSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)

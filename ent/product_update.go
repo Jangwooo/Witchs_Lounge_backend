@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -29,6 +30,12 @@ type ProductUpdate struct {
 // Where appends a list predicates to the ProductUpdate builder.
 func (pu *ProductUpdate) Where(ps ...predicate.Product) *ProductUpdate {
 	pu.mutation.Where(ps...)
+	return pu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *ProductUpdate) SetUpdatedAt(t time.Time) *ProductUpdate {
+	pu.mutation.SetUpdatedAt(t)
 	return pu
 }
 
@@ -230,6 +237,7 @@ func (pu *ProductUpdate) RemoveUserPurchases(u ...*UserPurchase) *ProductUpdate 
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *ProductUpdate) Save(ctx context.Context) (int, error) {
+	pu.defaults()
 	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
@@ -252,6 +260,14 @@ func (pu *ProductUpdate) Exec(ctx context.Context) error {
 func (pu *ProductUpdate) ExecX(ctx context.Context) {
 	if err := pu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (pu *ProductUpdate) defaults() {
+	if _, ok := pu.mutation.UpdatedAt(); !ok {
+		v := product.UpdateDefaultUpdatedAt()
+		pu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -286,6 +302,9 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)
@@ -492,6 +511,12 @@ type ProductUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ProductMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *ProductUpdateOne) SetUpdatedAt(t time.Time) *ProductUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
 }
 
 // SetName sets the "name" field.
@@ -705,6 +730,7 @@ func (puo *ProductUpdateOne) Select(field string, fields ...string) *ProductUpda
 
 // Save executes the query and returns the updated Product entity.
 func (puo *ProductUpdateOne) Save(ctx context.Context) (*Product, error) {
+	puo.defaults()
 	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
@@ -727,6 +753,14 @@ func (puo *ProductUpdateOne) Exec(ctx context.Context) error {
 func (puo *ProductUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (puo *ProductUpdateOne) defaults() {
+	if _, ok := puo.mutation.UpdatedAt(); !ok {
+		v := product.UpdateDefaultUpdatedAt()
+		puo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -778,6 +812,9 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)

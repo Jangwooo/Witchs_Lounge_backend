@@ -11,6 +11,8 @@ var (
 	// CharactersColumns holds the columns for the "characters" table.
 	CharactersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString, Size: 2147483647},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "source", Type: field.TypeString, Size: 2147483647},
@@ -24,6 +26,8 @@ var (
 	// ItemsColumns holds the columns for the "items" table.
 	ItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString, Size: 2147483647},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "effect_id", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -39,6 +43,8 @@ var (
 	// MusicsColumns holds the columns for the "musics" table.
 	MusicsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString, Size: 2147483647},
 		{Name: "music_source", Type: field.TypeString, Size: 2147483647},
 		{Name: "jacket_source", Type: field.TypeString, Size: 2147483647},
@@ -54,6 +60,8 @@ var (
 	// ProductsColumns holds the columns for the "products" table.
 	ProductsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "price", Type: field.TypeFloat64},
@@ -69,31 +77,23 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "products_items_item",
-				Columns:    []*schema.Column{ProductsColumns[5]},
+				Columns:    []*schema.Column{ProductsColumns[7]},
 				RefColumns: []*schema.Column{ItemsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "products_characters_character",
-				Columns:    []*schema.Column{ProductsColumns[6]},
+				Columns:    []*schema.Column{ProductsColumns[8]},
 				RefColumns: []*schema.Column{CharactersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 	}
-	// QuestsColumns holds the columns for the "quests" table.
-	QuestsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-	}
-	// QuestsTable holds the schema information for the "quests" table.
-	QuestsTable = &schema.Table{
-		Name:       "quests",
-		Columns:    QuestsColumns,
-		PrimaryKey: []*schema.Column{QuestsColumns[0]},
-	}
 	// RecordsColumns holds the columns for the "records" table.
 	RecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "score", Type: field.TypeInt},
 		{Name: "perfect_count", Type: field.TypeInt, Default: 0},
 		{Name: "good_count", Type: field.TypeInt, Default: 0},
@@ -115,25 +115,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "records_characters_records",
-				Columns:    []*schema.Column{RecordsColumns[9]},
+				Columns:    []*schema.Column{RecordsColumns[11]},
 				RefColumns: []*schema.Column{CharactersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_musics_records",
-				Columns:    []*schema.Column{RecordsColumns[10]},
+				Columns:    []*schema.Column{RecordsColumns[12]},
 				RefColumns: []*schema.Column{MusicsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_stages_records",
-				Columns:    []*schema.Column{RecordsColumns[11]},
+				Columns:    []*schema.Column{RecordsColumns[13]},
 				RefColumns: []*schema.Column{StagesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_users_records",
-				Columns:    []*schema.Column{RecordsColumns[12]},
+				Columns:    []*schema.Column{RecordsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -142,33 +142,35 @@ var (
 			{
 				Name:    "record_user_id_music_id_stage_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[12], RecordsColumns[10], RecordsColumns[11]},
+				Columns: []*schema.Column{RecordsColumns[14], RecordsColumns[12], RecordsColumns[13]},
 			},
 			{
 				Name:    "record_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[12]},
+				Columns: []*schema.Column{RecordsColumns[14]},
 			},
 			{
 				Name:    "record_music_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[10]},
+				Columns: []*schema.Column{RecordsColumns[12]},
 			},
 			{
 				Name:    "record_stage_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[11]},
+				Columns: []*schema.Column{RecordsColumns[13]},
 			},
 			{
 				Name:    "record_played_at",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[6]},
+				Columns: []*schema.Column{RecordsColumns[8]},
 			},
 		},
 	}
 	// StagesColumns holds the columns for the "stages" table.
 	StagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "level_name", Type: field.TypeString, Size: 2147483647},
 		{Name: "level_address", Type: field.TypeString, Size: 2147483647},
 		{Name: "jacket_address", Type: field.TypeString, Size: 2147483647},
@@ -182,7 +184,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stages_musics_stages",
-				Columns:    []*schema.Column{StagesColumns[4]},
+				Columns:    []*schema.Column{StagesColumns[6]},
 				RefColumns: []*schema.Column{MusicsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -191,12 +193,12 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "nickname", Type: field.TypeString, Size: 2147483647},
 		{Name: "steam_id", Type: field.TypeString, Unique: true, Size: 2147483647},
 		{Name: "steam_avatar_url", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "steam_default_language", Type: field.TypeString, Size: 2147483647, Default: "ko"},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "last_login_at", Type: field.TypeTime},
 		{Name: "customize_data", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: "{}"},
 		{Name: "save_data", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: "{}"},
@@ -210,13 +212,15 @@ var (
 			{
 				Name:    "user_steam_id",
 				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[2]},
+				Columns: []*schema.Column{UsersColumns[4]},
 			},
 		},
 	}
 	// UserPurchasesColumns holds the columns for the "user_purchases" table.
 	UserPurchasesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "purchase_date", Type: field.TypeTime},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "product_id", Type: field.TypeUUID},
@@ -229,13 +233,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "user_purchases_users_user",
-				Columns:    []*schema.Column{UserPurchasesColumns[2]},
+				Columns:    []*schema.Column{UserPurchasesColumns[4]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "user_purchases_products_product",
-				Columns:    []*schema.Column{UserPurchasesColumns[3]},
+				Columns:    []*schema.Column{UserPurchasesColumns[5]},
 				RefColumns: []*schema.Column{ProductsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -244,7 +248,7 @@ var (
 			{
 				Name:    "userpurchase_user_id_product_id",
 				Unique:  true,
-				Columns: []*schema.Column{UserPurchasesColumns[2], UserPurchasesColumns[3]},
+				Columns: []*schema.Column{UserPurchasesColumns[4], UserPurchasesColumns[5]},
 			},
 		},
 	}
@@ -254,7 +258,6 @@ var (
 		ItemsTable,
 		MusicsTable,
 		ProductsTable,
-		QuestsTable,
 		RecordsTable,
 		StagesTable,
 		UsersTable,

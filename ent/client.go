@@ -20,7 +20,6 @@ import (
 	"github.com/witchs-lounge_backend/ent/item"
 	"github.com/witchs-lounge_backend/ent/music"
 	"github.com/witchs-lounge_backend/ent/product"
-	"github.com/witchs-lounge_backend/ent/quest"
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
@@ -40,8 +39,6 @@ type Client struct {
 	Music *MusicClient
 	// Product is the client for interacting with the Product builders.
 	Product *ProductClient
-	// Quest is the client for interacting with the Quest builders.
-	Quest *QuestClient
 	// Record is the client for interacting with the Record builders.
 	Record *RecordClient
 	// Stage is the client for interacting with the Stage builders.
@@ -65,7 +62,6 @@ func (c *Client) init() {
 	c.Item = NewItemClient(c.config)
 	c.Music = NewMusicClient(c.config)
 	c.Product = NewProductClient(c.config)
-	c.Quest = NewQuestClient(c.config)
 	c.Record = NewRecordClient(c.config)
 	c.Stage = NewStageClient(c.config)
 	c.User = NewUserClient(c.config)
@@ -166,7 +162,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Item:         NewItemClient(cfg),
 		Music:        NewMusicClient(cfg),
 		Product:      NewProductClient(cfg),
-		Quest:        NewQuestClient(cfg),
 		Record:       NewRecordClient(cfg),
 		Stage:        NewStageClient(cfg),
 		User:         NewUserClient(cfg),
@@ -194,7 +189,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Item:         NewItemClient(cfg),
 		Music:        NewMusicClient(cfg),
 		Product:      NewProductClient(cfg),
-		Quest:        NewQuestClient(cfg),
 		Record:       NewRecordClient(cfg),
 		Stage:        NewStageClient(cfg),
 		User:         NewUserClient(cfg),
@@ -228,7 +222,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Character, c.Item, c.Music, c.Product, c.Quest, c.Record, c.Stage, c.User,
+		c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage, c.User,
 		c.UserPurchase,
 	} {
 		n.Use(hooks...)
@@ -239,7 +233,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Character, c.Item, c.Music, c.Product, c.Quest, c.Record, c.Stage, c.User,
+		c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage, c.User,
 		c.UserPurchase,
 	} {
 		n.Intercept(interceptors...)
@@ -257,8 +251,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Music.mutate(ctx, m)
 	case *ProductMutation:
 		return c.Product.mutate(ctx, m)
-	case *QuestMutation:
-		return c.Quest.mutate(ctx, m)
 	case *RecordMutation:
 		return c.Record.mutate(ctx, m)
 	case *StageMutation:
@@ -945,139 +937,6 @@ func (c *ProductClient) mutate(ctx context.Context, m *ProductMutation) (Value, 
 		return (&ProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Product mutation op: %q", m.Op())
-	}
-}
-
-// QuestClient is a client for the Quest schema.
-type QuestClient struct {
-	config
-}
-
-// NewQuestClient returns a client for the Quest from the given config.
-func NewQuestClient(c config) *QuestClient {
-	return &QuestClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `quest.Hooks(f(g(h())))`.
-func (c *QuestClient) Use(hooks ...Hook) {
-	c.hooks.Quest = append(c.hooks.Quest, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `quest.Intercept(f(g(h())))`.
-func (c *QuestClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Quest = append(c.inters.Quest, interceptors...)
-}
-
-// Create returns a builder for creating a Quest entity.
-func (c *QuestClient) Create() *QuestCreate {
-	mutation := newQuestMutation(c.config, OpCreate)
-	return &QuestCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Quest entities.
-func (c *QuestClient) CreateBulk(builders ...*QuestCreate) *QuestCreateBulk {
-	return &QuestCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *QuestClient) MapCreateBulk(slice any, setFunc func(*QuestCreate, int)) *QuestCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &QuestCreateBulk{err: fmt.Errorf("calling to QuestClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*QuestCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &QuestCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Quest.
-func (c *QuestClient) Update() *QuestUpdate {
-	mutation := newQuestMutation(c.config, OpUpdate)
-	return &QuestUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *QuestClient) UpdateOne(q *Quest) *QuestUpdateOne {
-	mutation := newQuestMutation(c.config, OpUpdateOne, withQuest(q))
-	return &QuestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *QuestClient) UpdateOneID(id int) *QuestUpdateOne {
-	mutation := newQuestMutation(c.config, OpUpdateOne, withQuestID(id))
-	return &QuestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Quest.
-func (c *QuestClient) Delete() *QuestDelete {
-	mutation := newQuestMutation(c.config, OpDelete)
-	return &QuestDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *QuestClient) DeleteOne(q *Quest) *QuestDeleteOne {
-	return c.DeleteOneID(q.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *QuestClient) DeleteOneID(id int) *QuestDeleteOne {
-	builder := c.Delete().Where(quest.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &QuestDeleteOne{builder}
-}
-
-// Query returns a query builder for Quest.
-func (c *QuestClient) Query() *QuestQuery {
-	return &QuestQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeQuest},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Quest entity by its id.
-func (c *QuestClient) Get(ctx context.Context, id int) (*Quest, error) {
-	return c.Query().Where(quest.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *QuestClient) GetX(ctx context.Context, id int) *Quest {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *QuestClient) Hooks() []Hook {
-	return c.hooks.Quest
-}
-
-// Interceptors returns the client interceptors.
-func (c *QuestClient) Interceptors() []Interceptor {
-	return c.inters.Quest
-}
-
-func (c *QuestClient) mutate(ctx context.Context, m *QuestMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&QuestCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&QuestUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&QuestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&QuestDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Quest mutation op: %q", m.Op())
 	}
 }
 
@@ -1792,11 +1651,10 @@ func (c *UserPurchaseClient) mutate(ctx context.Context, m *UserPurchaseMutation
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Character, Item, Music, Product, Quest, Record, Stage, User,
-		UserPurchase []ent.Hook
+		Character, Item, Music, Product, Record, Stage, User, UserPurchase []ent.Hook
 	}
 	inters struct {
-		Character, Item, Music, Product, Quest, Record, Stage, User,
+		Character, Item, Music, Product, Record, Stage, User,
 		UserPurchase []ent.Interceptor
 	}
 )

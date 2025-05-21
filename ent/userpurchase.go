@@ -19,7 +19,12 @@ import (
 type UserPurchase struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// ProductID holds the value of the "product_id" field.
@@ -70,7 +75,7 @@ func (*UserPurchase) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case userpurchase.FieldPurchaseDate:
+		case userpurchase.FieldCreatedAt, userpurchase.FieldUpdatedAt, userpurchase.FieldPurchaseDate:
 			values[i] = new(sql.NullTime)
 		case userpurchase.FieldID, userpurchase.FieldUserID, userpurchase.FieldProductID:
 			values[i] = new(uuid.UUID)
@@ -94,6 +99,18 @@ func (up *UserPurchase) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				up.ID = *value
+			}
+		case userpurchase.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				up.CreatedAt = value.Time
+			}
+		case userpurchase.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				up.UpdatedAt = value.Time
 			}
 		case userpurchase.FieldUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -159,6 +176,12 @@ func (up *UserPurchase) String() string {
 	var builder strings.Builder
 	builder.WriteString("UserPurchase(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", up.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(up.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(up.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(fmt.Sprintf("%v", up.UserID))
 	builder.WriteString(", ")

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -22,6 +23,34 @@ type ProductCreate struct {
 	config
 	mutation *ProductMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pc *ProductCreate) SetCreatedAt(t time.Time) *ProductCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableCreatedAt(t *time.Time) *ProductCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *ProductCreate) SetUpdatedAt(t time.Time) *ProductCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableUpdatedAt(t *time.Time) *ProductCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
 }
 
 // SetName sets the "name" field.
@@ -173,6 +202,14 @@ func (pc *ProductCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (pc *ProductCreate) defaults() {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		v := product.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		v := product.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := pc.mutation.ID(); !ok {
 		v := product.DefaultID()
 		pc.mutation.SetID(v)
@@ -181,6 +218,12 @@ func (pc *ProductCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProductCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Product.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Product.updated_at"`)}
+	}
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Product.name"`)}
 	}
@@ -239,6 +282,14 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if id, ok := pc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(product.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(product.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(product.FieldName, field.TypeString, value)

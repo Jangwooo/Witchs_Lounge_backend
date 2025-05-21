@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -20,6 +21,34 @@ type MusicCreate struct {
 	config
 	mutation *MusicMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (mc *MusicCreate) SetCreatedAt(t time.Time) *MusicCreate {
+	mc.mutation.SetCreatedAt(t)
+	return mc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableCreatedAt(t *time.Time) *MusicCreate {
+	if t != nil {
+		mc.SetCreatedAt(*t)
+	}
+	return mc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (mc *MusicCreate) SetUpdatedAt(t time.Time) *MusicCreate {
+	mc.mutation.SetUpdatedAt(t)
+	return mc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableUpdatedAt(t *time.Time) *MusicCreate {
+	if t != nil {
+		mc.SetUpdatedAt(*t)
+	}
+	return mc
 }
 
 // SetName sets the "name" field.
@@ -131,6 +160,14 @@ func (mc *MusicCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (mc *MusicCreate) defaults() {
+	if _, ok := mc.mutation.CreatedAt(); !ok {
+		v := music.DefaultCreatedAt()
+		mc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := mc.mutation.UpdatedAt(); !ok {
+		v := music.DefaultUpdatedAt()
+		mc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := mc.mutation.ID(); !ok {
 		v := music.DefaultID()
 		mc.mutation.SetID(v)
@@ -139,6 +176,12 @@ func (mc *MusicCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (mc *MusicCreate) check() error {
+	if _, ok := mc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Music.created_at"`)}
+	}
+	if _, ok := mc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Music.updated_at"`)}
+	}
 	if _, ok := mc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Music.name"`)}
 	}
@@ -188,6 +231,14 @@ func (mc *MusicCreate) createSpec() (*Music, *sqlgraph.CreateSpec) {
 	if id, ok := mc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := mc.mutation.CreatedAt(); ok {
+		_spec.SetField(music.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := mc.mutation.UpdatedAt(); ok {
+		_spec.SetField(music.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	if value, ok := mc.mutation.Name(); ok {
 		_spec.SetField(music.FieldName, field.TypeString, value)

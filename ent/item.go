@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -16,7 +17,12 @@ import (
 type Item struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -58,6 +64,8 @@ func (*Item) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case item.FieldName, item.FieldDescription, item.FieldEffectID, item.FieldType, item.FieldSource:
 			values[i] = new(sql.NullString)
+		case item.FieldCreatedAt, item.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case item.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -80,6 +88,18 @@ func (i *Item) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[j])
 			} else if value != nil {
 				i.ID = *value
+			}
+		case item.FieldCreatedAt:
+			if value, ok := values[j].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[j])
+			} else if value.Valid {
+				i.CreatedAt = value.Time
+			}
+		case item.FieldUpdatedAt:
+			if value, ok := values[j].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[j])
+			} else if value.Valid {
+				i.UpdatedAt = value.Time
 			}
 		case item.FieldName:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -153,6 +173,12 @@ func (i *Item) String() string {
 	var builder strings.Builder
 	builder.WriteString("Item(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", i.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(i.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(i.Name)
 	builder.WriteString(", ")

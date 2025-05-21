@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -17,7 +18,12 @@ import (
 type Stage struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// MusicID holds the value of the "music_id" field.
 	MusicID uuid.UUID `json:"music_id,omitempty"`
 	// LevelName holds the value of the "level_name" field.
@@ -70,6 +76,8 @@ func (*Stage) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case stage.FieldLevelName, stage.FieldLevelAddress, stage.FieldJacketAddress:
 			values[i] = new(sql.NullString)
+		case stage.FieldCreatedAt, stage.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case stage.FieldID, stage.FieldMusicID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -92,6 +100,18 @@ func (s *Stage) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				s.ID = *value
+			}
+		case stage.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				s.CreatedAt = value.Time
+			}
+		case stage.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				s.UpdatedAt = value.Time
 			}
 		case stage.FieldMusicID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -163,6 +183,12 @@ func (s *Stage) String() string {
 	var builder strings.Builder
 	builder.WriteString("Stage(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("music_id=")
 	builder.WriteString(fmt.Sprintf("%v", s.MusicID))
 	builder.WriteString(", ")

@@ -31,6 +31,12 @@ func (upu *UserPurchaseUpdate) Where(ps ...predicate.UserPurchase) *UserPurchase
 	return upu
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (upu *UserPurchaseUpdate) SetUpdatedAt(t time.Time) *UserPurchaseUpdate {
+	upu.mutation.SetUpdatedAt(t)
+	return upu
+}
+
 // SetUserID sets the "user_id" field.
 func (upu *UserPurchaseUpdate) SetUserID(u uuid.UUID) *UserPurchaseUpdate {
 	upu.mutation.SetUserID(u)
@@ -102,6 +108,7 @@ func (upu *UserPurchaseUpdate) ClearProduct() *UserPurchaseUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (upu *UserPurchaseUpdate) Save(ctx context.Context) (int, error) {
+	upu.defaults()
 	return withHooks(ctx, upu.sqlSave, upu.mutation, upu.hooks)
 }
 
@@ -127,6 +134,14 @@ func (upu *UserPurchaseUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (upu *UserPurchaseUpdate) defaults() {
+	if _, ok := upu.mutation.UpdatedAt(); !ok {
+		v := userpurchase.UpdateDefaultUpdatedAt()
+		upu.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (upu *UserPurchaseUpdate) check() error {
 	if upu.mutation.UserCleared() && len(upu.mutation.UserIDs()) > 0 {
@@ -149,6 +164,9 @@ func (upu *UserPurchaseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := upu.mutation.UpdatedAt(); ok {
+		_spec.SetField(userpurchase.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := upu.mutation.PurchaseDate(); ok {
 		_spec.SetField(userpurchase.FieldPurchaseDate, field.TypeTime, value)
@@ -229,6 +247,12 @@ type UserPurchaseUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *UserPurchaseMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (upuo *UserPurchaseUpdateOne) SetUpdatedAt(t time.Time) *UserPurchaseUpdateOne {
+	upuo.mutation.SetUpdatedAt(t)
+	return upuo
 }
 
 // SetUserID sets the "user_id" field.
@@ -315,6 +339,7 @@ func (upuo *UserPurchaseUpdateOne) Select(field string, fields ...string) *UserP
 
 // Save executes the query and returns the updated UserPurchase entity.
 func (upuo *UserPurchaseUpdateOne) Save(ctx context.Context) (*UserPurchase, error) {
+	upuo.defaults()
 	return withHooks(ctx, upuo.sqlSave, upuo.mutation, upuo.hooks)
 }
 
@@ -337,6 +362,14 @@ func (upuo *UserPurchaseUpdateOne) Exec(ctx context.Context) error {
 func (upuo *UserPurchaseUpdateOne) ExecX(ctx context.Context) {
 	if err := upuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (upuo *UserPurchaseUpdateOne) defaults() {
+	if _, ok := upuo.mutation.UpdatedAt(); !ok {
+		v := userpurchase.UpdateDefaultUpdatedAt()
+		upuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -379,6 +412,9 @@ func (upuo *UserPurchaseUpdateOne) sqlSave(ctx context.Context) (_node *UserPurc
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := upuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(userpurchase.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := upuo.mutation.PurchaseDate(); ok {
 		_spec.SetField(userpurchase.FieldPurchaseDate, field.TypeTime, value)

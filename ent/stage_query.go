@@ -336,12 +336,12 @@ func (sq *StageQuery) WithRecords(opts ...func(*RecordQuery)) *StageQuery {
 // Example:
 //
 //	var v []struct {
-//		MusicID uuid.UUID `json:"music_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Stage.Query().
-//		GroupBy(stage.FieldMusicID).
+//		GroupBy(stage.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (sq *StageQuery) GroupBy(field string, fields ...string) *StageGroupBy {
@@ -359,11 +359,11 @@ func (sq *StageQuery) GroupBy(field string, fields ...string) *StageGroupBy {
 // Example:
 //
 //	var v []struct {
-//		MusicID uuid.UUID `json:"music_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Stage.Query().
-//		Select(stage.FieldMusicID).
+//		Select(stage.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (sq *StageQuery) Select(fields ...string) *StageSelect {
 	sq.ctx.Fields = append(sq.ctx.Fields, fields...)

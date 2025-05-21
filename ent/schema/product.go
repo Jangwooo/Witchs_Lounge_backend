@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/schema/mixin"
 )
 
 // Product는 상점에서 판매하는 상품 엔티티입니다.
@@ -12,10 +12,16 @@ type Product struct {
 	ent.Schema
 }
 
+// Mixin of the Product.
+func (Product) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.GlobalMixin{},
+	}
+}
+
 // Fields of the Product.
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("name").NotEmpty(),
 		field.String("description").Optional(),
 		field.Float("price").Positive(),

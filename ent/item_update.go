@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,12 @@ type ItemUpdate struct {
 // Where appends a list predicates to the ItemUpdate builder.
 func (iu *ItemUpdate) Where(ps ...predicate.Item) *ItemUpdate {
 	iu.mutation.Where(ps...)
+	return iu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (iu *ItemUpdate) SetUpdatedAt(t time.Time) *ItemUpdate {
+	iu.mutation.SetUpdatedAt(t)
 	return iu
 }
 
@@ -154,6 +161,7 @@ func (iu *ItemUpdate) RemoveProducts(p ...*Product) *ItemUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (iu *ItemUpdate) Save(ctx context.Context) (int, error) {
+	iu.defaults()
 	return withHooks(ctx, iu.sqlSave, iu.mutation, iu.hooks)
 }
 
@@ -176,6 +184,14 @@ func (iu *ItemUpdate) Exec(ctx context.Context) error {
 func (iu *ItemUpdate) ExecX(ctx context.Context) {
 	if err := iu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (iu *ItemUpdate) defaults() {
+	if _, ok := iu.mutation.UpdatedAt(); !ok {
+		v := item.UpdateDefaultUpdatedAt()
+		iu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -205,6 +221,9 @@ func (iu *ItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := iu.mutation.UpdatedAt(); ok {
+		_spec.SetField(item.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := iu.mutation.Name(); ok {
 		_spec.SetField(item.FieldName, field.TypeString, value)
@@ -290,6 +309,12 @@ type ItemUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ItemMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (iuo *ItemUpdateOne) SetUpdatedAt(t time.Time) *ItemUpdateOne {
+	iuo.mutation.SetUpdatedAt(t)
+	return iuo
 }
 
 // SetName sets the "name" field.
@@ -430,6 +455,7 @@ func (iuo *ItemUpdateOne) Select(field string, fields ...string) *ItemUpdateOne 
 
 // Save executes the query and returns the updated Item entity.
 func (iuo *ItemUpdateOne) Save(ctx context.Context) (*Item, error) {
+	iuo.defaults()
 	return withHooks(ctx, iuo.sqlSave, iuo.mutation, iuo.hooks)
 }
 
@@ -452,6 +478,14 @@ func (iuo *ItemUpdateOne) Exec(ctx context.Context) error {
 func (iuo *ItemUpdateOne) ExecX(ctx context.Context) {
 	if err := iuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (iuo *ItemUpdateOne) defaults() {
+	if _, ok := iuo.mutation.UpdatedAt(); !ok {
+		v := item.UpdateDefaultUpdatedAt()
+		iuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -498,6 +532,9 @@ func (iuo *ItemUpdateOne) sqlSave(ctx context.Context) (_node *Item, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := iuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(item.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := iuo.mutation.Name(); ok {
 		_spec.SetField(item.FieldName, field.TypeString, value)

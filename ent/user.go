@@ -17,7 +17,12 @@ import (
 type User struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Nickname holds the value of the "nickname" field.
 	Nickname string `json:"nickname,omitempty"`
 	// SteamID holds the value of the "steam_id" field.
@@ -26,10 +31,6 @@ type User struct {
 	SteamAvatarURL string `json:"steam_avatar_url,omitempty"`
 	// SteamDefaultLanguage holds the value of the "steam_default_language" field.
 	SteamDefaultLanguage string `json:"steam_default_language,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// LastLoginAt holds the value of the "last_login_at" field.
 	LastLoginAt time.Time `json:"last_login_at,omitempty"`
 	// CustomizeData holds the value of the "customize_data" field.
@@ -114,6 +115,18 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				u.ID = *value
 			}
+		case user.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				u.CreatedAt = value.Time
+			}
+		case user.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				u.UpdatedAt = value.Time
+			}
 		case user.FieldNickname:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field nickname", values[i])
@@ -137,18 +150,6 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field steam_default_language", values[i])
 			} else if value.Valid {
 				u.SteamDefaultLanguage = value.String
-			}
-		case user.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				u.CreatedAt = value.Time
-			}
-		case user.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				u.UpdatedAt = value.Time
 			}
 		case user.FieldLastLoginAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -221,6 +222,12 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("nickname=")
 	builder.WriteString(u.Nickname)
 	builder.WriteString(", ")
@@ -232,12 +239,6 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("steam_default_language=")
 	builder.WriteString(u.SteamDefaultLanguage)
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("last_login_at=")
 	builder.WriteString(u.LastLoginAt.Format(time.ANSIC))

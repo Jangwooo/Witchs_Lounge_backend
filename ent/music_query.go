@@ -336,12 +336,12 @@ func (mq *MusicQuery) WithRecords(opts ...func(*RecordQuery)) *MusicQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Music.Query().
-//		GroupBy(music.FieldName).
+//		GroupBy(music.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (mq *MusicQuery) GroupBy(field string, fields ...string) *MusicGroupBy {
@@ -359,11 +359,11 @@ func (mq *MusicQuery) GroupBy(field string, fields ...string) *MusicGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Music.Query().
-//		Select(music.FieldName).
+//		Select(music.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (mq *MusicQuery) Select(fields ...string) *MusicSelect {
 	mq.ctx.Fields = append(mq.ctx.Fields, fields...)

@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -16,7 +17,12 @@ import (
 type Character struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Description holds the value of the "description" field.
@@ -65,6 +71,8 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case character.FieldName, character.FieldDescription, character.FieldSource:
 			values[i] = new(sql.NullString)
+		case character.FieldCreatedAt, character.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case character.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -87,6 +95,18 @@ func (c *Character) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				c.ID = *value
+			}
+		case character.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				c.CreatedAt = value.Time
+			}
+		case character.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				c.UpdatedAt = value.Time
 			}
 		case character.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -152,6 +172,12 @@ func (c *Character) String() string {
 	var builder strings.Builder
 	builder.WriteString("Character(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)
 	builder.WriteString(", ")

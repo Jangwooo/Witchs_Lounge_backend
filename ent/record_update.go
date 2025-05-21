@@ -33,6 +33,12 @@ func (ru *RecordUpdate) Where(ps ...predicate.Record) *RecordUpdate {
 	return ru
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (ru *RecordUpdate) SetUpdatedAt(t time.Time) *RecordUpdate {
+	ru.mutation.SetUpdatedAt(t)
+	return ru
+}
+
 // SetUserID sets the "user_id" field.
 func (ru *RecordUpdate) SetUserID(u uuid.UUID) *RecordUpdate {
 	ru.mutation.SetUserID(u)
@@ -300,6 +306,7 @@ func (ru *RecordUpdate) ClearCharacter() *RecordUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ru *RecordUpdate) Save(ctx context.Context) (int, error) {
+	ru.defaults()
 	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
 }
 
@@ -322,6 +329,14 @@ func (ru *RecordUpdate) Exec(ctx context.Context) error {
 func (ru *RecordUpdate) ExecX(ctx context.Context) {
 	if err := ru.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ru *RecordUpdate) defaults() {
+	if _, ok := ru.mutation.UpdatedAt(); !ok {
+		v := record.UpdateDefaultUpdatedAt()
+		ru.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -353,6 +368,9 @@ func (ru *RecordUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ru.mutation.UpdatedAt(); ok {
+		_spec.SetField(record.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ru.mutation.Score(); ok {
 		_spec.SetField(record.FieldScore, field.TypeInt, value)
@@ -533,6 +551,12 @@ type RecordUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *RecordMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ruo *RecordUpdateOne) SetUpdatedAt(t time.Time) *RecordUpdateOne {
+	ruo.mutation.SetUpdatedAt(t)
+	return ruo
 }
 
 // SetUserID sets the "user_id" field.
@@ -815,6 +839,7 @@ func (ruo *RecordUpdateOne) Select(field string, fields ...string) *RecordUpdate
 
 // Save executes the query and returns the updated Record entity.
 func (ruo *RecordUpdateOne) Save(ctx context.Context) (*Record, error) {
+	ruo.defaults()
 	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
 }
 
@@ -837,6 +862,14 @@ func (ruo *RecordUpdateOne) Exec(ctx context.Context) error {
 func (ruo *RecordUpdateOne) ExecX(ctx context.Context) {
 	if err := ruo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ruo *RecordUpdateOne) defaults() {
+	if _, ok := ruo.mutation.UpdatedAt(); !ok {
+		v := record.UpdateDefaultUpdatedAt()
+		ruo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -885,6 +918,9 @@ func (ruo *RecordUpdateOne) sqlSave(ctx context.Context) (_node *Record, err err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := ruo.mutation.UpdatedAt(); ok {
+		_spec.SetField(record.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ruo.mutation.Score(); ok {
 		_spec.SetField(record.FieldScore, field.TypeInt, value)

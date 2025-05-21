@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,12 @@ type StageUpdate struct {
 // Where appends a list predicates to the StageUpdate builder.
 func (su *StageUpdate) Where(ps ...predicate.Stage) *StageUpdate {
 	su.mutation.Where(ps...)
+	return su
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (su *StageUpdate) SetUpdatedAt(t time.Time) *StageUpdate {
+	su.mutation.SetUpdatedAt(t)
 	return su
 }
 
@@ -140,6 +147,7 @@ func (su *StageUpdate) RemoveRecords(r ...*Record) *StageUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *StageUpdate) Save(ctx context.Context) (int, error) {
+	su.defaults()
 	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
@@ -162,6 +170,14 @@ func (su *StageUpdate) Exec(ctx context.Context) error {
 func (su *StageUpdate) ExecX(ctx context.Context) {
 	if err := su.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (su *StageUpdate) defaults() {
+	if _, ok := su.mutation.UpdatedAt(); !ok {
+		v := stage.UpdateDefaultUpdatedAt()
+		su.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -199,6 +215,9 @@ func (su *StageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := su.mutation.UpdatedAt(); ok {
+		_spec.SetField(stage.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := su.mutation.LevelName(); ok {
 		_spec.SetField(stage.FieldLevelName, field.TypeString, value)
@@ -301,6 +320,12 @@ type StageUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *StageMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (suo *StageUpdateOne) SetUpdatedAt(t time.Time) *StageUpdateOne {
+	suo.mutation.SetUpdatedAt(t)
+	return suo
 }
 
 // SetMusicID sets the "music_id" field.
@@ -426,6 +451,7 @@ func (suo *StageUpdateOne) Select(field string, fields ...string) *StageUpdateOn
 
 // Save executes the query and returns the updated Stage entity.
 func (suo *StageUpdateOne) Save(ctx context.Context) (*Stage, error) {
+	suo.defaults()
 	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
@@ -448,6 +474,14 @@ func (suo *StageUpdateOne) Exec(ctx context.Context) error {
 func (suo *StageUpdateOne) ExecX(ctx context.Context) {
 	if err := suo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (suo *StageUpdateOne) defaults() {
+	if _, ok := suo.mutation.UpdatedAt(); !ok {
+		v := stage.UpdateDefaultUpdatedAt()
+		suo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -502,6 +536,9 @@ func (suo *StageUpdateOne) sqlSave(ctx context.Context) (_node *Stage, err error
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := suo.mutation.UpdatedAt(); ok {
+		_spec.SetField(stage.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := suo.mutation.LevelName(); ok {
 		_spec.SetField(stage.FieldLevelName, field.TypeString, value)

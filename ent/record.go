@@ -21,7 +21,12 @@ import (
 type Record struct {
 	config `json:"-"`
 	// ID of the ent.
+	// Global custom UUID ID
 	ID uuid.UUID `json:"id,omitempty"`
+	// Created time
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Updated time
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// MusicID holds the value of the "music_id" field.
@@ -122,7 +127,7 @@ func (*Record) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case record.FieldAdditionalInfo:
 			values[i] = new(sql.NullString)
-		case record.FieldPlayedAt:
+		case record.FieldCreatedAt, record.FieldUpdatedAt, record.FieldPlayedAt:
 			values[i] = new(sql.NullTime)
 		case record.FieldID, record.FieldUserID, record.FieldMusicID, record.FieldStageID, record.FieldCharacterID:
 			values[i] = new(uuid.UUID)
@@ -146,6 +151,18 @@ func (r *Record) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				r.ID = *value
+			}
+		case record.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				r.CreatedAt = value.Time
+			}
+		case record.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				r.UpdatedAt = value.Time
 			}
 		case record.FieldUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -275,6 +292,12 @@ func (r *Record) String() string {
 	var builder strings.Builder
 	builder.WriteString("Record(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(r.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(r.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(fmt.Sprintf("%v", r.UserID))
 	builder.WriteString(", ")

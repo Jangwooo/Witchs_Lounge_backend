@@ -20,8 +20,6 @@ type Tx struct {
 	Music *MusicClient
 	// Product is the client for interacting with the Product builders.
 	Product *ProductClient
-	// Quest is the client for interacting with the Quest builders.
-	Quest *QuestClient
 	// Record is the client for interacting with the Record builders.
 	Record *RecordClient
 	// Stage is the client for interacting with the Stage builders.
@@ -165,7 +163,6 @@ func (tx *Tx) init() {
 	tx.Item = NewItemClient(tx.config)
 	tx.Music = NewMusicClient(tx.config)
 	tx.Product = NewProductClient(tx.config)
-	tx.Quest = NewQuestClient(tx.config)
 	tx.Record = NewRecordClient(tx.config)
 	tx.Stage = NewStageClient(tx.config)
 	tx.User = NewUserClient(tx.config)
