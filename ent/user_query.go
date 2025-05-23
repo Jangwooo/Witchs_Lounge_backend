@@ -17,6 +17,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/product"
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -29,6 +30,7 @@ type UserQuery struct {
 	predicates            []predicate.User
 	withPurchasedProducts *ProductQuery
 	withRecords           *RecordQuery
+	withUserAchievements  *UserAchievementQuery
 	withUserPurchases     *UserPurchaseQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -103,6 +105,28 @@ func (uq *UserQuery) QueryRecords() *RecordQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(record.Table, record.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.RecordsTable, user.RecordsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUserAchievements chains the current query on the "user_achievements" edge.
+func (uq *UserQuery) QueryUserAchievements() *UserAchievementQuery {
+	query := (&UserAchievementClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(userachievement.Table, userachievement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserAchievementsTable, user.UserAchievementsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -326,6 +350,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		predicates:            append([]predicate.User{}, uq.predicates...),
 		withPurchasedProducts: uq.withPurchasedProducts.Clone(),
 		withRecords:           uq.withRecords.Clone(),
+		withUserAchievements:  uq.withUserAchievements.Clone(),
 		withUserPurchases:     uq.withUserPurchases.Clone(),
 		// clone intermediate query.
 		sql:  uq.sql.Clone(),
@@ -352,6 +377,17 @@ func (uq *UserQuery) WithRecords(opts ...func(*RecordQuery)) *UserQuery {
 		opt(query)
 	}
 	uq.withRecords = query
+	return uq
+}
+
+// WithUserAchievements tells the query-builder to eager-load the nodes that are connected to
+// the "user_achievements" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithUserAchievements(opts ...func(*UserAchievementQuery)) *UserQuery {
+	query := (&UserAchievementClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withUserAchievements = query
 	return uq
 }
 
@@ -444,9 +480,10 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			uq.withPurchasedProducts != nil,
 			uq.withRecords != nil,
+			uq.withUserAchievements != nil,
 			uq.withUserPurchases != nil,
 		}
 	)
@@ -479,6 +516,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadRecords(ctx, query, nodes,
 			func(n *User) { n.Edges.Records = []*Record{} },
 			func(n *User, e *Record) { n.Edges.Records = append(n.Edges.Records, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withUserAchievements; query != nil {
+		if err := uq.loadUserAchievements(ctx, query, nodes,
+			func(n *User) { n.Edges.UserAchievements = []*UserAchievement{} },
+			func(n *User, e *UserAchievement) { n.Edges.UserAchievements = append(n.Edges.UserAchievements, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -568,6 +612,36 @@ func (uq *UserQuery) loadRecords(ctx context.Context, query *RecordQuery, nodes 
 	}
 	query.Where(predicate.Record(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.RecordsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (uq *UserQuery) loadUserAchievements(ctx context.Context, query *UserAchievementQuery, nodes []*User, init func(*User), assign func(*User, *UserAchievement)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(userachievement.FieldUserID)
+	}
+	query.Where(predicate.UserAchievement(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.UserAchievementsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

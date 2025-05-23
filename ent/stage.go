@@ -24,14 +24,22 @@ type Stage struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Updated time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// MusicID holds the value of the "music_id" field.
+	// 음악 ID
 	MusicID uuid.UUID `json:"music_id,omitempty"`
-	// LevelName holds the value of the "level_name" field.
+	// 난이도 이름 (Easy, Normal, Hard, Expert)
 	LevelName string `json:"level_name,omitempty"`
-	// LevelAddress holds the value of the "level_address" field.
+	// 난이도 수치 (1-10)
+	Difficulty int `json:"difficulty,omitempty"`
+	// 채보 파일 경로
 	LevelAddress string `json:"level_address,omitempty"`
-	// JacketAddress holds the value of the "jacket_address" field.
+	// 난이도별 재킷 이미지 경로
 	JacketAddress string `json:"jacket_address,omitempty"`
+	// 총 노트 수
+	TotalNotes int `json:"total_notes,omitempty"`
+	// 최대 콤보
+	MaxCombo int `json:"max_combo,omitempty"`
+	// 활성 여부
+	IsActive bool `json:"is_active,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StageQuery when eager-loading is set.
 	Edges        StageEdges `json:"edges"`
@@ -74,6 +82,10 @@ func (*Stage) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case stage.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case stage.FieldDifficulty, stage.FieldTotalNotes, stage.FieldMaxCombo:
+			values[i] = new(sql.NullInt64)
 		case stage.FieldLevelName, stage.FieldLevelAddress, stage.FieldJacketAddress:
 			values[i] = new(sql.NullString)
 		case stage.FieldCreatedAt, stage.FieldUpdatedAt:
@@ -125,6 +137,12 @@ func (s *Stage) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.LevelName = value.String
 			}
+		case stage.FieldDifficulty:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field difficulty", values[i])
+			} else if value.Valid {
+				s.Difficulty = int(value.Int64)
+			}
 		case stage.FieldLevelAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field level_address", values[i])
@@ -136,6 +154,24 @@ func (s *Stage) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field jacket_address", values[i])
 			} else if value.Valid {
 				s.JacketAddress = value.String
+			}
+		case stage.FieldTotalNotes:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field total_notes", values[i])
+			} else if value.Valid {
+				s.TotalNotes = int(value.Int64)
+			}
+		case stage.FieldMaxCombo:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field max_combo", values[i])
+			} else if value.Valid {
+				s.MaxCombo = int(value.Int64)
+			}
+		case stage.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				s.IsActive = value.Bool
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -195,11 +231,23 @@ func (s *Stage) String() string {
 	builder.WriteString("level_name=")
 	builder.WriteString(s.LevelName)
 	builder.WriteString(", ")
+	builder.WriteString("difficulty=")
+	builder.WriteString(fmt.Sprintf("%v", s.Difficulty))
+	builder.WriteString(", ")
 	builder.WriteString("level_address=")
 	builder.WriteString(s.LevelAddress)
 	builder.WriteString(", ")
 	builder.WriteString("jacket_address=")
 	builder.WriteString(s.JacketAddress)
+	builder.WriteString(", ")
+	builder.WriteString("total_notes=")
+	builder.WriteString(fmt.Sprintf("%v", s.TotalNotes))
+	builder.WriteString(", ")
+	builder.WriteString("max_combo=")
+	builder.WriteString(fmt.Sprintf("%v", s.MaxCombo))
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", s.IsActive))
 	builder.WriteByte(')')
 	return builder.String()
 }

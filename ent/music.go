@@ -23,16 +23,34 @@ type Music struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Updated time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// Name holds the value of the "name" field.
+	// 곡 제목
 	Name string `json:"name,omitempty"`
-	// MusicSource holds the value of the "music_source" field.
+	// 아티스트
+	Artist string `json:"artist,omitempty"`
+	// 작곡가
+	Composer string `json:"composer,omitempty"`
+	// 음악 파일 경로
 	MusicSource string `json:"music_source,omitempty"`
-	// JacketSource holds the value of the "jacket_source" field.
+	// 재킷 이미지 경로
 	JacketSource string `json:"jacket_source,omitempty"`
-	// Duration holds the value of the "duration" field.
+	// 곡 길이(초)
 	Duration float64 `json:"duration,omitempty"`
-	// Author holds the value of the "Author" field.
-	Author string `json:"Author,omitempty"`
+	// BPM
+	Bpm float64 `json:"bpm,omitempty"`
+	// 장르
+	Genre string `json:"genre,omitempty"`
+	// 곡 설명
+	Description string `json:"description,omitempty"`
+	// 추천곡 여부
+	IsFeatured bool `json:"is_featured,omitempty"`
+	// 무료곡 여부
+	IsFree bool `json:"is_free,omitempty"`
+	// 해금 레벨
+	UnlockLevel int `json:"unlock_level,omitempty"`
+	// 출시일
+	ReleaseDate *time.Time `json:"release_date,omitempty"`
+	// 활성 여부
+	IsActive bool `json:"is_active,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MusicQuery when eager-loading is set.
 	Edges        MusicEdges `json:"edges"`
@@ -73,11 +91,15 @@ func (*Music) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case music.FieldDuration:
+		case music.FieldIsFeatured, music.FieldIsFree, music.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case music.FieldDuration, music.FieldBpm:
 			values[i] = new(sql.NullFloat64)
-		case music.FieldName, music.FieldMusicSource, music.FieldJacketSource, music.FieldAuthor:
+		case music.FieldUnlockLevel:
+			values[i] = new(sql.NullInt64)
+		case music.FieldName, music.FieldArtist, music.FieldComposer, music.FieldMusicSource, music.FieldJacketSource, music.FieldGenre, music.FieldDescription:
 			values[i] = new(sql.NullString)
-		case music.FieldCreatedAt, music.FieldUpdatedAt:
+		case music.FieldCreatedAt, music.FieldUpdatedAt, music.FieldReleaseDate:
 			values[i] = new(sql.NullTime)
 		case music.FieldID:
 			values[i] = new(uuid.UUID)
@@ -120,6 +142,18 @@ func (m *Music) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Name = value.String
 			}
+		case music.FieldArtist:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field artist", values[i])
+			} else if value.Valid {
+				m.Artist = value.String
+			}
+		case music.FieldComposer:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field composer", values[i])
+			} else if value.Valid {
+				m.Composer = value.String
+			}
 		case music.FieldMusicSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field music_source", values[i])
@@ -138,11 +172,54 @@ func (m *Music) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Duration = value.Float64
 			}
-		case music.FieldAuthor:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field Author", values[i])
+		case music.FieldBpm:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field bpm", values[i])
 			} else if value.Valid {
-				m.Author = value.String
+				m.Bpm = value.Float64
+			}
+		case music.FieldGenre:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field genre", values[i])
+			} else if value.Valid {
+				m.Genre = value.String
+			}
+		case music.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				m.Description = value.String
+			}
+		case music.FieldIsFeatured:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_featured", values[i])
+			} else if value.Valid {
+				m.IsFeatured = value.Bool
+			}
+		case music.FieldIsFree:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_free", values[i])
+			} else if value.Valid {
+				m.IsFree = value.Bool
+			}
+		case music.FieldUnlockLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field unlock_level", values[i])
+			} else if value.Valid {
+				m.UnlockLevel = int(value.Int64)
+			}
+		case music.FieldReleaseDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field release_date", values[i])
+			} else if value.Valid {
+				m.ReleaseDate = new(time.Time)
+				*m.ReleaseDate = value.Time
+			}
+		case music.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_active", values[i])
+			} else if value.Valid {
+				m.IsActive = value.Bool
 			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
@@ -199,6 +276,12 @@ func (m *Music) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(m.Name)
 	builder.WriteString(", ")
+	builder.WriteString("artist=")
+	builder.WriteString(m.Artist)
+	builder.WriteString(", ")
+	builder.WriteString("composer=")
+	builder.WriteString(m.Composer)
+	builder.WriteString(", ")
 	builder.WriteString("music_source=")
 	builder.WriteString(m.MusicSource)
 	builder.WriteString(", ")
@@ -208,8 +291,31 @@ func (m *Music) String() string {
 	builder.WriteString("duration=")
 	builder.WriteString(fmt.Sprintf("%v", m.Duration))
 	builder.WriteString(", ")
-	builder.WriteString("Author=")
-	builder.WriteString(m.Author)
+	builder.WriteString("bpm=")
+	builder.WriteString(fmt.Sprintf("%v", m.Bpm))
+	builder.WriteString(", ")
+	builder.WriteString("genre=")
+	builder.WriteString(m.Genre)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("is_featured=")
+	builder.WriteString(fmt.Sprintf("%v", m.IsFeatured))
+	builder.WriteString(", ")
+	builder.WriteString("is_free=")
+	builder.WriteString(fmt.Sprintf("%v", m.IsFree))
+	builder.WriteString(", ")
+	builder.WriteString("unlock_level=")
+	builder.WriteString(fmt.Sprintf("%v", m.UnlockLevel))
+	builder.WriteString(", ")
+	if v := m.ReleaseDate; v != nil {
+		builder.WriteString("release_date=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("is_active=")
+	builder.WriteString(fmt.Sprintf("%v", m.IsActive))
 	builder.WriteByte(')')
 	return builder.String()
 }

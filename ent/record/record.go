@@ -3,6 +3,7 @@
 package record
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -37,12 +38,24 @@ const (
 	FieldBadCount = "bad_count"
 	// FieldMissCount holds the string denoting the miss_count field in the database.
 	FieldMissCount = "miss_count"
-	// FieldPlayedAt holds the string denoting the played_at field in the database.
-	FieldPlayedAt = "played_at"
+	// FieldMaxCombo holds the string denoting the max_combo field in the database.
+	FieldMaxCombo = "max_combo"
 	// FieldAccuracy holds the string denoting the accuracy field in the database.
 	FieldAccuracy = "accuracy"
+	// FieldRank holds the string denoting the rank field in the database.
+	FieldRank = "rank"
+	// FieldIsFullCombo holds the string denoting the is_full_combo field in the database.
+	FieldIsFullCombo = "is_full_combo"
+	// FieldIsPerfectPlay holds the string denoting the is_perfect_play field in the database.
+	FieldIsPerfectPlay = "is_perfect_play"
+	// FieldPlayedAt holds the string denoting the played_at field in the database.
+	FieldPlayedAt = "played_at"
+	// FieldPlayDuration holds the string denoting the play_duration field in the database.
+	FieldPlayDuration = "play_duration"
 	// FieldAdditionalInfo holds the string denoting the additional_info field in the database.
 	FieldAdditionalInfo = "additional_info"
+	// FieldIsValid holds the string denoting the is_valid field in the database.
+	FieldIsValid = "is_valid"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeMusic holds the string denoting the music edge name in mutations.
@@ -97,9 +110,15 @@ var Columns = []string{
 	FieldGoodCount,
 	FieldBadCount,
 	FieldMissCount,
-	FieldPlayedAt,
+	FieldMaxCombo,
 	FieldAccuracy,
+	FieldRank,
+	FieldIsFullCombo,
+	FieldIsPerfectPlay,
+	FieldPlayedAt,
+	FieldPlayDuration,
 	FieldAdditionalInfo,
+	FieldIsValid,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -127,13 +146,50 @@ var (
 	DefaultBadCount int
 	// DefaultMissCount holds the default value on creation for the "miss_count" field.
 	DefaultMissCount int
-	// DefaultPlayedAt holds the default value on creation for the "played_at" field.
-	DefaultPlayedAt func() time.Time
+	// DefaultMaxCombo holds the default value on creation for the "max_combo" field.
+	DefaultMaxCombo int
 	// DefaultAccuracy holds the default value on creation for the "accuracy" field.
 	DefaultAccuracy float64
+	// DefaultIsFullCombo holds the default value on creation for the "is_full_combo" field.
+	DefaultIsFullCombo bool
+	// DefaultIsPerfectPlay holds the default value on creation for the "is_perfect_play" field.
+	DefaultIsPerfectPlay bool
+	// DefaultPlayedAt holds the default value on creation for the "played_at" field.
+	DefaultPlayedAt func() time.Time
+	// DefaultIsValid holds the default value on creation for the "is_valid" field.
+	DefaultIsValid bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
+
+// Rank defines the type for the "rank" enum field.
+type Rank string
+
+// Rank values.
+const (
+	RankF   Rank = "F"
+	RankD   Rank = "D"
+	RankC   Rank = "C"
+	RankB   Rank = "B"
+	RankA   Rank = "A"
+	RankS   Rank = "S"
+	RankSS  Rank = "SS"
+	RankSSS Rank = "SSS"
+)
+
+func (r Rank) String() string {
+	return string(r)
+}
+
+// RankValidator is a validator for the "rank" field enum values. It is called by the builders before save.
+func RankValidator(r Rank) error {
+	switch r {
+	case RankF, RankD, RankC, RankB, RankA, RankS, RankSS, RankSSS:
+		return nil
+	default:
+		return fmt.Errorf("record: invalid enum value for rank field: %q", r)
+	}
+}
 
 // OrderOption defines the ordering options for the Record queries.
 type OrderOption func(*sql.Selector)
@@ -198,9 +254,9 @@ func ByMissCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMissCount, opts...).ToFunc()
 }
 
-// ByPlayedAt orders the results by the played_at field.
-func ByPlayedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPlayedAt, opts...).ToFunc()
+// ByMaxCombo orders the results by the max_combo field.
+func ByMaxCombo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMaxCombo, opts...).ToFunc()
 }
 
 // ByAccuracy orders the results by the accuracy field.
@@ -208,9 +264,34 @@ func ByAccuracy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAccuracy, opts...).ToFunc()
 }
 
-// ByAdditionalInfo orders the results by the additional_info field.
-func ByAdditionalInfo(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAdditionalInfo, opts...).ToFunc()
+// ByRank orders the results by the rank field.
+func ByRank(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRank, opts...).ToFunc()
+}
+
+// ByIsFullCombo orders the results by the is_full_combo field.
+func ByIsFullCombo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsFullCombo, opts...).ToFunc()
+}
+
+// ByIsPerfectPlay orders the results by the is_perfect_play field.
+func ByIsPerfectPlay(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPerfectPlay, opts...).ToFunc()
+}
+
+// ByPlayedAt orders the results by the played_at field.
+func ByPlayedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlayedAt, opts...).ToFunc()
+}
+
+// ByPlayDuration orders the results by the play_duration field.
+func ByPlayDuration(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlayDuration, opts...).ToFunc()
+}
+
+// ByIsValid orders the results by the is_valid field.
+func ByIsValid(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsValid, opts...).ToFunc()
 }
 
 // ByUserField orders the results by user field.

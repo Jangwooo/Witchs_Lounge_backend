@@ -57,6 +57,26 @@ func (mc *MusicCreate) SetName(s string) *MusicCreate {
 	return mc
 }
 
+// SetArtist sets the "artist" field.
+func (mc *MusicCreate) SetArtist(s string) *MusicCreate {
+	mc.mutation.SetArtist(s)
+	return mc
+}
+
+// SetComposer sets the "composer" field.
+func (mc *MusicCreate) SetComposer(s string) *MusicCreate {
+	mc.mutation.SetComposer(s)
+	return mc
+}
+
+// SetNillableComposer sets the "composer" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableComposer(s *string) *MusicCreate {
+	if s != nil {
+		mc.SetComposer(*s)
+	}
+	return mc
+}
+
 // SetMusicSource sets the "music_source" field.
 func (mc *MusicCreate) SetMusicSource(s string) *MusicCreate {
 	mc.mutation.SetMusicSource(s)
@@ -75,9 +95,107 @@ func (mc *MusicCreate) SetDuration(f float64) *MusicCreate {
 	return mc
 }
 
-// SetAuthor sets the "Author" field.
-func (mc *MusicCreate) SetAuthor(s string) *MusicCreate {
-	mc.mutation.SetAuthor(s)
+// SetBpm sets the "bpm" field.
+func (mc *MusicCreate) SetBpm(f float64) *MusicCreate {
+	mc.mutation.SetBpm(f)
+	return mc
+}
+
+// SetGenre sets the "genre" field.
+func (mc *MusicCreate) SetGenre(s string) *MusicCreate {
+	mc.mutation.SetGenre(s)
+	return mc
+}
+
+// SetNillableGenre sets the "genre" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableGenre(s *string) *MusicCreate {
+	if s != nil {
+		mc.SetGenre(*s)
+	}
+	return mc
+}
+
+// SetDescription sets the "description" field.
+func (mc *MusicCreate) SetDescription(s string) *MusicCreate {
+	mc.mutation.SetDescription(s)
+	return mc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableDescription(s *string) *MusicCreate {
+	if s != nil {
+		mc.SetDescription(*s)
+	}
+	return mc
+}
+
+// SetIsFeatured sets the "is_featured" field.
+func (mc *MusicCreate) SetIsFeatured(b bool) *MusicCreate {
+	mc.mutation.SetIsFeatured(b)
+	return mc
+}
+
+// SetNillableIsFeatured sets the "is_featured" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableIsFeatured(b *bool) *MusicCreate {
+	if b != nil {
+		mc.SetIsFeatured(*b)
+	}
+	return mc
+}
+
+// SetIsFree sets the "is_free" field.
+func (mc *MusicCreate) SetIsFree(b bool) *MusicCreate {
+	mc.mutation.SetIsFree(b)
+	return mc
+}
+
+// SetNillableIsFree sets the "is_free" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableIsFree(b *bool) *MusicCreate {
+	if b != nil {
+		mc.SetIsFree(*b)
+	}
+	return mc
+}
+
+// SetUnlockLevel sets the "unlock_level" field.
+func (mc *MusicCreate) SetUnlockLevel(i int) *MusicCreate {
+	mc.mutation.SetUnlockLevel(i)
+	return mc
+}
+
+// SetNillableUnlockLevel sets the "unlock_level" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableUnlockLevel(i *int) *MusicCreate {
+	if i != nil {
+		mc.SetUnlockLevel(*i)
+	}
+	return mc
+}
+
+// SetReleaseDate sets the "release_date" field.
+func (mc *MusicCreate) SetReleaseDate(t time.Time) *MusicCreate {
+	mc.mutation.SetReleaseDate(t)
+	return mc
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableReleaseDate(t *time.Time) *MusicCreate {
+	if t != nil {
+		mc.SetReleaseDate(*t)
+	}
+	return mc
+}
+
+// SetIsActive sets the "is_active" field.
+func (mc *MusicCreate) SetIsActive(b bool) *MusicCreate {
+	mc.mutation.SetIsActive(b)
+	return mc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (mc *MusicCreate) SetNillableIsActive(b *bool) *MusicCreate {
+	if b != nil {
+		mc.SetIsActive(*b)
+	}
 	return mc
 }
 
@@ -168,6 +286,22 @@ func (mc *MusicCreate) defaults() {
 		v := music.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := mc.mutation.IsFeatured(); !ok {
+		v := music.DefaultIsFeatured
+		mc.mutation.SetIsFeatured(v)
+	}
+	if _, ok := mc.mutation.IsFree(); !ok {
+		v := music.DefaultIsFree
+		mc.mutation.SetIsFree(v)
+	}
+	if _, ok := mc.mutation.UnlockLevel(); !ok {
+		v := music.DefaultUnlockLevel
+		mc.mutation.SetUnlockLevel(v)
+	}
+	if _, ok := mc.mutation.IsActive(); !ok {
+		v := music.DefaultIsActive
+		mc.mutation.SetIsActive(v)
+	}
 	if _, ok := mc.mutation.ID(); !ok {
 		v := music.DefaultID()
 		mc.mutation.SetID(v)
@@ -185,6 +319,9 @@ func (mc *MusicCreate) check() error {
 	if _, ok := mc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Music.name"`)}
 	}
+	if _, ok := mc.mutation.Artist(); !ok {
+		return &ValidationError{Name: "artist", err: errors.New(`ent: missing required field "Music.artist"`)}
+	}
 	if _, ok := mc.mutation.MusicSource(); !ok {
 		return &ValidationError{Name: "music_source", err: errors.New(`ent: missing required field "Music.music_source"`)}
 	}
@@ -194,8 +331,20 @@ func (mc *MusicCreate) check() error {
 	if _, ok := mc.mutation.Duration(); !ok {
 		return &ValidationError{Name: "duration", err: errors.New(`ent: missing required field "Music.duration"`)}
 	}
-	if _, ok := mc.mutation.Author(); !ok {
-		return &ValidationError{Name: "Author", err: errors.New(`ent: missing required field "Music.Author"`)}
+	if _, ok := mc.mutation.Bpm(); !ok {
+		return &ValidationError{Name: "bpm", err: errors.New(`ent: missing required field "Music.bpm"`)}
+	}
+	if _, ok := mc.mutation.IsFeatured(); !ok {
+		return &ValidationError{Name: "is_featured", err: errors.New(`ent: missing required field "Music.is_featured"`)}
+	}
+	if _, ok := mc.mutation.IsFree(); !ok {
+		return &ValidationError{Name: "is_free", err: errors.New(`ent: missing required field "Music.is_free"`)}
+	}
+	if _, ok := mc.mutation.UnlockLevel(); !ok {
+		return &ValidationError{Name: "unlock_level", err: errors.New(`ent: missing required field "Music.unlock_level"`)}
+	}
+	if _, ok := mc.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "is_active", err: errors.New(`ent: missing required field "Music.is_active"`)}
 	}
 	return nil
 }
@@ -244,6 +393,14 @@ func (mc *MusicCreate) createSpec() (*Music, *sqlgraph.CreateSpec) {
 		_spec.SetField(music.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := mc.mutation.Artist(); ok {
+		_spec.SetField(music.FieldArtist, field.TypeString, value)
+		_node.Artist = value
+	}
+	if value, ok := mc.mutation.Composer(); ok {
+		_spec.SetField(music.FieldComposer, field.TypeString, value)
+		_node.Composer = value
+	}
 	if value, ok := mc.mutation.MusicSource(); ok {
 		_spec.SetField(music.FieldMusicSource, field.TypeString, value)
 		_node.MusicSource = value
@@ -256,9 +413,37 @@ func (mc *MusicCreate) createSpec() (*Music, *sqlgraph.CreateSpec) {
 		_spec.SetField(music.FieldDuration, field.TypeFloat64, value)
 		_node.Duration = value
 	}
-	if value, ok := mc.mutation.Author(); ok {
-		_spec.SetField(music.FieldAuthor, field.TypeString, value)
-		_node.Author = value
+	if value, ok := mc.mutation.Bpm(); ok {
+		_spec.SetField(music.FieldBpm, field.TypeFloat64, value)
+		_node.Bpm = value
+	}
+	if value, ok := mc.mutation.Genre(); ok {
+		_spec.SetField(music.FieldGenre, field.TypeString, value)
+		_node.Genre = value
+	}
+	if value, ok := mc.mutation.Description(); ok {
+		_spec.SetField(music.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := mc.mutation.IsFeatured(); ok {
+		_spec.SetField(music.FieldIsFeatured, field.TypeBool, value)
+		_node.IsFeatured = value
+	}
+	if value, ok := mc.mutation.IsFree(); ok {
+		_spec.SetField(music.FieldIsFree, field.TypeBool, value)
+		_node.IsFree = value
+	}
+	if value, ok := mc.mutation.UnlockLevel(); ok {
+		_spec.SetField(music.FieldUnlockLevel, field.TypeInt, value)
+		_node.UnlockLevel = value
+	}
+	if value, ok := mc.mutation.ReleaseDate(); ok {
+		_spec.SetField(music.FieldReleaseDate, field.TypeTime, value)
+		_node.ReleaseDate = &value
+	}
+	if value, ok := mc.mutation.IsActive(); ok {
+		_spec.SetField(music.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
 	}
 	if nodes := mc.mutation.StagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

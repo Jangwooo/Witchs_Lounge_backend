@@ -14,6 +14,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/product"
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -52,42 +53,110 @@ func (uc *UserCreate) SetNillableUpdatedAt(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetPlatformType sets the "platform_type" field.
+func (uc *UserCreate) SetPlatformType(ut user.PlatformType) *UserCreate {
+	uc.mutation.SetPlatformType(ut)
+	return uc
+}
+
+// SetPlatformUserID sets the "platform_user_id" field.
+func (uc *UserCreate) SetPlatformUserID(s string) *UserCreate {
+	uc.mutation.SetPlatformUserID(s)
+	return uc
+}
+
+// SetPlatformEmail sets the "platform_email" field.
+func (uc *UserCreate) SetPlatformEmail(s string) *UserCreate {
+	uc.mutation.SetPlatformEmail(s)
+	return uc
+}
+
+// SetNillablePlatformEmail sets the "platform_email" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePlatformEmail(s *string) *UserCreate {
+	if s != nil {
+		uc.SetPlatformEmail(*s)
+	}
+	return uc
+}
+
+// SetPlatformAvatarURL sets the "platform_avatar_url" field.
+func (uc *UserCreate) SetPlatformAvatarURL(s string) *UserCreate {
+	uc.mutation.SetPlatformAvatarURL(s)
+	return uc
+}
+
+// SetNillablePlatformAvatarURL sets the "platform_avatar_url" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePlatformAvatarURL(s *string) *UserCreate {
+	if s != nil {
+		uc.SetPlatformAvatarURL(*s)
+	}
+	return uc
+}
+
+// SetPlatformDisplayName sets the "platform_display_name" field.
+func (uc *UserCreate) SetPlatformDisplayName(s string) *UserCreate {
+	uc.mutation.SetPlatformDisplayName(s)
+	return uc
+}
+
+// SetNillablePlatformDisplayName sets the "platform_display_name" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePlatformDisplayName(s *string) *UserCreate {
+	if s != nil {
+		uc.SetPlatformDisplayName(*s)
+	}
+	return uc
+}
+
+// SetLanguage sets the "language" field.
+func (uc *UserCreate) SetLanguage(s string) *UserCreate {
+	uc.mutation.SetLanguage(s)
+	return uc
+}
+
+// SetNillableLanguage sets the "language" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLanguage(s *string) *UserCreate {
+	if s != nil {
+		uc.SetLanguage(*s)
+	}
+	return uc
+}
+
+// SetPlatformData sets the "platform_data" field.
+func (uc *UserCreate) SetPlatformData(m map[string]interface{}) *UserCreate {
+	uc.mutation.SetPlatformData(m)
+	return uc
+}
+
+// SetIsVerified sets the "is_verified" field.
+func (uc *UserCreate) SetIsVerified(b bool) *UserCreate {
+	uc.mutation.SetIsVerified(b)
+	return uc
+}
+
+// SetNillableIsVerified sets the "is_verified" field if the given value is not nil.
+func (uc *UserCreate) SetNillableIsVerified(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetIsVerified(*b)
+	}
+	return uc
+}
+
 // SetNickname sets the "nickname" field.
 func (uc *UserCreate) SetNickname(s string) *UserCreate {
 	uc.mutation.SetNickname(s)
 	return uc
 }
 
-// SetSteamID sets the "steam_id" field.
-func (uc *UserCreate) SetSteamID(s string) *UserCreate {
-	uc.mutation.SetSteamID(s)
+// SetDisplayName sets the "display_name" field.
+func (uc *UserCreate) SetDisplayName(s string) *UserCreate {
+	uc.mutation.SetDisplayName(s)
 	return uc
 }
 
-// SetSteamAvatarURL sets the "steam_avatar_url" field.
-func (uc *UserCreate) SetSteamAvatarURL(s string) *UserCreate {
-	uc.mutation.SetSteamAvatarURL(s)
-	return uc
-}
-
-// SetNillableSteamAvatarURL sets the "steam_avatar_url" field if the given value is not nil.
-func (uc *UserCreate) SetNillableSteamAvatarURL(s *string) *UserCreate {
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (uc *UserCreate) SetNillableDisplayName(s *string) *UserCreate {
 	if s != nil {
-		uc.SetSteamAvatarURL(*s)
-	}
-	return uc
-}
-
-// SetSteamDefaultLanguage sets the "steam_default_language" field.
-func (uc *UserCreate) SetSteamDefaultLanguage(s string) *UserCreate {
-	uc.mutation.SetSteamDefaultLanguage(s)
-	return uc
-}
-
-// SetNillableSteamDefaultLanguage sets the "steam_default_language" field if the given value is not nil.
-func (uc *UserCreate) SetNillableSteamDefaultLanguage(s *string) *UserCreate {
-	if s != nil {
-		uc.SetSteamDefaultLanguage(*s)
+		uc.SetDisplayName(*s)
 	}
 	return uc
 }
@@ -106,30 +175,118 @@ func (uc *UserCreate) SetNillableLastLoginAt(t *time.Time) *UserCreate {
 	return uc
 }
 
-// SetCustomizeData sets the "customize_data" field.
-func (uc *UserCreate) SetCustomizeData(s string) *UserCreate {
-	uc.mutation.SetCustomizeData(s)
+// SetLevel sets the "level" field.
+func (uc *UserCreate) SetLevel(i int) *UserCreate {
+	uc.mutation.SetLevel(i)
 	return uc
 }
 
-// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
-func (uc *UserCreate) SetNillableCustomizeData(s *string) *UserCreate {
-	if s != nil {
-		uc.SetCustomizeData(*s)
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLevel(i *int) *UserCreate {
+	if i != nil {
+		uc.SetLevel(*i)
 	}
 	return uc
 }
 
-// SetSaveData sets the "save_data" field.
-func (uc *UserCreate) SetSaveData(s string) *UserCreate {
-	uc.mutation.SetSaveData(s)
+// SetExp sets the "exp" field.
+func (uc *UserCreate) SetExp(i int) *UserCreate {
+	uc.mutation.SetExp(i)
 	return uc
 }
 
-// SetNillableSaveData sets the "save_data" field if the given value is not nil.
-func (uc *UserCreate) SetNillableSaveData(s *string) *UserCreate {
+// SetNillableExp sets the "exp" field if the given value is not nil.
+func (uc *UserCreate) SetNillableExp(i *int) *UserCreate {
+	if i != nil {
+		uc.SetExp(*i)
+	}
+	return uc
+}
+
+// SetCoin sets the "coin" field.
+func (uc *UserCreate) SetCoin(i int) *UserCreate {
+	uc.mutation.SetCoin(i)
+	return uc
+}
+
+// SetNillableCoin sets the "coin" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCoin(i *int) *UserCreate {
+	if i != nil {
+		uc.SetCoin(*i)
+	}
+	return uc
+}
+
+// SetGem sets the "gem" field.
+func (uc *UserCreate) SetGem(i int) *UserCreate {
+	uc.mutation.SetGem(i)
+	return uc
+}
+
+// SetNillableGem sets the "gem" field if the given value is not nil.
+func (uc *UserCreate) SetNillableGem(i *int) *UserCreate {
+	if i != nil {
+		uc.SetGem(*i)
+	}
+	return uc
+}
+
+// SetSettings sets the "settings" field.
+func (uc *UserCreate) SetSettings(m map[string]interface{}) *UserCreate {
+	uc.mutation.SetSettings(m)
+	return uc
+}
+
+// SetCustomizeData sets the "customize_data" field.
+func (uc *UserCreate) SetCustomizeData(m map[string]interface{}) *UserCreate {
+	uc.mutation.SetCustomizeData(m)
+	return uc
+}
+
+// SetSaveData sets the "save_data" field.
+func (uc *UserCreate) SetSaveData(m map[string]interface{}) *UserCreate {
+	uc.mutation.SetSaveData(m)
+	return uc
+}
+
+// SetIsBanned sets the "is_banned" field.
+func (uc *UserCreate) SetIsBanned(b bool) *UserCreate {
+	uc.mutation.SetIsBanned(b)
+	return uc
+}
+
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (uc *UserCreate) SetNillableIsBanned(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetIsBanned(*b)
+	}
+	return uc
+}
+
+// SetBannedUntil sets the "banned_until" field.
+func (uc *UserCreate) SetBannedUntil(t time.Time) *UserCreate {
+	uc.mutation.SetBannedUntil(t)
+	return uc
+}
+
+// SetNillableBannedUntil sets the "banned_until" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBannedUntil(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetBannedUntil(*t)
+	}
+	return uc
+}
+
+// SetBanReason sets the "ban_reason" field.
+func (uc *UserCreate) SetBanReason(s string) *UserCreate {
+	uc.mutation.SetBanReason(s)
+	return uc
+}
+
+// SetNillableBanReason sets the "ban_reason" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBanReason(s *string) *UserCreate {
 	if s != nil {
-		uc.SetSaveData(*s)
+		uc.SetBanReason(*s)
 	}
 	return uc
 }
@@ -176,6 +333,21 @@ func (uc *UserCreate) AddRecords(r ...*Record) *UserCreate {
 		ids[i] = r[i].ID
 	}
 	return uc.AddRecordIDs(ids...)
+}
+
+// AddUserAchievementIDs adds the "user_achievements" edge to the UserAchievement entity by IDs.
+func (uc *UserCreate) AddUserAchievementIDs(ids ...uuid.UUID) *UserCreate {
+	uc.mutation.AddUserAchievementIDs(ids...)
+	return uc
+}
+
+// AddUserAchievements adds the "user_achievements" edges to the UserAchievement entity.
+func (uc *UserCreate) AddUserAchievements(u ...*UserAchievement) *UserCreate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uc.AddUserAchievementIDs(ids...)
 }
 
 // AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
@@ -236,13 +408,37 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultUpdatedAt()
 		uc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := uc.mutation.SteamDefaultLanguage(); !ok {
-		v := user.DefaultSteamDefaultLanguage
-		uc.mutation.SetSteamDefaultLanguage(v)
+	if _, ok := uc.mutation.Language(); !ok {
+		v := user.DefaultLanguage
+		uc.mutation.SetLanguage(v)
+	}
+	if _, ok := uc.mutation.IsVerified(); !ok {
+		v := user.DefaultIsVerified
+		uc.mutation.SetIsVerified(v)
 	}
 	if _, ok := uc.mutation.LastLoginAt(); !ok {
 		v := user.DefaultLastLoginAt()
 		uc.mutation.SetLastLoginAt(v)
+	}
+	if _, ok := uc.mutation.Level(); !ok {
+		v := user.DefaultLevel
+		uc.mutation.SetLevel(v)
+	}
+	if _, ok := uc.mutation.Exp(); !ok {
+		v := user.DefaultExp
+		uc.mutation.SetExp(v)
+	}
+	if _, ok := uc.mutation.Coin(); !ok {
+		v := user.DefaultCoin
+		uc.mutation.SetCoin(v)
+	}
+	if _, ok := uc.mutation.Gem(); !ok {
+		v := user.DefaultGem
+		uc.mutation.SetGem(v)
+	}
+	if _, ok := uc.mutation.Settings(); !ok {
+		v := user.DefaultSettings
+		uc.mutation.SetSettings(v)
 	}
 	if _, ok := uc.mutation.CustomizeData(); !ok {
 		v := user.DefaultCustomizeData
@@ -251,6 +447,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.SaveData(); !ok {
 		v := user.DefaultSaveData
 		uc.mutation.SetSaveData(v)
+	}
+	if _, ok := uc.mutation.IsBanned(); !ok {
+		v := user.DefaultIsBanned
+		uc.mutation.SetIsBanned(v)
 	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
@@ -266,17 +466,52 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "User.updated_at"`)}
 	}
+	if _, ok := uc.mutation.PlatformType(); !ok {
+		return &ValidationError{Name: "platform_type", err: errors.New(`ent: missing required field "User.platform_type"`)}
+	}
+	if v, ok := uc.mutation.PlatformType(); ok {
+		if err := user.PlatformTypeValidator(v); err != nil {
+			return &ValidationError{Name: "platform_type", err: fmt.Errorf(`ent: validator failed for field "User.platform_type": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.PlatformUserID(); !ok {
+		return &ValidationError{Name: "platform_user_id", err: errors.New(`ent: missing required field "User.platform_user_id"`)}
+	}
+	if _, ok := uc.mutation.Language(); !ok {
+		return &ValidationError{Name: "language", err: errors.New(`ent: missing required field "User.language"`)}
+	}
+	if _, ok := uc.mutation.IsVerified(); !ok {
+		return &ValidationError{Name: "is_verified", err: errors.New(`ent: missing required field "User.is_verified"`)}
+	}
 	if _, ok := uc.mutation.Nickname(); !ok {
 		return &ValidationError{Name: "nickname", err: errors.New(`ent: missing required field "User.nickname"`)}
 	}
-	if _, ok := uc.mutation.SteamID(); !ok {
-		return &ValidationError{Name: "steam_id", err: errors.New(`ent: missing required field "User.steam_id"`)}
-	}
-	if _, ok := uc.mutation.SteamDefaultLanguage(); !ok {
-		return &ValidationError{Name: "steam_default_language", err: errors.New(`ent: missing required field "User.steam_default_language"`)}
-	}
 	if _, ok := uc.mutation.LastLoginAt(); !ok {
 		return &ValidationError{Name: "last_login_at", err: errors.New(`ent: missing required field "User.last_login_at"`)}
+	}
+	if _, ok := uc.mutation.Level(); !ok {
+		return &ValidationError{Name: "level", err: errors.New(`ent: missing required field "User.level"`)}
+	}
+	if _, ok := uc.mutation.Exp(); !ok {
+		return &ValidationError{Name: "exp", err: errors.New(`ent: missing required field "User.exp"`)}
+	}
+	if _, ok := uc.mutation.Coin(); !ok {
+		return &ValidationError{Name: "coin", err: errors.New(`ent: missing required field "User.coin"`)}
+	}
+	if _, ok := uc.mutation.Gem(); !ok {
+		return &ValidationError{Name: "gem", err: errors.New(`ent: missing required field "User.gem"`)}
+	}
+	if _, ok := uc.mutation.Settings(); !ok {
+		return &ValidationError{Name: "settings", err: errors.New(`ent: missing required field "User.settings"`)}
+	}
+	if _, ok := uc.mutation.CustomizeData(); !ok {
+		return &ValidationError{Name: "customize_data", err: errors.New(`ent: missing required field "User.customize_data"`)}
+	}
+	if _, ok := uc.mutation.SaveData(); !ok {
+		return &ValidationError{Name: "save_data", err: errors.New(`ent: missing required field "User.save_data"`)}
+	}
+	if _, ok := uc.mutation.IsBanned(); !ok {
+		return &ValidationError{Name: "is_banned", err: errors.New(`ent: missing required field "User.is_banned"`)}
 	}
 	return nil
 }
@@ -321,33 +556,89 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := uc.mutation.PlatformType(); ok {
+		_spec.SetField(user.FieldPlatformType, field.TypeEnum, value)
+		_node.PlatformType = value
+	}
+	if value, ok := uc.mutation.PlatformUserID(); ok {
+		_spec.SetField(user.FieldPlatformUserID, field.TypeString, value)
+		_node.PlatformUserID = value
+	}
+	if value, ok := uc.mutation.PlatformEmail(); ok {
+		_spec.SetField(user.FieldPlatformEmail, field.TypeString, value)
+		_node.PlatformEmail = value
+	}
+	if value, ok := uc.mutation.PlatformAvatarURL(); ok {
+		_spec.SetField(user.FieldPlatformAvatarURL, field.TypeString, value)
+		_node.PlatformAvatarURL = value
+	}
+	if value, ok := uc.mutation.PlatformDisplayName(); ok {
+		_spec.SetField(user.FieldPlatformDisplayName, field.TypeString, value)
+		_node.PlatformDisplayName = value
+	}
+	if value, ok := uc.mutation.Language(); ok {
+		_spec.SetField(user.FieldLanguage, field.TypeString, value)
+		_node.Language = value
+	}
+	if value, ok := uc.mutation.PlatformData(); ok {
+		_spec.SetField(user.FieldPlatformData, field.TypeJSON, value)
+		_node.PlatformData = value
+	}
+	if value, ok := uc.mutation.IsVerified(); ok {
+		_spec.SetField(user.FieldIsVerified, field.TypeBool, value)
+		_node.IsVerified = value
+	}
 	if value, ok := uc.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
 		_node.Nickname = value
 	}
-	if value, ok := uc.mutation.SteamID(); ok {
-		_spec.SetField(user.FieldSteamID, field.TypeString, value)
-		_node.SteamID = value
-	}
-	if value, ok := uc.mutation.SteamAvatarURL(); ok {
-		_spec.SetField(user.FieldSteamAvatarURL, field.TypeString, value)
-		_node.SteamAvatarURL = value
-	}
-	if value, ok := uc.mutation.SteamDefaultLanguage(); ok {
-		_spec.SetField(user.FieldSteamDefaultLanguage, field.TypeString, value)
-		_node.SteamDefaultLanguage = value
+	if value, ok := uc.mutation.DisplayName(); ok {
+		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
 	}
 	if value, ok := uc.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 		_node.LastLoginAt = value
 	}
+	if value, ok := uc.mutation.Level(); ok {
+		_spec.SetField(user.FieldLevel, field.TypeInt, value)
+		_node.Level = value
+	}
+	if value, ok := uc.mutation.Exp(); ok {
+		_spec.SetField(user.FieldExp, field.TypeInt, value)
+		_node.Exp = value
+	}
+	if value, ok := uc.mutation.Coin(); ok {
+		_spec.SetField(user.FieldCoin, field.TypeInt, value)
+		_node.Coin = value
+	}
+	if value, ok := uc.mutation.Gem(); ok {
+		_spec.SetField(user.FieldGem, field.TypeInt, value)
+		_node.Gem = value
+	}
+	if value, ok := uc.mutation.Settings(); ok {
+		_spec.SetField(user.FieldSettings, field.TypeJSON, value)
+		_node.Settings = value
+	}
 	if value, ok := uc.mutation.CustomizeData(); ok {
-		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
-		_node.CustomizeData = &value
+		_spec.SetField(user.FieldCustomizeData, field.TypeJSON, value)
+		_node.CustomizeData = value
 	}
 	if value, ok := uc.mutation.SaveData(); ok {
-		_spec.SetField(user.FieldSaveData, field.TypeString, value)
-		_node.SaveData = &value
+		_spec.SetField(user.FieldSaveData, field.TypeJSON, value)
+		_node.SaveData = value
+	}
+	if value, ok := uc.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
+		_node.IsBanned = value
+	}
+	if value, ok := uc.mutation.BannedUntil(); ok {
+		_spec.SetField(user.FieldBannedUntil, field.TypeTime, value)
+		_node.BannedUntil = &value
+	}
+	if value, ok := uc.mutation.BanReason(); ok {
+		_spec.SetField(user.FieldBanReason, field.TypeString, value)
+		_node.BanReason = value
 	}
 	if nodes := uc.mutation.PurchasedProductsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -381,6 +672,22 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.UserAchievementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

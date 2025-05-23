@@ -21,14 +21,32 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldArtist holds the string denoting the artist field in the database.
+	FieldArtist = "artist"
+	// FieldComposer holds the string denoting the composer field in the database.
+	FieldComposer = "composer"
 	// FieldMusicSource holds the string denoting the music_source field in the database.
 	FieldMusicSource = "music_source"
 	// FieldJacketSource holds the string denoting the jacket_source field in the database.
 	FieldJacketSource = "jacket_source"
 	// FieldDuration holds the string denoting the duration field in the database.
 	FieldDuration = "duration"
-	// FieldAuthor holds the string denoting the author field in the database.
-	FieldAuthor = "author"
+	// FieldBpm holds the string denoting the bpm field in the database.
+	FieldBpm = "bpm"
+	// FieldGenre holds the string denoting the genre field in the database.
+	FieldGenre = "genre"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldIsFeatured holds the string denoting the is_featured field in the database.
+	FieldIsFeatured = "is_featured"
+	// FieldIsFree holds the string denoting the is_free field in the database.
+	FieldIsFree = "is_free"
+	// FieldUnlockLevel holds the string denoting the unlock_level field in the database.
+	FieldUnlockLevel = "unlock_level"
+	// FieldReleaseDate holds the string denoting the release_date field in the database.
+	FieldReleaseDate = "release_date"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
 	// EdgeStages holds the string denoting the stages edge name in mutations.
 	EdgeStages = "stages"
 	// EdgeRecords holds the string denoting the records edge name in mutations.
@@ -57,10 +75,19 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldName,
+	FieldArtist,
+	FieldComposer,
 	FieldMusicSource,
 	FieldJacketSource,
 	FieldDuration,
-	FieldAuthor,
+	FieldBpm,
+	FieldGenre,
+	FieldDescription,
+	FieldIsFeatured,
+	FieldIsFree,
+	FieldUnlockLevel,
+	FieldReleaseDate,
+	FieldIsActive,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -80,6 +107,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultIsFeatured holds the default value on creation for the "is_featured" field.
+	DefaultIsFeatured bool
+	// DefaultIsFree holds the default value on creation for the "is_free" field.
+	DefaultIsFree bool
+	// DefaultUnlockLevel holds the default value on creation for the "unlock_level" field.
+	DefaultUnlockLevel int
+	// DefaultIsActive holds the default value on creation for the "is_active" field.
+	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -107,6 +142,16 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
+// ByArtist orders the results by the artist field.
+func ByArtist(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArtist, opts...).ToFunc()
+}
+
+// ByComposer orders the results by the composer field.
+func ByComposer(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldComposer, opts...).ToFunc()
+}
+
 // ByMusicSource orders the results by the music_source field.
 func ByMusicSource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMusicSource, opts...).ToFunc()
@@ -122,9 +167,44 @@ func ByDuration(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDuration, opts...).ToFunc()
 }
 
-// ByAuthor orders the results by the Author field.
-func ByAuthor(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAuthor, opts...).ToFunc()
+// ByBpm orders the results by the bpm field.
+func ByBpm(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBpm, opts...).ToFunc()
+}
+
+// ByGenre orders the results by the genre field.
+func ByGenre(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGenre, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByIsFeatured orders the results by the is_featured field.
+func ByIsFeatured(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsFeatured, opts...).ToFunc()
+}
+
+// ByIsFree orders the results by the is_free field.
+func ByIsFree(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsFree, opts...).ToFunc()
+}
+
+// ByUnlockLevel orders the results by the unlock_level field.
+func ByUnlockLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUnlockLevel, opts...).ToFunc()
+}
+
+// ByReleaseDate orders the results by the release_date field.
+func ByReleaseDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReleaseDate, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the is_active field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
 }
 
 // ByStagesCount orders the results by stages count.

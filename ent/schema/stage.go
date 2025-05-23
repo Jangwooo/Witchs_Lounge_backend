@@ -23,10 +23,22 @@ func (Stage) Mixin() []ent.Mixin {
 // Fields of the Stage.
 func (Stage) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("music_id", uuid.UUID{}),
-		field.Text("level_name").NotEmpty(),
-		field.Text("level_address").NotEmpty(),
-		field.Text("jacket_address").NotEmpty(),
+		field.UUID("music_id", uuid.UUID{}).
+			Comment("음악 ID"),
+		field.Text("level_name").NotEmpty().
+			Comment("난이도 이름 (Easy, Normal, Hard, Expert)"),
+		field.Int("difficulty").
+			Comment("난이도 수치 (1-10)"),
+		field.Text("level_address").NotEmpty().
+			Comment("채보 파일 경로"),
+		field.Text("jacket_address").NotEmpty().
+			Comment("난이도별 재킷 이미지 경로"),
+		field.Int("total_notes").
+			Comment("총 노트 수"),
+		field.Int("max_combo").
+			Comment("최대 콤보"),
+		field.Bool("is_active").Default(true).
+			Comment("활성 여부"),
 	}
 }
 

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/witchs-lounge_backend/ent/achievement"
 	"github.com/witchs-lounge_backend/ent/character"
 	"github.com/witchs-lounge_backend/ent/item"
 	"github.com/witchs-lounge_backend/ent/music"
@@ -19,6 +20,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -80,14 +82,16 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			character.Table:    character.ValidColumn,
-			item.Table:         item.ValidColumn,
-			music.Table:        music.ValidColumn,
-			product.Table:      product.ValidColumn,
-			record.Table:       record.ValidColumn,
-			stage.Table:        stage.ValidColumn,
-			user.Table:         user.ValidColumn,
-			userpurchase.Table: userpurchase.ValidColumn,
+			achievement.Table:     achievement.ValidColumn,
+			character.Table:       character.ValidColumn,
+			item.Table:            item.ValidColumn,
+			music.Table:           music.ValidColumn,
+			product.Table:         product.ValidColumn,
+			record.Table:          record.ValidColumn,
+			stage.Table:           stage.ValidColumn,
+			user.Table:            user.ValidColumn,
+			userachievement.Table: userachievement.ValidColumn,
+			userpurchase.Table:    userpurchase.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

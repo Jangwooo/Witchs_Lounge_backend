@@ -16,6 +16,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/product"
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -38,6 +39,134 @@ func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
+// SetPlatformType sets the "platform_type" field.
+func (uu *UserUpdate) SetPlatformType(ut user.PlatformType) *UserUpdate {
+	uu.mutation.SetPlatformType(ut)
+	return uu
+}
+
+// SetNillablePlatformType sets the "platform_type" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePlatformType(ut *user.PlatformType) *UserUpdate {
+	if ut != nil {
+		uu.SetPlatformType(*ut)
+	}
+	return uu
+}
+
+// SetPlatformUserID sets the "platform_user_id" field.
+func (uu *UserUpdate) SetPlatformUserID(s string) *UserUpdate {
+	uu.mutation.SetPlatformUserID(s)
+	return uu
+}
+
+// SetNillablePlatformUserID sets the "platform_user_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePlatformUserID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPlatformUserID(*s)
+	}
+	return uu
+}
+
+// SetPlatformEmail sets the "platform_email" field.
+func (uu *UserUpdate) SetPlatformEmail(s string) *UserUpdate {
+	uu.mutation.SetPlatformEmail(s)
+	return uu
+}
+
+// SetNillablePlatformEmail sets the "platform_email" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePlatformEmail(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPlatformEmail(*s)
+	}
+	return uu
+}
+
+// ClearPlatformEmail clears the value of the "platform_email" field.
+func (uu *UserUpdate) ClearPlatformEmail() *UserUpdate {
+	uu.mutation.ClearPlatformEmail()
+	return uu
+}
+
+// SetPlatformAvatarURL sets the "platform_avatar_url" field.
+func (uu *UserUpdate) SetPlatformAvatarURL(s string) *UserUpdate {
+	uu.mutation.SetPlatformAvatarURL(s)
+	return uu
+}
+
+// SetNillablePlatformAvatarURL sets the "platform_avatar_url" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePlatformAvatarURL(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPlatformAvatarURL(*s)
+	}
+	return uu
+}
+
+// ClearPlatformAvatarURL clears the value of the "platform_avatar_url" field.
+func (uu *UserUpdate) ClearPlatformAvatarURL() *UserUpdate {
+	uu.mutation.ClearPlatformAvatarURL()
+	return uu
+}
+
+// SetPlatformDisplayName sets the "platform_display_name" field.
+func (uu *UserUpdate) SetPlatformDisplayName(s string) *UserUpdate {
+	uu.mutation.SetPlatformDisplayName(s)
+	return uu
+}
+
+// SetNillablePlatformDisplayName sets the "platform_display_name" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePlatformDisplayName(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetPlatformDisplayName(*s)
+	}
+	return uu
+}
+
+// ClearPlatformDisplayName clears the value of the "platform_display_name" field.
+func (uu *UserUpdate) ClearPlatformDisplayName() *UserUpdate {
+	uu.mutation.ClearPlatformDisplayName()
+	return uu
+}
+
+// SetLanguage sets the "language" field.
+func (uu *UserUpdate) SetLanguage(s string) *UserUpdate {
+	uu.mutation.SetLanguage(s)
+	return uu
+}
+
+// SetNillableLanguage sets the "language" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableLanguage(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetLanguage(*s)
+	}
+	return uu
+}
+
+// SetPlatformData sets the "platform_data" field.
+func (uu *UserUpdate) SetPlatformData(m map[string]interface{}) *UserUpdate {
+	uu.mutation.SetPlatformData(m)
+	return uu
+}
+
+// ClearPlatformData clears the value of the "platform_data" field.
+func (uu *UserUpdate) ClearPlatformData() *UserUpdate {
+	uu.mutation.ClearPlatformData()
+	return uu
+}
+
+// SetIsVerified sets the "is_verified" field.
+func (uu *UserUpdate) SetIsVerified(b bool) *UserUpdate {
+	uu.mutation.SetIsVerified(b)
+	return uu
+}
+
+// SetNillableIsVerified sets the "is_verified" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableIsVerified(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetIsVerified(*b)
+	}
+	return uu
+}
+
 // SetNickname sets the "nickname" field.
 func (uu *UserUpdate) SetNickname(s string) *UserUpdate {
 	uu.mutation.SetNickname(s)
@@ -52,37 +181,23 @@ func (uu *UserUpdate) SetNillableNickname(s *string) *UserUpdate {
 	return uu
 }
 
-// SetSteamAvatarURL sets the "steam_avatar_url" field.
-func (uu *UserUpdate) SetSteamAvatarURL(s string) *UserUpdate {
-	uu.mutation.SetSteamAvatarURL(s)
+// SetDisplayName sets the "display_name" field.
+func (uu *UserUpdate) SetDisplayName(s string) *UserUpdate {
+	uu.mutation.SetDisplayName(s)
 	return uu
 }
 
-// SetNillableSteamAvatarURL sets the "steam_avatar_url" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableSteamAvatarURL(s *string) *UserUpdate {
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableDisplayName(s *string) *UserUpdate {
 	if s != nil {
-		uu.SetSteamAvatarURL(*s)
+		uu.SetDisplayName(*s)
 	}
 	return uu
 }
 
-// ClearSteamAvatarURL clears the value of the "steam_avatar_url" field.
-func (uu *UserUpdate) ClearSteamAvatarURL() *UserUpdate {
-	uu.mutation.ClearSteamAvatarURL()
-	return uu
-}
-
-// SetSteamDefaultLanguage sets the "steam_default_language" field.
-func (uu *UserUpdate) SetSteamDefaultLanguage(s string) *UserUpdate {
-	uu.mutation.SetSteamDefaultLanguage(s)
-	return uu
-}
-
-// SetNillableSteamDefaultLanguage sets the "steam_default_language" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableSteamDefaultLanguage(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetSteamDefaultLanguage(*s)
-	}
+// ClearDisplayName clears the value of the "display_name" field.
+func (uu *UserUpdate) ClearDisplayName() *UserUpdate {
+	uu.mutation.ClearDisplayName()
 	return uu
 }
 
@@ -100,43 +215,159 @@ func (uu *UserUpdate) SetNillableLastLoginAt(t *time.Time) *UserUpdate {
 	return uu
 }
 
-// SetCustomizeData sets the "customize_data" field.
-func (uu *UserUpdate) SetCustomizeData(s string) *UserUpdate {
-	uu.mutation.SetCustomizeData(s)
+// SetLevel sets the "level" field.
+func (uu *UserUpdate) SetLevel(i int) *UserUpdate {
+	uu.mutation.ResetLevel()
+	uu.mutation.SetLevel(i)
 	return uu
 }
 
-// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCustomizeData(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetCustomizeData(*s)
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableLevel(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetLevel(*i)
 	}
 	return uu
 }
 
-// ClearCustomizeData clears the value of the "customize_data" field.
-func (uu *UserUpdate) ClearCustomizeData() *UserUpdate {
-	uu.mutation.ClearCustomizeData()
+// AddLevel adds i to the "level" field.
+func (uu *UserUpdate) AddLevel(i int) *UserUpdate {
+	uu.mutation.AddLevel(i)
+	return uu
+}
+
+// SetExp sets the "exp" field.
+func (uu *UserUpdate) SetExp(i int) *UserUpdate {
+	uu.mutation.ResetExp()
+	uu.mutation.SetExp(i)
+	return uu
+}
+
+// SetNillableExp sets the "exp" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableExp(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetExp(*i)
+	}
+	return uu
+}
+
+// AddExp adds i to the "exp" field.
+func (uu *UserUpdate) AddExp(i int) *UserUpdate {
+	uu.mutation.AddExp(i)
+	return uu
+}
+
+// SetCoin sets the "coin" field.
+func (uu *UserUpdate) SetCoin(i int) *UserUpdate {
+	uu.mutation.ResetCoin()
+	uu.mutation.SetCoin(i)
+	return uu
+}
+
+// SetNillableCoin sets the "coin" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableCoin(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetCoin(*i)
+	}
+	return uu
+}
+
+// AddCoin adds i to the "coin" field.
+func (uu *UserUpdate) AddCoin(i int) *UserUpdate {
+	uu.mutation.AddCoin(i)
+	return uu
+}
+
+// SetGem sets the "gem" field.
+func (uu *UserUpdate) SetGem(i int) *UserUpdate {
+	uu.mutation.ResetGem()
+	uu.mutation.SetGem(i)
+	return uu
+}
+
+// SetNillableGem sets the "gem" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableGem(i *int) *UserUpdate {
+	if i != nil {
+		uu.SetGem(*i)
+	}
+	return uu
+}
+
+// AddGem adds i to the "gem" field.
+func (uu *UserUpdate) AddGem(i int) *UserUpdate {
+	uu.mutation.AddGem(i)
+	return uu
+}
+
+// SetSettings sets the "settings" field.
+func (uu *UserUpdate) SetSettings(m map[string]interface{}) *UserUpdate {
+	uu.mutation.SetSettings(m)
+	return uu
+}
+
+// SetCustomizeData sets the "customize_data" field.
+func (uu *UserUpdate) SetCustomizeData(m map[string]interface{}) *UserUpdate {
+	uu.mutation.SetCustomizeData(m)
 	return uu
 }
 
 // SetSaveData sets the "save_data" field.
-func (uu *UserUpdate) SetSaveData(s string) *UserUpdate {
-	uu.mutation.SetSaveData(s)
+func (uu *UserUpdate) SetSaveData(m map[string]interface{}) *UserUpdate {
+	uu.mutation.SetSaveData(m)
 	return uu
 }
 
-// SetNillableSaveData sets the "save_data" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableSaveData(s *string) *UserUpdate {
-	if s != nil {
-		uu.SetSaveData(*s)
+// SetIsBanned sets the "is_banned" field.
+func (uu *UserUpdate) SetIsBanned(b bool) *UserUpdate {
+	uu.mutation.SetIsBanned(b)
+	return uu
+}
+
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableIsBanned(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetIsBanned(*b)
 	}
 	return uu
 }
 
-// ClearSaveData clears the value of the "save_data" field.
-func (uu *UserUpdate) ClearSaveData() *UserUpdate {
-	uu.mutation.ClearSaveData()
+// SetBannedUntil sets the "banned_until" field.
+func (uu *UserUpdate) SetBannedUntil(t time.Time) *UserUpdate {
+	uu.mutation.SetBannedUntil(t)
+	return uu
+}
+
+// SetNillableBannedUntil sets the "banned_until" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableBannedUntil(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetBannedUntil(*t)
+	}
+	return uu
+}
+
+// ClearBannedUntil clears the value of the "banned_until" field.
+func (uu *UserUpdate) ClearBannedUntil() *UserUpdate {
+	uu.mutation.ClearBannedUntil()
+	return uu
+}
+
+// SetBanReason sets the "ban_reason" field.
+func (uu *UserUpdate) SetBanReason(s string) *UserUpdate {
+	uu.mutation.SetBanReason(s)
+	return uu
+}
+
+// SetNillableBanReason sets the "ban_reason" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableBanReason(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetBanReason(*s)
+	}
+	return uu
+}
+
+// ClearBanReason clears the value of the "ban_reason" field.
+func (uu *UserUpdate) ClearBanReason() *UserUpdate {
+	uu.mutation.ClearBanReason()
 	return uu
 }
 
@@ -168,6 +399,21 @@ func (uu *UserUpdate) AddRecords(r ...*Record) *UserUpdate {
 		ids[i] = r[i].ID
 	}
 	return uu.AddRecordIDs(ids...)
+}
+
+// AddUserAchievementIDs adds the "user_achievements" edge to the UserAchievement entity by IDs.
+func (uu *UserUpdate) AddUserAchievementIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.AddUserAchievementIDs(ids...)
+	return uu
+}
+
+// AddUserAchievements adds the "user_achievements" edges to the UserAchievement entity.
+func (uu *UserUpdate) AddUserAchievements(u ...*UserAchievement) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.AddUserAchievementIDs(ids...)
 }
 
 // AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
@@ -232,6 +478,27 @@ func (uu *UserUpdate) RemoveRecords(r ...*Record) *UserUpdate {
 	return uu.RemoveRecordIDs(ids...)
 }
 
+// ClearUserAchievements clears all "user_achievements" edges to the UserAchievement entity.
+func (uu *UserUpdate) ClearUserAchievements() *UserUpdate {
+	uu.mutation.ClearUserAchievements()
+	return uu
+}
+
+// RemoveUserAchievementIDs removes the "user_achievements" edge to UserAchievement entities by IDs.
+func (uu *UserUpdate) RemoveUserAchievementIDs(ids ...uuid.UUID) *UserUpdate {
+	uu.mutation.RemoveUserAchievementIDs(ids...)
+	return uu
+}
+
+// RemoveUserAchievements removes "user_achievements" edges to UserAchievement entities.
+func (uu *UserUpdate) RemoveUserAchievements(u ...*UserAchievement) *UserUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uu.RemoveUserAchievementIDs(ids...)
+}
+
 // ClearUserPurchases clears all "user_purchases" edges to the UserPurchase entity.
 func (uu *UserUpdate) ClearUserPurchases() *UserUpdate {
 	uu.mutation.ClearUserPurchases()
@@ -289,7 +556,20 @@ func (uu *UserUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (uu *UserUpdate) check() error {
+	if v, ok := uu.mutation.PlatformType(); ok {
+		if err := user.PlatformTypeValidator(v); err != nil {
+			return &ValidationError{Name: "platform_type", err: fmt.Errorf(`ent: validator failed for field "User.platform_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := uu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
 	if ps := uu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -301,32 +581,101 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := uu.mutation.PlatformType(); ok {
+		_spec.SetField(user.FieldPlatformType, field.TypeEnum, value)
+	}
+	if value, ok := uu.mutation.PlatformUserID(); ok {
+		_spec.SetField(user.FieldPlatformUserID, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.PlatformEmail(); ok {
+		_spec.SetField(user.FieldPlatformEmail, field.TypeString, value)
+	}
+	if uu.mutation.PlatformEmailCleared() {
+		_spec.ClearField(user.FieldPlatformEmail, field.TypeString)
+	}
+	if value, ok := uu.mutation.PlatformAvatarURL(); ok {
+		_spec.SetField(user.FieldPlatformAvatarURL, field.TypeString, value)
+	}
+	if uu.mutation.PlatformAvatarURLCleared() {
+		_spec.ClearField(user.FieldPlatformAvatarURL, field.TypeString)
+	}
+	if value, ok := uu.mutation.PlatformDisplayName(); ok {
+		_spec.SetField(user.FieldPlatformDisplayName, field.TypeString, value)
+	}
+	if uu.mutation.PlatformDisplayNameCleared() {
+		_spec.ClearField(user.FieldPlatformDisplayName, field.TypeString)
+	}
+	if value, ok := uu.mutation.Language(); ok {
+		_spec.SetField(user.FieldLanguage, field.TypeString, value)
+	}
+	if value, ok := uu.mutation.PlatformData(); ok {
+		_spec.SetField(user.FieldPlatformData, field.TypeJSON, value)
+	}
+	if uu.mutation.PlatformDataCleared() {
+		_spec.ClearField(user.FieldPlatformData, field.TypeJSON)
+	}
+	if value, ok := uu.mutation.IsVerified(); ok {
+		_spec.SetField(user.FieldIsVerified, field.TypeBool, value)
+	}
 	if value, ok := uu.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.SteamAvatarURL(); ok {
-		_spec.SetField(user.FieldSteamAvatarURL, field.TypeString, value)
+	if value, ok := uu.mutation.DisplayName(); ok {
+		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
 	}
-	if uu.mutation.SteamAvatarURLCleared() {
-		_spec.ClearField(user.FieldSteamAvatarURL, field.TypeString)
-	}
-	if value, ok := uu.mutation.SteamDefaultLanguage(); ok {
-		_spec.SetField(user.FieldSteamDefaultLanguage, field.TypeString, value)
+	if uu.mutation.DisplayNameCleared() {
+		_spec.ClearField(user.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := uu.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if value, ok := uu.mutation.CustomizeData(); ok {
-		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
+	if value, ok := uu.mutation.Level(); ok {
+		_spec.SetField(user.FieldLevel, field.TypeInt, value)
 	}
-	if uu.mutation.CustomizeDataCleared() {
-		_spec.ClearField(user.FieldCustomizeData, field.TypeString)
+	if value, ok := uu.mutation.AddedLevel(); ok {
+		_spec.AddField(user.FieldLevel, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.Exp(); ok {
+		_spec.SetField(user.FieldExp, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedExp(); ok {
+		_spec.AddField(user.FieldExp, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.Coin(); ok {
+		_spec.SetField(user.FieldCoin, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedCoin(); ok {
+		_spec.AddField(user.FieldCoin, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.Gem(); ok {
+		_spec.SetField(user.FieldGem, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.AddedGem(); ok {
+		_spec.AddField(user.FieldGem, field.TypeInt, value)
+	}
+	if value, ok := uu.mutation.Settings(); ok {
+		_spec.SetField(user.FieldSettings, field.TypeJSON, value)
+	}
+	if value, ok := uu.mutation.CustomizeData(); ok {
+		_spec.SetField(user.FieldCustomizeData, field.TypeJSON, value)
 	}
 	if value, ok := uu.mutation.SaveData(); ok {
-		_spec.SetField(user.FieldSaveData, field.TypeString, value)
+		_spec.SetField(user.FieldSaveData, field.TypeJSON, value)
 	}
-	if uu.mutation.SaveDataCleared() {
-		_spec.ClearField(user.FieldSaveData, field.TypeString)
+	if value, ok := uu.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
+	}
+	if value, ok := uu.mutation.BannedUntil(); ok {
+		_spec.SetField(user.FieldBannedUntil, field.TypeTime, value)
+	}
+	if uu.mutation.BannedUntilCleared() {
+		_spec.ClearField(user.FieldBannedUntil, field.TypeTime)
+	}
+	if value, ok := uu.mutation.BanReason(); ok {
+		_spec.SetField(user.FieldBanReason, field.TypeString, value)
+	}
+	if uu.mutation.BanReasonCleared() {
+		_spec.ClearField(user.FieldBanReason, field.TypeString)
 	}
 	if uu.mutation.PurchasedProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -439,6 +788,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.UserAchievementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedUserAchievementsIDs(); len(nodes) > 0 && !uu.mutation.UserAchievementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.UserAchievementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if uu.mutation.UserPurchasesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -510,6 +904,134 @@ func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
+// SetPlatformType sets the "platform_type" field.
+func (uuo *UserUpdateOne) SetPlatformType(ut user.PlatformType) *UserUpdateOne {
+	uuo.mutation.SetPlatformType(ut)
+	return uuo
+}
+
+// SetNillablePlatformType sets the "platform_type" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePlatformType(ut *user.PlatformType) *UserUpdateOne {
+	if ut != nil {
+		uuo.SetPlatformType(*ut)
+	}
+	return uuo
+}
+
+// SetPlatformUserID sets the "platform_user_id" field.
+func (uuo *UserUpdateOne) SetPlatformUserID(s string) *UserUpdateOne {
+	uuo.mutation.SetPlatformUserID(s)
+	return uuo
+}
+
+// SetNillablePlatformUserID sets the "platform_user_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePlatformUserID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPlatformUserID(*s)
+	}
+	return uuo
+}
+
+// SetPlatformEmail sets the "platform_email" field.
+func (uuo *UserUpdateOne) SetPlatformEmail(s string) *UserUpdateOne {
+	uuo.mutation.SetPlatformEmail(s)
+	return uuo
+}
+
+// SetNillablePlatformEmail sets the "platform_email" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePlatformEmail(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPlatformEmail(*s)
+	}
+	return uuo
+}
+
+// ClearPlatformEmail clears the value of the "platform_email" field.
+func (uuo *UserUpdateOne) ClearPlatformEmail() *UserUpdateOne {
+	uuo.mutation.ClearPlatformEmail()
+	return uuo
+}
+
+// SetPlatformAvatarURL sets the "platform_avatar_url" field.
+func (uuo *UserUpdateOne) SetPlatformAvatarURL(s string) *UserUpdateOne {
+	uuo.mutation.SetPlatformAvatarURL(s)
+	return uuo
+}
+
+// SetNillablePlatformAvatarURL sets the "platform_avatar_url" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePlatformAvatarURL(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPlatformAvatarURL(*s)
+	}
+	return uuo
+}
+
+// ClearPlatformAvatarURL clears the value of the "platform_avatar_url" field.
+func (uuo *UserUpdateOne) ClearPlatformAvatarURL() *UserUpdateOne {
+	uuo.mutation.ClearPlatformAvatarURL()
+	return uuo
+}
+
+// SetPlatformDisplayName sets the "platform_display_name" field.
+func (uuo *UserUpdateOne) SetPlatformDisplayName(s string) *UserUpdateOne {
+	uuo.mutation.SetPlatformDisplayName(s)
+	return uuo
+}
+
+// SetNillablePlatformDisplayName sets the "platform_display_name" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePlatformDisplayName(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetPlatformDisplayName(*s)
+	}
+	return uuo
+}
+
+// ClearPlatformDisplayName clears the value of the "platform_display_name" field.
+func (uuo *UserUpdateOne) ClearPlatformDisplayName() *UserUpdateOne {
+	uuo.mutation.ClearPlatformDisplayName()
+	return uuo
+}
+
+// SetLanguage sets the "language" field.
+func (uuo *UserUpdateOne) SetLanguage(s string) *UserUpdateOne {
+	uuo.mutation.SetLanguage(s)
+	return uuo
+}
+
+// SetNillableLanguage sets the "language" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableLanguage(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetLanguage(*s)
+	}
+	return uuo
+}
+
+// SetPlatformData sets the "platform_data" field.
+func (uuo *UserUpdateOne) SetPlatformData(m map[string]interface{}) *UserUpdateOne {
+	uuo.mutation.SetPlatformData(m)
+	return uuo
+}
+
+// ClearPlatformData clears the value of the "platform_data" field.
+func (uuo *UserUpdateOne) ClearPlatformData() *UserUpdateOne {
+	uuo.mutation.ClearPlatformData()
+	return uuo
+}
+
+// SetIsVerified sets the "is_verified" field.
+func (uuo *UserUpdateOne) SetIsVerified(b bool) *UserUpdateOne {
+	uuo.mutation.SetIsVerified(b)
+	return uuo
+}
+
+// SetNillableIsVerified sets the "is_verified" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableIsVerified(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetIsVerified(*b)
+	}
+	return uuo
+}
+
 // SetNickname sets the "nickname" field.
 func (uuo *UserUpdateOne) SetNickname(s string) *UserUpdateOne {
 	uuo.mutation.SetNickname(s)
@@ -524,37 +1046,23 @@ func (uuo *UserUpdateOne) SetNillableNickname(s *string) *UserUpdateOne {
 	return uuo
 }
 
-// SetSteamAvatarURL sets the "steam_avatar_url" field.
-func (uuo *UserUpdateOne) SetSteamAvatarURL(s string) *UserUpdateOne {
-	uuo.mutation.SetSteamAvatarURL(s)
+// SetDisplayName sets the "display_name" field.
+func (uuo *UserUpdateOne) SetDisplayName(s string) *UserUpdateOne {
+	uuo.mutation.SetDisplayName(s)
 	return uuo
 }
 
-// SetNillableSteamAvatarURL sets the "steam_avatar_url" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableSteamAvatarURL(s *string) *UserUpdateOne {
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableDisplayName(s *string) *UserUpdateOne {
 	if s != nil {
-		uuo.SetSteamAvatarURL(*s)
+		uuo.SetDisplayName(*s)
 	}
 	return uuo
 }
 
-// ClearSteamAvatarURL clears the value of the "steam_avatar_url" field.
-func (uuo *UserUpdateOne) ClearSteamAvatarURL() *UserUpdateOne {
-	uuo.mutation.ClearSteamAvatarURL()
-	return uuo
-}
-
-// SetSteamDefaultLanguage sets the "steam_default_language" field.
-func (uuo *UserUpdateOne) SetSteamDefaultLanguage(s string) *UserUpdateOne {
-	uuo.mutation.SetSteamDefaultLanguage(s)
-	return uuo
-}
-
-// SetNillableSteamDefaultLanguage sets the "steam_default_language" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableSteamDefaultLanguage(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetSteamDefaultLanguage(*s)
-	}
+// ClearDisplayName clears the value of the "display_name" field.
+func (uuo *UserUpdateOne) ClearDisplayName() *UserUpdateOne {
+	uuo.mutation.ClearDisplayName()
 	return uuo
 }
 
@@ -572,43 +1080,159 @@ func (uuo *UserUpdateOne) SetNillableLastLoginAt(t *time.Time) *UserUpdateOne {
 	return uuo
 }
 
-// SetCustomizeData sets the "customize_data" field.
-func (uuo *UserUpdateOne) SetCustomizeData(s string) *UserUpdateOne {
-	uuo.mutation.SetCustomizeData(s)
+// SetLevel sets the "level" field.
+func (uuo *UserUpdateOne) SetLevel(i int) *UserUpdateOne {
+	uuo.mutation.ResetLevel()
+	uuo.mutation.SetLevel(i)
 	return uuo
 }
 
-// SetNillableCustomizeData sets the "customize_data" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCustomizeData(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetCustomizeData(*s)
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableLevel(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetLevel(*i)
 	}
 	return uuo
 }
 
-// ClearCustomizeData clears the value of the "customize_data" field.
-func (uuo *UserUpdateOne) ClearCustomizeData() *UserUpdateOne {
-	uuo.mutation.ClearCustomizeData()
+// AddLevel adds i to the "level" field.
+func (uuo *UserUpdateOne) AddLevel(i int) *UserUpdateOne {
+	uuo.mutation.AddLevel(i)
+	return uuo
+}
+
+// SetExp sets the "exp" field.
+func (uuo *UserUpdateOne) SetExp(i int) *UserUpdateOne {
+	uuo.mutation.ResetExp()
+	uuo.mutation.SetExp(i)
+	return uuo
+}
+
+// SetNillableExp sets the "exp" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableExp(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetExp(*i)
+	}
+	return uuo
+}
+
+// AddExp adds i to the "exp" field.
+func (uuo *UserUpdateOne) AddExp(i int) *UserUpdateOne {
+	uuo.mutation.AddExp(i)
+	return uuo
+}
+
+// SetCoin sets the "coin" field.
+func (uuo *UserUpdateOne) SetCoin(i int) *UserUpdateOne {
+	uuo.mutation.ResetCoin()
+	uuo.mutation.SetCoin(i)
+	return uuo
+}
+
+// SetNillableCoin sets the "coin" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableCoin(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetCoin(*i)
+	}
+	return uuo
+}
+
+// AddCoin adds i to the "coin" field.
+func (uuo *UserUpdateOne) AddCoin(i int) *UserUpdateOne {
+	uuo.mutation.AddCoin(i)
+	return uuo
+}
+
+// SetGem sets the "gem" field.
+func (uuo *UserUpdateOne) SetGem(i int) *UserUpdateOne {
+	uuo.mutation.ResetGem()
+	uuo.mutation.SetGem(i)
+	return uuo
+}
+
+// SetNillableGem sets the "gem" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableGem(i *int) *UserUpdateOne {
+	if i != nil {
+		uuo.SetGem(*i)
+	}
+	return uuo
+}
+
+// AddGem adds i to the "gem" field.
+func (uuo *UserUpdateOne) AddGem(i int) *UserUpdateOne {
+	uuo.mutation.AddGem(i)
+	return uuo
+}
+
+// SetSettings sets the "settings" field.
+func (uuo *UserUpdateOne) SetSettings(m map[string]interface{}) *UserUpdateOne {
+	uuo.mutation.SetSettings(m)
+	return uuo
+}
+
+// SetCustomizeData sets the "customize_data" field.
+func (uuo *UserUpdateOne) SetCustomizeData(m map[string]interface{}) *UserUpdateOne {
+	uuo.mutation.SetCustomizeData(m)
 	return uuo
 }
 
 // SetSaveData sets the "save_data" field.
-func (uuo *UserUpdateOne) SetSaveData(s string) *UserUpdateOne {
-	uuo.mutation.SetSaveData(s)
+func (uuo *UserUpdateOne) SetSaveData(m map[string]interface{}) *UserUpdateOne {
+	uuo.mutation.SetSaveData(m)
 	return uuo
 }
 
-// SetNillableSaveData sets the "save_data" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableSaveData(s *string) *UserUpdateOne {
-	if s != nil {
-		uuo.SetSaveData(*s)
+// SetIsBanned sets the "is_banned" field.
+func (uuo *UserUpdateOne) SetIsBanned(b bool) *UserUpdateOne {
+	uuo.mutation.SetIsBanned(b)
+	return uuo
+}
+
+// SetNillableIsBanned sets the "is_banned" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableIsBanned(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetIsBanned(*b)
 	}
 	return uuo
 }
 
-// ClearSaveData clears the value of the "save_data" field.
-func (uuo *UserUpdateOne) ClearSaveData() *UserUpdateOne {
-	uuo.mutation.ClearSaveData()
+// SetBannedUntil sets the "banned_until" field.
+func (uuo *UserUpdateOne) SetBannedUntil(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetBannedUntil(t)
+	return uuo
+}
+
+// SetNillableBannedUntil sets the "banned_until" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableBannedUntil(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetBannedUntil(*t)
+	}
+	return uuo
+}
+
+// ClearBannedUntil clears the value of the "banned_until" field.
+func (uuo *UserUpdateOne) ClearBannedUntil() *UserUpdateOne {
+	uuo.mutation.ClearBannedUntil()
+	return uuo
+}
+
+// SetBanReason sets the "ban_reason" field.
+func (uuo *UserUpdateOne) SetBanReason(s string) *UserUpdateOne {
+	uuo.mutation.SetBanReason(s)
+	return uuo
+}
+
+// SetNillableBanReason sets the "ban_reason" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableBanReason(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetBanReason(*s)
+	}
+	return uuo
+}
+
+// ClearBanReason clears the value of the "ban_reason" field.
+func (uuo *UserUpdateOne) ClearBanReason() *UserUpdateOne {
+	uuo.mutation.ClearBanReason()
 	return uuo
 }
 
@@ -640,6 +1264,21 @@ func (uuo *UserUpdateOne) AddRecords(r ...*Record) *UserUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return uuo.AddRecordIDs(ids...)
+}
+
+// AddUserAchievementIDs adds the "user_achievements" edge to the UserAchievement entity by IDs.
+func (uuo *UserUpdateOne) AddUserAchievementIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.AddUserAchievementIDs(ids...)
+	return uuo
+}
+
+// AddUserAchievements adds the "user_achievements" edges to the UserAchievement entity.
+func (uuo *UserUpdateOne) AddUserAchievements(u ...*UserAchievement) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.AddUserAchievementIDs(ids...)
 }
 
 // AddUserPurchaseIDs adds the "user_purchases" edge to the UserPurchase entity by IDs.
@@ -702,6 +1341,27 @@ func (uuo *UserUpdateOne) RemoveRecords(r ...*Record) *UserUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return uuo.RemoveRecordIDs(ids...)
+}
+
+// ClearUserAchievements clears all "user_achievements" edges to the UserAchievement entity.
+func (uuo *UserUpdateOne) ClearUserAchievements() *UserUpdateOne {
+	uuo.mutation.ClearUserAchievements()
+	return uuo
+}
+
+// RemoveUserAchievementIDs removes the "user_achievements" edge to UserAchievement entities by IDs.
+func (uuo *UserUpdateOne) RemoveUserAchievementIDs(ids ...uuid.UUID) *UserUpdateOne {
+	uuo.mutation.RemoveUserAchievementIDs(ids...)
+	return uuo
+}
+
+// RemoveUserAchievements removes "user_achievements" edges to UserAchievement entities.
+func (uuo *UserUpdateOne) RemoveUserAchievements(u ...*UserAchievement) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return uuo.RemoveUserAchievementIDs(ids...)
 }
 
 // ClearUserPurchases clears all "user_purchases" edges to the UserPurchase entity.
@@ -774,7 +1434,20 @@ func (uuo *UserUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (uuo *UserUpdateOne) check() error {
+	if v, ok := uuo.mutation.PlatformType(); ok {
+		if err := user.PlatformTypeValidator(v); err != nil {
+			return &ValidationError{Name: "platform_type", err: fmt.Errorf(`ent: validator failed for field "User.platform_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
+	if err := uuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
 	id, ok := uuo.mutation.ID()
 	if !ok {
@@ -803,32 +1476,101 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := uuo.mutation.PlatformType(); ok {
+		_spec.SetField(user.FieldPlatformType, field.TypeEnum, value)
+	}
+	if value, ok := uuo.mutation.PlatformUserID(); ok {
+		_spec.SetField(user.FieldPlatformUserID, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.PlatformEmail(); ok {
+		_spec.SetField(user.FieldPlatformEmail, field.TypeString, value)
+	}
+	if uuo.mutation.PlatformEmailCleared() {
+		_spec.ClearField(user.FieldPlatformEmail, field.TypeString)
+	}
+	if value, ok := uuo.mutation.PlatformAvatarURL(); ok {
+		_spec.SetField(user.FieldPlatformAvatarURL, field.TypeString, value)
+	}
+	if uuo.mutation.PlatformAvatarURLCleared() {
+		_spec.ClearField(user.FieldPlatformAvatarURL, field.TypeString)
+	}
+	if value, ok := uuo.mutation.PlatformDisplayName(); ok {
+		_spec.SetField(user.FieldPlatformDisplayName, field.TypeString, value)
+	}
+	if uuo.mutation.PlatformDisplayNameCleared() {
+		_spec.ClearField(user.FieldPlatformDisplayName, field.TypeString)
+	}
+	if value, ok := uuo.mutation.Language(); ok {
+		_spec.SetField(user.FieldLanguage, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.PlatformData(); ok {
+		_spec.SetField(user.FieldPlatformData, field.TypeJSON, value)
+	}
+	if uuo.mutation.PlatformDataCleared() {
+		_spec.ClearField(user.FieldPlatformData, field.TypeJSON)
+	}
+	if value, ok := uuo.mutation.IsVerified(); ok {
+		_spec.SetField(user.FieldIsVerified, field.TypeBool, value)
+	}
 	if value, ok := uuo.mutation.Nickname(); ok {
 		_spec.SetField(user.FieldNickname, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.SteamAvatarURL(); ok {
-		_spec.SetField(user.FieldSteamAvatarURL, field.TypeString, value)
+	if value, ok := uuo.mutation.DisplayName(); ok {
+		_spec.SetField(user.FieldDisplayName, field.TypeString, value)
 	}
-	if uuo.mutation.SteamAvatarURLCleared() {
-		_spec.ClearField(user.FieldSteamAvatarURL, field.TypeString)
-	}
-	if value, ok := uuo.mutation.SteamDefaultLanguage(); ok {
-		_spec.SetField(user.FieldSteamDefaultLanguage, field.TypeString, value)
+	if uuo.mutation.DisplayNameCleared() {
+		_spec.ClearField(user.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := uuo.mutation.LastLoginAt(); ok {
 		_spec.SetField(user.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if value, ok := uuo.mutation.CustomizeData(); ok {
-		_spec.SetField(user.FieldCustomizeData, field.TypeString, value)
+	if value, ok := uuo.mutation.Level(); ok {
+		_spec.SetField(user.FieldLevel, field.TypeInt, value)
 	}
-	if uuo.mutation.CustomizeDataCleared() {
-		_spec.ClearField(user.FieldCustomizeData, field.TypeString)
+	if value, ok := uuo.mutation.AddedLevel(); ok {
+		_spec.AddField(user.FieldLevel, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.Exp(); ok {
+		_spec.SetField(user.FieldExp, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedExp(); ok {
+		_spec.AddField(user.FieldExp, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.Coin(); ok {
+		_spec.SetField(user.FieldCoin, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedCoin(); ok {
+		_spec.AddField(user.FieldCoin, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.Gem(); ok {
+		_spec.SetField(user.FieldGem, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.AddedGem(); ok {
+		_spec.AddField(user.FieldGem, field.TypeInt, value)
+	}
+	if value, ok := uuo.mutation.Settings(); ok {
+		_spec.SetField(user.FieldSettings, field.TypeJSON, value)
+	}
+	if value, ok := uuo.mutation.CustomizeData(); ok {
+		_spec.SetField(user.FieldCustomizeData, field.TypeJSON, value)
 	}
 	if value, ok := uuo.mutation.SaveData(); ok {
-		_spec.SetField(user.FieldSaveData, field.TypeString, value)
+		_spec.SetField(user.FieldSaveData, field.TypeJSON, value)
 	}
-	if uuo.mutation.SaveDataCleared() {
-		_spec.ClearField(user.FieldSaveData, field.TypeString)
+	if value, ok := uuo.mutation.IsBanned(); ok {
+		_spec.SetField(user.FieldIsBanned, field.TypeBool, value)
+	}
+	if value, ok := uuo.mutation.BannedUntil(); ok {
+		_spec.SetField(user.FieldBannedUntil, field.TypeTime, value)
+	}
+	if uuo.mutation.BannedUntilCleared() {
+		_spec.ClearField(user.FieldBannedUntil, field.TypeTime)
+	}
+	if value, ok := uuo.mutation.BanReason(); ok {
+		_spec.SetField(user.FieldBanReason, field.TypeString, value)
+	}
+	if uuo.mutation.BanReasonCleared() {
+		_spec.ClearField(user.FieldBanReason, field.TypeString)
 	}
 	if uuo.mutation.PurchasedProductsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -934,6 +1676,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(record.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.UserAchievementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedUserAchievementsIDs(); len(nodes) > 0 && !uuo.mutation.UserAchievementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.UserAchievementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.UserAchievementsTable,
+			Columns: []string{user.UserAchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(userachievement.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

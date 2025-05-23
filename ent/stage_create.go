@@ -63,6 +63,12 @@ func (sc *StageCreate) SetLevelName(s string) *StageCreate {
 	return sc
 }
 
+// SetDifficulty sets the "difficulty" field.
+func (sc *StageCreate) SetDifficulty(i int) *StageCreate {
+	sc.mutation.SetDifficulty(i)
+	return sc
+}
+
 // SetLevelAddress sets the "level_address" field.
 func (sc *StageCreate) SetLevelAddress(s string) *StageCreate {
 	sc.mutation.SetLevelAddress(s)
@@ -72,6 +78,32 @@ func (sc *StageCreate) SetLevelAddress(s string) *StageCreate {
 // SetJacketAddress sets the "jacket_address" field.
 func (sc *StageCreate) SetJacketAddress(s string) *StageCreate {
 	sc.mutation.SetJacketAddress(s)
+	return sc
+}
+
+// SetTotalNotes sets the "total_notes" field.
+func (sc *StageCreate) SetTotalNotes(i int) *StageCreate {
+	sc.mutation.SetTotalNotes(i)
+	return sc
+}
+
+// SetMaxCombo sets the "max_combo" field.
+func (sc *StageCreate) SetMaxCombo(i int) *StageCreate {
+	sc.mutation.SetMaxCombo(i)
+	return sc
+}
+
+// SetIsActive sets the "is_active" field.
+func (sc *StageCreate) SetIsActive(b bool) *StageCreate {
+	sc.mutation.SetIsActive(b)
+	return sc
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (sc *StageCreate) SetNillableIsActive(b *bool) *StageCreate {
+	if b != nil {
+		sc.SetIsActive(*b)
+	}
 	return sc
 }
 
@@ -152,6 +184,10 @@ func (sc *StageCreate) defaults() {
 		v := stage.DefaultUpdatedAt()
 		sc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := sc.mutation.IsActive(); !ok {
+		v := stage.DefaultIsActive
+		sc.mutation.SetIsActive(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		v := stage.DefaultID()
 		sc.mutation.SetID(v)
@@ -177,6 +213,9 @@ func (sc *StageCreate) check() error {
 			return &ValidationError{Name: "level_name", err: fmt.Errorf(`ent: validator failed for field "Stage.level_name": %w`, err)}
 		}
 	}
+	if _, ok := sc.mutation.Difficulty(); !ok {
+		return &ValidationError{Name: "difficulty", err: errors.New(`ent: missing required field "Stage.difficulty"`)}
+	}
 	if _, ok := sc.mutation.LevelAddress(); !ok {
 		return &ValidationError{Name: "level_address", err: errors.New(`ent: missing required field "Stage.level_address"`)}
 	}
@@ -192,6 +231,15 @@ func (sc *StageCreate) check() error {
 		if err := stage.JacketAddressValidator(v); err != nil {
 			return &ValidationError{Name: "jacket_address", err: fmt.Errorf(`ent: validator failed for field "Stage.jacket_address": %w`, err)}
 		}
+	}
+	if _, ok := sc.mutation.TotalNotes(); !ok {
+		return &ValidationError{Name: "total_notes", err: errors.New(`ent: missing required field "Stage.total_notes"`)}
+	}
+	if _, ok := sc.mutation.MaxCombo(); !ok {
+		return &ValidationError{Name: "max_combo", err: errors.New(`ent: missing required field "Stage.max_combo"`)}
+	}
+	if _, ok := sc.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "is_active", err: errors.New(`ent: missing required field "Stage.is_active"`)}
 	}
 	if len(sc.mutation.MusicIDs()) == 0 {
 		return &ValidationError{Name: "music", err: errors.New(`ent: missing required edge "Stage.music"`)}
@@ -243,6 +291,10 @@ func (sc *StageCreate) createSpec() (*Stage, *sqlgraph.CreateSpec) {
 		_spec.SetField(stage.FieldLevelName, field.TypeString, value)
 		_node.LevelName = value
 	}
+	if value, ok := sc.mutation.Difficulty(); ok {
+		_spec.SetField(stage.FieldDifficulty, field.TypeInt, value)
+		_node.Difficulty = value
+	}
 	if value, ok := sc.mutation.LevelAddress(); ok {
 		_spec.SetField(stage.FieldLevelAddress, field.TypeString, value)
 		_node.LevelAddress = value
@@ -250,6 +302,18 @@ func (sc *StageCreate) createSpec() (*Stage, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.JacketAddress(); ok {
 		_spec.SetField(stage.FieldJacketAddress, field.TypeString, value)
 		_node.JacketAddress = value
+	}
+	if value, ok := sc.mutation.TotalNotes(); ok {
+		_spec.SetField(stage.FieldTotalNotes, field.TypeInt, value)
+		_node.TotalNotes = value
+	}
+	if value, ok := sc.mutation.MaxCombo(); ok {
+		_spec.SetField(stage.FieldMaxCombo, field.TypeInt, value)
+		_node.MaxCombo = value
+	}
+	if value, ok := sc.mutation.IsActive(); ok {
+		_spec.SetField(stage.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
 	}
 	if nodes := sc.mutation.MusicIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

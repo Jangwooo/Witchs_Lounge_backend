@@ -139,16 +139,16 @@ func (rc *RecordCreate) SetNillableMissCount(i *int) *RecordCreate {
 	return rc
 }
 
-// SetPlayedAt sets the "played_at" field.
-func (rc *RecordCreate) SetPlayedAt(t time.Time) *RecordCreate {
-	rc.mutation.SetPlayedAt(t)
+// SetMaxCombo sets the "max_combo" field.
+func (rc *RecordCreate) SetMaxCombo(i int) *RecordCreate {
+	rc.mutation.SetMaxCombo(i)
 	return rc
 }
 
-// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
-func (rc *RecordCreate) SetNillablePlayedAt(t *time.Time) *RecordCreate {
-	if t != nil {
-		rc.SetPlayedAt(*t)
+// SetNillableMaxCombo sets the "max_combo" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableMaxCombo(i *int) *RecordCreate {
+	if i != nil {
+		rc.SetMaxCombo(*i)
 	}
 	return rc
 }
@@ -167,16 +167,92 @@ func (rc *RecordCreate) SetNillableAccuracy(f *float64) *RecordCreate {
 	return rc
 }
 
-// SetAdditionalInfo sets the "additional_info" field.
-func (rc *RecordCreate) SetAdditionalInfo(s string) *RecordCreate {
-	rc.mutation.SetAdditionalInfo(s)
+// SetRank sets the "rank" field.
+func (rc *RecordCreate) SetRank(r record.Rank) *RecordCreate {
+	rc.mutation.SetRank(r)
 	return rc
 }
 
-// SetNillableAdditionalInfo sets the "additional_info" field if the given value is not nil.
-func (rc *RecordCreate) SetNillableAdditionalInfo(s *string) *RecordCreate {
-	if s != nil {
-		rc.SetAdditionalInfo(*s)
+// SetNillableRank sets the "rank" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableRank(r *record.Rank) *RecordCreate {
+	if r != nil {
+		rc.SetRank(*r)
+	}
+	return rc
+}
+
+// SetIsFullCombo sets the "is_full_combo" field.
+func (rc *RecordCreate) SetIsFullCombo(b bool) *RecordCreate {
+	rc.mutation.SetIsFullCombo(b)
+	return rc
+}
+
+// SetNillableIsFullCombo sets the "is_full_combo" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableIsFullCombo(b *bool) *RecordCreate {
+	if b != nil {
+		rc.SetIsFullCombo(*b)
+	}
+	return rc
+}
+
+// SetIsPerfectPlay sets the "is_perfect_play" field.
+func (rc *RecordCreate) SetIsPerfectPlay(b bool) *RecordCreate {
+	rc.mutation.SetIsPerfectPlay(b)
+	return rc
+}
+
+// SetNillableIsPerfectPlay sets the "is_perfect_play" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableIsPerfectPlay(b *bool) *RecordCreate {
+	if b != nil {
+		rc.SetIsPerfectPlay(*b)
+	}
+	return rc
+}
+
+// SetPlayedAt sets the "played_at" field.
+func (rc *RecordCreate) SetPlayedAt(t time.Time) *RecordCreate {
+	rc.mutation.SetPlayedAt(t)
+	return rc
+}
+
+// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
+func (rc *RecordCreate) SetNillablePlayedAt(t *time.Time) *RecordCreate {
+	if t != nil {
+		rc.SetPlayedAt(*t)
+	}
+	return rc
+}
+
+// SetPlayDuration sets the "play_duration" field.
+func (rc *RecordCreate) SetPlayDuration(i int) *RecordCreate {
+	rc.mutation.SetPlayDuration(i)
+	return rc
+}
+
+// SetNillablePlayDuration sets the "play_duration" field if the given value is not nil.
+func (rc *RecordCreate) SetNillablePlayDuration(i *int) *RecordCreate {
+	if i != nil {
+		rc.SetPlayDuration(*i)
+	}
+	return rc
+}
+
+// SetAdditionalInfo sets the "additional_info" field.
+func (rc *RecordCreate) SetAdditionalInfo(m map[string]interface{}) *RecordCreate {
+	rc.mutation.SetAdditionalInfo(m)
+	return rc
+}
+
+// SetIsValid sets the "is_valid" field.
+func (rc *RecordCreate) SetIsValid(b bool) *RecordCreate {
+	rc.mutation.SetIsValid(b)
+	return rc
+}
+
+// SetNillableIsValid sets the "is_valid" field if the given value is not nil.
+func (rc *RecordCreate) SetNillableIsValid(b *bool) *RecordCreate {
+	if b != nil {
+		rc.SetIsValid(*b)
 	}
 	return rc
 }
@@ -274,13 +350,29 @@ func (rc *RecordCreate) defaults() {
 		v := record.DefaultMissCount
 		rc.mutation.SetMissCount(v)
 	}
-	if _, ok := rc.mutation.PlayedAt(); !ok {
-		v := record.DefaultPlayedAt()
-		rc.mutation.SetPlayedAt(v)
+	if _, ok := rc.mutation.MaxCombo(); !ok {
+		v := record.DefaultMaxCombo
+		rc.mutation.SetMaxCombo(v)
 	}
 	if _, ok := rc.mutation.Accuracy(); !ok {
 		v := record.DefaultAccuracy
 		rc.mutation.SetAccuracy(v)
+	}
+	if _, ok := rc.mutation.IsFullCombo(); !ok {
+		v := record.DefaultIsFullCombo
+		rc.mutation.SetIsFullCombo(v)
+	}
+	if _, ok := rc.mutation.IsPerfectPlay(); !ok {
+		v := record.DefaultIsPerfectPlay
+		rc.mutation.SetIsPerfectPlay(v)
+	}
+	if _, ok := rc.mutation.PlayedAt(); !ok {
+		v := record.DefaultPlayedAt()
+		rc.mutation.SetPlayedAt(v)
+	}
+	if _, ok := rc.mutation.IsValid(); !ok {
+		v := record.DefaultIsValid
+		rc.mutation.SetIsValid(v)
 	}
 	if _, ok := rc.mutation.ID(); !ok {
 		v := record.DefaultID()
@@ -323,11 +415,28 @@ func (rc *RecordCreate) check() error {
 	if _, ok := rc.mutation.MissCount(); !ok {
 		return &ValidationError{Name: "miss_count", err: errors.New(`ent: missing required field "Record.miss_count"`)}
 	}
-	if _, ok := rc.mutation.PlayedAt(); !ok {
-		return &ValidationError{Name: "played_at", err: errors.New(`ent: missing required field "Record.played_at"`)}
+	if _, ok := rc.mutation.MaxCombo(); !ok {
+		return &ValidationError{Name: "max_combo", err: errors.New(`ent: missing required field "Record.max_combo"`)}
 	}
 	if _, ok := rc.mutation.Accuracy(); !ok {
 		return &ValidationError{Name: "accuracy", err: errors.New(`ent: missing required field "Record.accuracy"`)}
+	}
+	if v, ok := rc.mutation.Rank(); ok {
+		if err := record.RankValidator(v); err != nil {
+			return &ValidationError{Name: "rank", err: fmt.Errorf(`ent: validator failed for field "Record.rank": %w`, err)}
+		}
+	}
+	if _, ok := rc.mutation.IsFullCombo(); !ok {
+		return &ValidationError{Name: "is_full_combo", err: errors.New(`ent: missing required field "Record.is_full_combo"`)}
+	}
+	if _, ok := rc.mutation.IsPerfectPlay(); !ok {
+		return &ValidationError{Name: "is_perfect_play", err: errors.New(`ent: missing required field "Record.is_perfect_play"`)}
+	}
+	if _, ok := rc.mutation.PlayedAt(); !ok {
+		return &ValidationError{Name: "played_at", err: errors.New(`ent: missing required field "Record.played_at"`)}
+	}
+	if _, ok := rc.mutation.IsValid(); !ok {
+		return &ValidationError{Name: "is_valid", err: errors.New(`ent: missing required field "Record.is_valid"`)}
 	}
 	if len(rc.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Record.user"`)}
@@ -404,17 +513,41 @@ func (rc *RecordCreate) createSpec() (*Record, *sqlgraph.CreateSpec) {
 		_spec.SetField(record.FieldMissCount, field.TypeInt, value)
 		_node.MissCount = value
 	}
-	if value, ok := rc.mutation.PlayedAt(); ok {
-		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
-		_node.PlayedAt = value
+	if value, ok := rc.mutation.MaxCombo(); ok {
+		_spec.SetField(record.FieldMaxCombo, field.TypeInt, value)
+		_node.MaxCombo = value
 	}
 	if value, ok := rc.mutation.Accuracy(); ok {
 		_spec.SetField(record.FieldAccuracy, field.TypeFloat64, value)
 		_node.Accuracy = value
 	}
+	if value, ok := rc.mutation.Rank(); ok {
+		_spec.SetField(record.FieldRank, field.TypeEnum, value)
+		_node.Rank = value
+	}
+	if value, ok := rc.mutation.IsFullCombo(); ok {
+		_spec.SetField(record.FieldIsFullCombo, field.TypeBool, value)
+		_node.IsFullCombo = value
+	}
+	if value, ok := rc.mutation.IsPerfectPlay(); ok {
+		_spec.SetField(record.FieldIsPerfectPlay, field.TypeBool, value)
+		_node.IsPerfectPlay = value
+	}
+	if value, ok := rc.mutation.PlayedAt(); ok {
+		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
+		_node.PlayedAt = value
+	}
+	if value, ok := rc.mutation.PlayDuration(); ok {
+		_spec.SetField(record.FieldPlayDuration, field.TypeInt, value)
+		_node.PlayDuration = value
+	}
 	if value, ok := rc.mutation.AdditionalInfo(); ok {
-		_spec.SetField(record.FieldAdditionalInfo, field.TypeString, value)
+		_spec.SetField(record.FieldAdditionalInfo, field.TypeJSON, value)
 		_node.AdditionalInfo = value
+	}
+	if value, ok := rc.mutation.IsValid(); ok {
+		_spec.SetField(record.FieldIsValid, field.TypeBool, value)
+		_node.IsValid = value
 	}
 	if nodes := rc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

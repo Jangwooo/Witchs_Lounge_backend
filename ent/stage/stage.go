@@ -23,10 +23,18 @@ const (
 	FieldMusicID = "music_id"
 	// FieldLevelName holds the string denoting the level_name field in the database.
 	FieldLevelName = "level_name"
+	// FieldDifficulty holds the string denoting the difficulty field in the database.
+	FieldDifficulty = "difficulty"
 	// FieldLevelAddress holds the string denoting the level_address field in the database.
 	FieldLevelAddress = "level_address"
 	// FieldJacketAddress holds the string denoting the jacket_address field in the database.
 	FieldJacketAddress = "jacket_address"
+	// FieldTotalNotes holds the string denoting the total_notes field in the database.
+	FieldTotalNotes = "total_notes"
+	// FieldMaxCombo holds the string denoting the max_combo field in the database.
+	FieldMaxCombo = "max_combo"
+	// FieldIsActive holds the string denoting the is_active field in the database.
+	FieldIsActive = "is_active"
 	// EdgeMusic holds the string denoting the music edge name in mutations.
 	EdgeMusic = "music"
 	// EdgeRecords holds the string denoting the records edge name in mutations.
@@ -56,8 +64,12 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldMusicID,
 	FieldLevelName,
+	FieldDifficulty,
 	FieldLevelAddress,
 	FieldJacketAddress,
+	FieldTotalNotes,
+	FieldMaxCombo,
+	FieldIsActive,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -83,6 +95,8 @@ var (
 	LevelAddressValidator func(string) error
 	// JacketAddressValidator is a validator for the "jacket_address" field. It is called by the builders before save.
 	JacketAddressValidator func(string) error
+	// DefaultIsActive holds the default value on creation for the "is_active" field.
+	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -115,6 +129,11 @@ func ByLevelName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLevelName, opts...).ToFunc()
 }
 
+// ByDifficulty orders the results by the difficulty field.
+func ByDifficulty(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDifficulty, opts...).ToFunc()
+}
+
 // ByLevelAddress orders the results by the level_address field.
 func ByLevelAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLevelAddress, opts...).ToFunc()
@@ -123,6 +142,21 @@ func ByLevelAddress(opts ...sql.OrderTermOption) OrderOption {
 // ByJacketAddress orders the results by the jacket_address field.
 func ByJacketAddress(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJacketAddress, opts...).ToFunc()
+}
+
+// ByTotalNotes orders the results by the total_notes field.
+func ByTotalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTotalNotes, opts...).ToFunc()
+}
+
+// ByMaxCombo orders the results by the max_combo field.
+func ByMaxCombo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMaxCombo, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the is_active field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
 }
 
 // ByMusicField orders the results by music field.

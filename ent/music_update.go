@@ -51,6 +51,40 @@ func (mu *MusicUpdate) SetNillableName(s *string) *MusicUpdate {
 	return mu
 }
 
+// SetArtist sets the "artist" field.
+func (mu *MusicUpdate) SetArtist(s string) *MusicUpdate {
+	mu.mutation.SetArtist(s)
+	return mu
+}
+
+// SetNillableArtist sets the "artist" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableArtist(s *string) *MusicUpdate {
+	if s != nil {
+		mu.SetArtist(*s)
+	}
+	return mu
+}
+
+// SetComposer sets the "composer" field.
+func (mu *MusicUpdate) SetComposer(s string) *MusicUpdate {
+	mu.mutation.SetComposer(s)
+	return mu
+}
+
+// SetNillableComposer sets the "composer" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableComposer(s *string) *MusicUpdate {
+	if s != nil {
+		mu.SetComposer(*s)
+	}
+	return mu
+}
+
+// ClearComposer clears the value of the "composer" field.
+func (mu *MusicUpdate) ClearComposer() *MusicUpdate {
+	mu.mutation.ClearComposer()
+	return mu
+}
+
 // SetMusicSource sets the "music_source" field.
 func (mu *MusicUpdate) SetMusicSource(s string) *MusicUpdate {
 	mu.mutation.SetMusicSource(s)
@@ -100,16 +134,146 @@ func (mu *MusicUpdate) AddDuration(f float64) *MusicUpdate {
 	return mu
 }
 
-// SetAuthor sets the "Author" field.
-func (mu *MusicUpdate) SetAuthor(s string) *MusicUpdate {
-	mu.mutation.SetAuthor(s)
+// SetBpm sets the "bpm" field.
+func (mu *MusicUpdate) SetBpm(f float64) *MusicUpdate {
+	mu.mutation.ResetBpm()
+	mu.mutation.SetBpm(f)
 	return mu
 }
 
-// SetNillableAuthor sets the "Author" field if the given value is not nil.
-func (mu *MusicUpdate) SetNillableAuthor(s *string) *MusicUpdate {
+// SetNillableBpm sets the "bpm" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableBpm(f *float64) *MusicUpdate {
+	if f != nil {
+		mu.SetBpm(*f)
+	}
+	return mu
+}
+
+// AddBpm adds f to the "bpm" field.
+func (mu *MusicUpdate) AddBpm(f float64) *MusicUpdate {
+	mu.mutation.AddBpm(f)
+	return mu
+}
+
+// SetGenre sets the "genre" field.
+func (mu *MusicUpdate) SetGenre(s string) *MusicUpdate {
+	mu.mutation.SetGenre(s)
+	return mu
+}
+
+// SetNillableGenre sets the "genre" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableGenre(s *string) *MusicUpdate {
 	if s != nil {
-		mu.SetAuthor(*s)
+		mu.SetGenre(*s)
+	}
+	return mu
+}
+
+// ClearGenre clears the value of the "genre" field.
+func (mu *MusicUpdate) ClearGenre() *MusicUpdate {
+	mu.mutation.ClearGenre()
+	return mu
+}
+
+// SetDescription sets the "description" field.
+func (mu *MusicUpdate) SetDescription(s string) *MusicUpdate {
+	mu.mutation.SetDescription(s)
+	return mu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableDescription(s *string) *MusicUpdate {
+	if s != nil {
+		mu.SetDescription(*s)
+	}
+	return mu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (mu *MusicUpdate) ClearDescription() *MusicUpdate {
+	mu.mutation.ClearDescription()
+	return mu
+}
+
+// SetIsFeatured sets the "is_featured" field.
+func (mu *MusicUpdate) SetIsFeatured(b bool) *MusicUpdate {
+	mu.mutation.SetIsFeatured(b)
+	return mu
+}
+
+// SetNillableIsFeatured sets the "is_featured" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableIsFeatured(b *bool) *MusicUpdate {
+	if b != nil {
+		mu.SetIsFeatured(*b)
+	}
+	return mu
+}
+
+// SetIsFree sets the "is_free" field.
+func (mu *MusicUpdate) SetIsFree(b bool) *MusicUpdate {
+	mu.mutation.SetIsFree(b)
+	return mu
+}
+
+// SetNillableIsFree sets the "is_free" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableIsFree(b *bool) *MusicUpdate {
+	if b != nil {
+		mu.SetIsFree(*b)
+	}
+	return mu
+}
+
+// SetUnlockLevel sets the "unlock_level" field.
+func (mu *MusicUpdate) SetUnlockLevel(i int) *MusicUpdate {
+	mu.mutation.ResetUnlockLevel()
+	mu.mutation.SetUnlockLevel(i)
+	return mu
+}
+
+// SetNillableUnlockLevel sets the "unlock_level" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableUnlockLevel(i *int) *MusicUpdate {
+	if i != nil {
+		mu.SetUnlockLevel(*i)
+	}
+	return mu
+}
+
+// AddUnlockLevel adds i to the "unlock_level" field.
+func (mu *MusicUpdate) AddUnlockLevel(i int) *MusicUpdate {
+	mu.mutation.AddUnlockLevel(i)
+	return mu
+}
+
+// SetReleaseDate sets the "release_date" field.
+func (mu *MusicUpdate) SetReleaseDate(t time.Time) *MusicUpdate {
+	mu.mutation.SetReleaseDate(t)
+	return mu
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableReleaseDate(t *time.Time) *MusicUpdate {
+	if t != nil {
+		mu.SetReleaseDate(*t)
+	}
+	return mu
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (mu *MusicUpdate) ClearReleaseDate() *MusicUpdate {
+	mu.mutation.ClearReleaseDate()
+	return mu
+}
+
+// SetIsActive sets the "is_active" field.
+func (mu *MusicUpdate) SetIsActive(b bool) *MusicUpdate {
+	mu.mutation.SetIsActive(b)
+	return mu
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (mu *MusicUpdate) SetNillableIsActive(b *bool) *MusicUpdate {
+	if b != nil {
+		mu.SetIsActive(*b)
 	}
 	return mu
 }
@@ -242,6 +406,15 @@ func (mu *MusicUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.Name(); ok {
 		_spec.SetField(music.FieldName, field.TypeString, value)
 	}
+	if value, ok := mu.mutation.Artist(); ok {
+		_spec.SetField(music.FieldArtist, field.TypeString, value)
+	}
+	if value, ok := mu.mutation.Composer(); ok {
+		_spec.SetField(music.FieldComposer, field.TypeString, value)
+	}
+	if mu.mutation.ComposerCleared() {
+		_spec.ClearField(music.FieldComposer, field.TypeString)
+	}
 	if value, ok := mu.mutation.MusicSource(); ok {
 		_spec.SetField(music.FieldMusicSource, field.TypeString, value)
 	}
@@ -254,8 +427,44 @@ func (mu *MusicUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := mu.mutation.AddedDuration(); ok {
 		_spec.AddField(music.FieldDuration, field.TypeFloat64, value)
 	}
-	if value, ok := mu.mutation.Author(); ok {
-		_spec.SetField(music.FieldAuthor, field.TypeString, value)
+	if value, ok := mu.mutation.Bpm(); ok {
+		_spec.SetField(music.FieldBpm, field.TypeFloat64, value)
+	}
+	if value, ok := mu.mutation.AddedBpm(); ok {
+		_spec.AddField(music.FieldBpm, field.TypeFloat64, value)
+	}
+	if value, ok := mu.mutation.Genre(); ok {
+		_spec.SetField(music.FieldGenre, field.TypeString, value)
+	}
+	if mu.mutation.GenreCleared() {
+		_spec.ClearField(music.FieldGenre, field.TypeString)
+	}
+	if value, ok := mu.mutation.Description(); ok {
+		_spec.SetField(music.FieldDescription, field.TypeString, value)
+	}
+	if mu.mutation.DescriptionCleared() {
+		_spec.ClearField(music.FieldDescription, field.TypeString)
+	}
+	if value, ok := mu.mutation.IsFeatured(); ok {
+		_spec.SetField(music.FieldIsFeatured, field.TypeBool, value)
+	}
+	if value, ok := mu.mutation.IsFree(); ok {
+		_spec.SetField(music.FieldIsFree, field.TypeBool, value)
+	}
+	if value, ok := mu.mutation.UnlockLevel(); ok {
+		_spec.SetField(music.FieldUnlockLevel, field.TypeInt, value)
+	}
+	if value, ok := mu.mutation.AddedUnlockLevel(); ok {
+		_spec.AddField(music.FieldUnlockLevel, field.TypeInt, value)
+	}
+	if value, ok := mu.mutation.ReleaseDate(); ok {
+		_spec.SetField(music.FieldReleaseDate, field.TypeTime, value)
+	}
+	if mu.mutation.ReleaseDateCleared() {
+		_spec.ClearField(music.FieldReleaseDate, field.TypeTime)
+	}
+	if value, ok := mu.mutation.IsActive(); ok {
+		_spec.SetField(music.FieldIsActive, field.TypeBool, value)
 	}
 	if mu.mutation.StagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -387,6 +596,40 @@ func (muo *MusicUpdateOne) SetNillableName(s *string) *MusicUpdateOne {
 	return muo
 }
 
+// SetArtist sets the "artist" field.
+func (muo *MusicUpdateOne) SetArtist(s string) *MusicUpdateOne {
+	muo.mutation.SetArtist(s)
+	return muo
+}
+
+// SetNillableArtist sets the "artist" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableArtist(s *string) *MusicUpdateOne {
+	if s != nil {
+		muo.SetArtist(*s)
+	}
+	return muo
+}
+
+// SetComposer sets the "composer" field.
+func (muo *MusicUpdateOne) SetComposer(s string) *MusicUpdateOne {
+	muo.mutation.SetComposer(s)
+	return muo
+}
+
+// SetNillableComposer sets the "composer" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableComposer(s *string) *MusicUpdateOne {
+	if s != nil {
+		muo.SetComposer(*s)
+	}
+	return muo
+}
+
+// ClearComposer clears the value of the "composer" field.
+func (muo *MusicUpdateOne) ClearComposer() *MusicUpdateOne {
+	muo.mutation.ClearComposer()
+	return muo
+}
+
 // SetMusicSource sets the "music_source" field.
 func (muo *MusicUpdateOne) SetMusicSource(s string) *MusicUpdateOne {
 	muo.mutation.SetMusicSource(s)
@@ -436,16 +679,146 @@ func (muo *MusicUpdateOne) AddDuration(f float64) *MusicUpdateOne {
 	return muo
 }
 
-// SetAuthor sets the "Author" field.
-func (muo *MusicUpdateOne) SetAuthor(s string) *MusicUpdateOne {
-	muo.mutation.SetAuthor(s)
+// SetBpm sets the "bpm" field.
+func (muo *MusicUpdateOne) SetBpm(f float64) *MusicUpdateOne {
+	muo.mutation.ResetBpm()
+	muo.mutation.SetBpm(f)
 	return muo
 }
 
-// SetNillableAuthor sets the "Author" field if the given value is not nil.
-func (muo *MusicUpdateOne) SetNillableAuthor(s *string) *MusicUpdateOne {
+// SetNillableBpm sets the "bpm" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableBpm(f *float64) *MusicUpdateOne {
+	if f != nil {
+		muo.SetBpm(*f)
+	}
+	return muo
+}
+
+// AddBpm adds f to the "bpm" field.
+func (muo *MusicUpdateOne) AddBpm(f float64) *MusicUpdateOne {
+	muo.mutation.AddBpm(f)
+	return muo
+}
+
+// SetGenre sets the "genre" field.
+func (muo *MusicUpdateOne) SetGenre(s string) *MusicUpdateOne {
+	muo.mutation.SetGenre(s)
+	return muo
+}
+
+// SetNillableGenre sets the "genre" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableGenre(s *string) *MusicUpdateOne {
 	if s != nil {
-		muo.SetAuthor(*s)
+		muo.SetGenre(*s)
+	}
+	return muo
+}
+
+// ClearGenre clears the value of the "genre" field.
+func (muo *MusicUpdateOne) ClearGenre() *MusicUpdateOne {
+	muo.mutation.ClearGenre()
+	return muo
+}
+
+// SetDescription sets the "description" field.
+func (muo *MusicUpdateOne) SetDescription(s string) *MusicUpdateOne {
+	muo.mutation.SetDescription(s)
+	return muo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableDescription(s *string) *MusicUpdateOne {
+	if s != nil {
+		muo.SetDescription(*s)
+	}
+	return muo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (muo *MusicUpdateOne) ClearDescription() *MusicUpdateOne {
+	muo.mutation.ClearDescription()
+	return muo
+}
+
+// SetIsFeatured sets the "is_featured" field.
+func (muo *MusicUpdateOne) SetIsFeatured(b bool) *MusicUpdateOne {
+	muo.mutation.SetIsFeatured(b)
+	return muo
+}
+
+// SetNillableIsFeatured sets the "is_featured" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableIsFeatured(b *bool) *MusicUpdateOne {
+	if b != nil {
+		muo.SetIsFeatured(*b)
+	}
+	return muo
+}
+
+// SetIsFree sets the "is_free" field.
+func (muo *MusicUpdateOne) SetIsFree(b bool) *MusicUpdateOne {
+	muo.mutation.SetIsFree(b)
+	return muo
+}
+
+// SetNillableIsFree sets the "is_free" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableIsFree(b *bool) *MusicUpdateOne {
+	if b != nil {
+		muo.SetIsFree(*b)
+	}
+	return muo
+}
+
+// SetUnlockLevel sets the "unlock_level" field.
+func (muo *MusicUpdateOne) SetUnlockLevel(i int) *MusicUpdateOne {
+	muo.mutation.ResetUnlockLevel()
+	muo.mutation.SetUnlockLevel(i)
+	return muo
+}
+
+// SetNillableUnlockLevel sets the "unlock_level" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableUnlockLevel(i *int) *MusicUpdateOne {
+	if i != nil {
+		muo.SetUnlockLevel(*i)
+	}
+	return muo
+}
+
+// AddUnlockLevel adds i to the "unlock_level" field.
+func (muo *MusicUpdateOne) AddUnlockLevel(i int) *MusicUpdateOne {
+	muo.mutation.AddUnlockLevel(i)
+	return muo
+}
+
+// SetReleaseDate sets the "release_date" field.
+func (muo *MusicUpdateOne) SetReleaseDate(t time.Time) *MusicUpdateOne {
+	muo.mutation.SetReleaseDate(t)
+	return muo
+}
+
+// SetNillableReleaseDate sets the "release_date" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableReleaseDate(t *time.Time) *MusicUpdateOne {
+	if t != nil {
+		muo.SetReleaseDate(*t)
+	}
+	return muo
+}
+
+// ClearReleaseDate clears the value of the "release_date" field.
+func (muo *MusicUpdateOne) ClearReleaseDate() *MusicUpdateOne {
+	muo.mutation.ClearReleaseDate()
+	return muo
+}
+
+// SetIsActive sets the "is_active" field.
+func (muo *MusicUpdateOne) SetIsActive(b bool) *MusicUpdateOne {
+	muo.mutation.SetIsActive(b)
+	return muo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (muo *MusicUpdateOne) SetNillableIsActive(b *bool) *MusicUpdateOne {
+	if b != nil {
+		muo.SetIsActive(*b)
 	}
 	return muo
 }
@@ -608,6 +981,15 @@ func (muo *MusicUpdateOne) sqlSave(ctx context.Context) (_node *Music, err error
 	if value, ok := muo.mutation.Name(); ok {
 		_spec.SetField(music.FieldName, field.TypeString, value)
 	}
+	if value, ok := muo.mutation.Artist(); ok {
+		_spec.SetField(music.FieldArtist, field.TypeString, value)
+	}
+	if value, ok := muo.mutation.Composer(); ok {
+		_spec.SetField(music.FieldComposer, field.TypeString, value)
+	}
+	if muo.mutation.ComposerCleared() {
+		_spec.ClearField(music.FieldComposer, field.TypeString)
+	}
 	if value, ok := muo.mutation.MusicSource(); ok {
 		_spec.SetField(music.FieldMusicSource, field.TypeString, value)
 	}
@@ -620,8 +1002,44 @@ func (muo *MusicUpdateOne) sqlSave(ctx context.Context) (_node *Music, err error
 	if value, ok := muo.mutation.AddedDuration(); ok {
 		_spec.AddField(music.FieldDuration, field.TypeFloat64, value)
 	}
-	if value, ok := muo.mutation.Author(); ok {
-		_spec.SetField(music.FieldAuthor, field.TypeString, value)
+	if value, ok := muo.mutation.Bpm(); ok {
+		_spec.SetField(music.FieldBpm, field.TypeFloat64, value)
+	}
+	if value, ok := muo.mutation.AddedBpm(); ok {
+		_spec.AddField(music.FieldBpm, field.TypeFloat64, value)
+	}
+	if value, ok := muo.mutation.Genre(); ok {
+		_spec.SetField(music.FieldGenre, field.TypeString, value)
+	}
+	if muo.mutation.GenreCleared() {
+		_spec.ClearField(music.FieldGenre, field.TypeString)
+	}
+	if value, ok := muo.mutation.Description(); ok {
+		_spec.SetField(music.FieldDescription, field.TypeString, value)
+	}
+	if muo.mutation.DescriptionCleared() {
+		_spec.ClearField(music.FieldDescription, field.TypeString)
+	}
+	if value, ok := muo.mutation.IsFeatured(); ok {
+		_spec.SetField(music.FieldIsFeatured, field.TypeBool, value)
+	}
+	if value, ok := muo.mutation.IsFree(); ok {
+		_spec.SetField(music.FieldIsFree, field.TypeBool, value)
+	}
+	if value, ok := muo.mutation.UnlockLevel(); ok {
+		_spec.SetField(music.FieldUnlockLevel, field.TypeInt, value)
+	}
+	if value, ok := muo.mutation.AddedUnlockLevel(); ok {
+		_spec.AddField(music.FieldUnlockLevel, field.TypeInt, value)
+	}
+	if value, ok := muo.mutation.ReleaseDate(); ok {
+		_spec.SetField(music.FieldReleaseDate, field.TypeTime, value)
+	}
+	if muo.mutation.ReleaseDateCleared() {
+		_spec.ClearField(music.FieldReleaseDate, field.TypeTime)
+	}
+	if value, ok := muo.mutation.IsActive(); ok {
+		_spec.SetField(music.FieldIsActive, field.TypeBool, value)
 	}
 	if muo.mutation.StagesCleared() {
 		edge := &sqlgraph.EdgeSpec{

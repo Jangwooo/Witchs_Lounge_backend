@@ -16,6 +16,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/witchs-lounge_backend/ent/achievement"
 	"github.com/witchs-lounge_backend/ent/character"
 	"github.com/witchs-lounge_backend/ent/item"
 	"github.com/witchs-lounge_backend/ent/music"
@@ -23,6 +24,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/record"
 	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -31,6 +33,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Achievement is the client for interacting with the Achievement builders.
+	Achievement *AchievementClient
 	// Character is the client for interacting with the Character builders.
 	Character *CharacterClient
 	// Item is the client for interacting with the Item builders.
@@ -45,6 +49,8 @@ type Client struct {
 	Stage *StageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserAchievement is the client for interacting with the UserAchievement builders.
+	UserAchievement *UserAchievementClient
 	// UserPurchase is the client for interacting with the UserPurchase builders.
 	UserPurchase *UserPurchaseClient
 }
@@ -58,6 +64,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.Achievement = NewAchievementClient(c.config)
 	c.Character = NewCharacterClient(c.config)
 	c.Item = NewItemClient(c.config)
 	c.Music = NewMusicClient(c.config)
@@ -65,6 +72,7 @@ func (c *Client) init() {
 	c.Record = NewRecordClient(c.config)
 	c.Stage = NewStageClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.UserAchievement = NewUserAchievementClient(c.config)
 	c.UserPurchase = NewUserPurchaseClient(c.config)
 }
 
@@ -156,16 +164,18 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Character:    NewCharacterClient(cfg),
-		Item:         NewItemClient(cfg),
-		Music:        NewMusicClient(cfg),
-		Product:      NewProductClient(cfg),
-		Record:       NewRecordClient(cfg),
-		Stage:        NewStageClient(cfg),
-		User:         NewUserClient(cfg),
-		UserPurchase: NewUserPurchaseClient(cfg),
+		ctx:             ctx,
+		config:          cfg,
+		Achievement:     NewAchievementClient(cfg),
+		Character:       NewCharacterClient(cfg),
+		Item:            NewItemClient(cfg),
+		Music:           NewMusicClient(cfg),
+		Product:         NewProductClient(cfg),
+		Record:          NewRecordClient(cfg),
+		Stage:           NewStageClient(cfg),
+		User:            NewUserClient(cfg),
+		UserAchievement: NewUserAchievementClient(cfg),
+		UserPurchase:    NewUserPurchaseClient(cfg),
 	}, nil
 }
 
@@ -183,23 +193,25 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:          ctx,
-		config:       cfg,
-		Character:    NewCharacterClient(cfg),
-		Item:         NewItemClient(cfg),
-		Music:        NewMusicClient(cfg),
-		Product:      NewProductClient(cfg),
-		Record:       NewRecordClient(cfg),
-		Stage:        NewStageClient(cfg),
-		User:         NewUserClient(cfg),
-		UserPurchase: NewUserPurchaseClient(cfg),
+		ctx:             ctx,
+		config:          cfg,
+		Achievement:     NewAchievementClient(cfg),
+		Character:       NewCharacterClient(cfg),
+		Item:            NewItemClient(cfg),
+		Music:           NewMusicClient(cfg),
+		Product:         NewProductClient(cfg),
+		Record:          NewRecordClient(cfg),
+		Stage:           NewStageClient(cfg),
+		User:            NewUserClient(cfg),
+		UserAchievement: NewUserAchievementClient(cfg),
+		UserPurchase:    NewUserPurchaseClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Character.
+//		Achievement.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -222,8 +234,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage, c.User,
-		c.UserPurchase,
+		c.Achievement, c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage,
+		c.User, c.UserAchievement, c.UserPurchase,
 	} {
 		n.Use(hooks...)
 	}
@@ -233,8 +245,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage, c.User,
-		c.UserPurchase,
+		c.Achievement, c.Character, c.Item, c.Music, c.Product, c.Record, c.Stage,
+		c.User, c.UserAchievement, c.UserPurchase,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -243,6 +255,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *AchievementMutation:
+		return c.Achievement.mutate(ctx, m)
 	case *CharacterMutation:
 		return c.Character.mutate(ctx, m)
 	case *ItemMutation:
@@ -257,10 +271,161 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Stage.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *UserAchievementMutation:
+		return c.UserAchievement.mutate(ctx, m)
 	case *UserPurchaseMutation:
 		return c.UserPurchase.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// AchievementClient is a client for the Achievement schema.
+type AchievementClient struct {
+	config
+}
+
+// NewAchievementClient returns a client for the Achievement from the given config.
+func NewAchievementClient(c config) *AchievementClient {
+	return &AchievementClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `achievement.Hooks(f(g(h())))`.
+func (c *AchievementClient) Use(hooks ...Hook) {
+	c.hooks.Achievement = append(c.hooks.Achievement, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `achievement.Intercept(f(g(h())))`.
+func (c *AchievementClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Achievement = append(c.inters.Achievement, interceptors...)
+}
+
+// Create returns a builder for creating a Achievement entity.
+func (c *AchievementClient) Create() *AchievementCreate {
+	mutation := newAchievementMutation(c.config, OpCreate)
+	return &AchievementCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Achievement entities.
+func (c *AchievementClient) CreateBulk(builders ...*AchievementCreate) *AchievementCreateBulk {
+	return &AchievementCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AchievementClient) MapCreateBulk(slice any, setFunc func(*AchievementCreate, int)) *AchievementCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AchievementCreateBulk{err: fmt.Errorf("calling to AchievementClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AchievementCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AchievementCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Achievement.
+func (c *AchievementClient) Update() *AchievementUpdate {
+	mutation := newAchievementMutation(c.config, OpUpdate)
+	return &AchievementUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AchievementClient) UpdateOne(a *Achievement) *AchievementUpdateOne {
+	mutation := newAchievementMutation(c.config, OpUpdateOne, withAchievement(a))
+	return &AchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AchievementClient) UpdateOneID(id uuid.UUID) *AchievementUpdateOne {
+	mutation := newAchievementMutation(c.config, OpUpdateOne, withAchievementID(id))
+	return &AchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Achievement.
+func (c *AchievementClient) Delete() *AchievementDelete {
+	mutation := newAchievementMutation(c.config, OpDelete)
+	return &AchievementDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AchievementClient) DeleteOne(a *Achievement) *AchievementDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AchievementClient) DeleteOneID(id uuid.UUID) *AchievementDeleteOne {
+	builder := c.Delete().Where(achievement.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AchievementDeleteOne{builder}
+}
+
+// Query returns a query builder for Achievement.
+func (c *AchievementClient) Query() *AchievementQuery {
+	return &AchievementQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAchievement},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Achievement entity by its id.
+func (c *AchievementClient) Get(ctx context.Context, id uuid.UUID) (*Achievement, error) {
+	return c.Query().Where(achievement.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AchievementClient) GetX(ctx context.Context, id uuid.UUID) *Achievement {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUserAchievements queries the user_achievements edge of a Achievement.
+func (c *AchievementClient) QueryUserAchievements(a *Achievement) *UserAchievementQuery {
+	query := (&UserAchievementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(achievement.Table, achievement.FieldID, id),
+			sqlgraph.To(userachievement.Table, userachievement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, achievement.UserAchievementsTable, achievement.UserAchievementsColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AchievementClient) Hooks() []Hook {
+	return c.hooks.Achievement
+}
+
+// Interceptors returns the client interceptors.
+func (c *AchievementClient) Interceptors() []Interceptor {
+	return c.inters.Achievement
+}
+
+func (c *AchievementClient) mutate(ctx context.Context, m *AchievementMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AchievementCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AchievementUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AchievementDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Achievement mutation op: %q", m.Op())
 	}
 }
 
@@ -1442,6 +1607,22 @@ func (c *UserClient) QueryRecords(u *User) *RecordQuery {
 	return query
 }
 
+// QueryUserAchievements queries the user_achievements edge of a User.
+func (c *UserClient) QueryUserAchievements(u *User) *UserAchievementQuery {
+	query := (&UserAchievementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(userachievement.Table, userachievement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.UserAchievementsTable, user.UserAchievementsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryUserPurchases queries the user_purchases edge of a User.
 func (c *UserClient) QueryUserPurchases(u *User) *UserPurchaseQuery {
 	query := (&UserPurchaseClient{config: c.config}).Query()
@@ -1480,6 +1661,171 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 		return (&UserDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown User mutation op: %q", m.Op())
+	}
+}
+
+// UserAchievementClient is a client for the UserAchievement schema.
+type UserAchievementClient struct {
+	config
+}
+
+// NewUserAchievementClient returns a client for the UserAchievement from the given config.
+func NewUserAchievementClient(c config) *UserAchievementClient {
+	return &UserAchievementClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `userachievement.Hooks(f(g(h())))`.
+func (c *UserAchievementClient) Use(hooks ...Hook) {
+	c.hooks.UserAchievement = append(c.hooks.UserAchievement, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `userachievement.Intercept(f(g(h())))`.
+func (c *UserAchievementClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserAchievement = append(c.inters.UserAchievement, interceptors...)
+}
+
+// Create returns a builder for creating a UserAchievement entity.
+func (c *UserAchievementClient) Create() *UserAchievementCreate {
+	mutation := newUserAchievementMutation(c.config, OpCreate)
+	return &UserAchievementCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserAchievement entities.
+func (c *UserAchievementClient) CreateBulk(builders ...*UserAchievementCreate) *UserAchievementCreateBulk {
+	return &UserAchievementCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserAchievementClient) MapCreateBulk(slice any, setFunc func(*UserAchievementCreate, int)) *UserAchievementCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserAchievementCreateBulk{err: fmt.Errorf("calling to UserAchievementClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserAchievementCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserAchievementCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserAchievement.
+func (c *UserAchievementClient) Update() *UserAchievementUpdate {
+	mutation := newUserAchievementMutation(c.config, OpUpdate)
+	return &UserAchievementUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserAchievementClient) UpdateOne(ua *UserAchievement) *UserAchievementUpdateOne {
+	mutation := newUserAchievementMutation(c.config, OpUpdateOne, withUserAchievement(ua))
+	return &UserAchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserAchievementClient) UpdateOneID(id uuid.UUID) *UserAchievementUpdateOne {
+	mutation := newUserAchievementMutation(c.config, OpUpdateOne, withUserAchievementID(id))
+	return &UserAchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserAchievement.
+func (c *UserAchievementClient) Delete() *UserAchievementDelete {
+	mutation := newUserAchievementMutation(c.config, OpDelete)
+	return &UserAchievementDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserAchievementClient) DeleteOne(ua *UserAchievement) *UserAchievementDeleteOne {
+	return c.DeleteOneID(ua.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserAchievementClient) DeleteOneID(id uuid.UUID) *UserAchievementDeleteOne {
+	builder := c.Delete().Where(userachievement.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserAchievementDeleteOne{builder}
+}
+
+// Query returns a query builder for UserAchievement.
+func (c *UserAchievementClient) Query() *UserAchievementQuery {
+	return &UserAchievementQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserAchievement},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserAchievement entity by its id.
+func (c *UserAchievementClient) Get(ctx context.Context, id uuid.UUID) (*UserAchievement, error) {
+	return c.Query().Where(userachievement.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserAchievementClient) GetX(ctx context.Context, id uuid.UUID) *UserAchievement {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a UserAchievement.
+func (c *UserAchievementClient) QueryUser(ua *UserAchievement) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ua.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(userachievement.Table, userachievement.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, userachievement.UserTable, userachievement.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(ua.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAchievement queries the achievement edge of a UserAchievement.
+func (c *UserAchievementClient) QueryAchievement(ua *UserAchievement) *AchievementQuery {
+	query := (&AchievementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ua.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(userachievement.Table, userachievement.FieldID, id),
+			sqlgraph.To(achievement.Table, achievement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, userachievement.AchievementTable, userachievement.AchievementColumn),
+		)
+		fromV = sqlgraph.Neighbors(ua.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserAchievementClient) Hooks() []Hook {
+	return c.hooks.UserAchievement
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserAchievementClient) Interceptors() []Interceptor {
+	return c.inters.UserAchievement
+}
+
+func (c *UserAchievementClient) mutate(ctx context.Context, m *UserAchievementMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserAchievementCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserAchievementUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserAchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserAchievementDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserAchievement mutation op: %q", m.Op())
 	}
 }
 
@@ -1651,10 +1997,11 @@ func (c *UserPurchaseClient) mutate(ctx context.Context, m *UserPurchaseMutation
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Character, Item, Music, Product, Record, Stage, User, UserPurchase []ent.Hook
+		Achievement, Character, Item, Music, Product, Record, Stage, User,
+		UserAchievement, UserPurchase []ent.Hook
 	}
 	inters struct {
-		Character, Item, Music, Product, Record, Stage, User,
-		UserPurchase []ent.Interceptor
+		Achievement, Character, Item, Music, Product, Record, Stage, User,
+		UserAchievement, UserPurchase []ent.Interceptor
 	}
 )

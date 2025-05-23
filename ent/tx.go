@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// Achievement is the client for interacting with the Achievement builders.
+	Achievement *AchievementClient
 	// Character is the client for interacting with the Character builders.
 	Character *CharacterClient
 	// Item is the client for interacting with the Item builders.
@@ -26,6 +28,8 @@ type Tx struct {
 	Stage *StageClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserAchievement is the client for interacting with the UserAchievement builders.
+	UserAchievement *UserAchievementClient
 	// UserPurchase is the client for interacting with the UserPurchase builders.
 	UserPurchase *UserPurchaseClient
 
@@ -159,6 +163,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.Achievement = NewAchievementClient(tx.config)
 	tx.Character = NewCharacterClient(tx.config)
 	tx.Item = NewItemClient(tx.config)
 	tx.Music = NewMusicClient(tx.config)
@@ -166,6 +171,7 @@ func (tx *Tx) init() {
 	tx.Record = NewRecordClient(tx.config)
 	tx.Stage = NewStageClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.UserAchievement = NewUserAchievementClient(tx.config)
 	tx.UserPurchase = NewUserPurchaseClient(tx.config)
 }
 
@@ -176,7 +182,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Character.QueryXXX(), the query will be executed
+// applies a query, for example: Achievement.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

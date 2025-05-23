@@ -15,6 +15,7 @@ import (
 	redisClient "github.com/witchs-lounge_backend/internal/infrastructure/redis"
 	"github.com/witchs-lounge_backend/internal/infrastructure/session"
 	"github.com/witchs-lounge_backend/internal/repository"
+	"github.com/witchs-lounge_backend/internal/strategy"
 	"github.com/witchs-lounge_backend/internal/usecase"
 )
 
@@ -77,8 +78,11 @@ func main() {
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(client)
 
+	// Initialize platform auth factory
+	authFactory := strategy.NewPlatformAuthFactory()
+
 	// Initialize use cases
-	userUseCase := usecase.NewUserUseCase(userRepo, sessionStore)
+	userUseCase := usecase.NewUserUseCase(userRepo, sessionStore, authFactory)
 
 	// Initialize handlers
 	userHandler := handler.NewUserHandler(userUseCase)

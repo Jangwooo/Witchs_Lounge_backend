@@ -3,6 +3,7 @@
 package user
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -19,24 +20,54 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldPlatformType holds the string denoting the platform_type field in the database.
+	FieldPlatformType = "platform_type"
+	// FieldPlatformUserID holds the string denoting the platform_user_id field in the database.
+	FieldPlatformUserID = "platform_user_id"
+	// FieldPlatformEmail holds the string denoting the platform_email field in the database.
+	FieldPlatformEmail = "platform_email"
+	// FieldPlatformAvatarURL holds the string denoting the platform_avatar_url field in the database.
+	FieldPlatformAvatarURL = "platform_avatar_url"
+	// FieldPlatformDisplayName holds the string denoting the platform_display_name field in the database.
+	FieldPlatformDisplayName = "platform_display_name"
+	// FieldLanguage holds the string denoting the language field in the database.
+	FieldLanguage = "language"
+	// FieldPlatformData holds the string denoting the platform_data field in the database.
+	FieldPlatformData = "platform_data"
+	// FieldIsVerified holds the string denoting the is_verified field in the database.
+	FieldIsVerified = "is_verified"
 	// FieldNickname holds the string denoting the nickname field in the database.
 	FieldNickname = "nickname"
-	// FieldSteamID holds the string denoting the steam_id field in the database.
-	FieldSteamID = "steam_id"
-	// FieldSteamAvatarURL holds the string denoting the steam_avatar_url field in the database.
-	FieldSteamAvatarURL = "steam_avatar_url"
-	// FieldSteamDefaultLanguage holds the string denoting the steam_default_language field in the database.
-	FieldSteamDefaultLanguage = "steam_default_language"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
 	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
 	FieldLastLoginAt = "last_login_at"
+	// FieldLevel holds the string denoting the level field in the database.
+	FieldLevel = "level"
+	// FieldExp holds the string denoting the exp field in the database.
+	FieldExp = "exp"
+	// FieldCoin holds the string denoting the coin field in the database.
+	FieldCoin = "coin"
+	// FieldGem holds the string denoting the gem field in the database.
+	FieldGem = "gem"
+	// FieldSettings holds the string denoting the settings field in the database.
+	FieldSettings = "settings"
 	// FieldCustomizeData holds the string denoting the customize_data field in the database.
 	FieldCustomizeData = "customize_data"
 	// FieldSaveData holds the string denoting the save_data field in the database.
 	FieldSaveData = "save_data"
+	// FieldIsBanned holds the string denoting the is_banned field in the database.
+	FieldIsBanned = "is_banned"
+	// FieldBannedUntil holds the string denoting the banned_until field in the database.
+	FieldBannedUntil = "banned_until"
+	// FieldBanReason holds the string denoting the ban_reason field in the database.
+	FieldBanReason = "ban_reason"
 	// EdgePurchasedProducts holds the string denoting the purchased_products edge name in mutations.
 	EdgePurchasedProducts = "purchased_products"
 	// EdgeRecords holds the string denoting the records edge name in mutations.
 	EdgeRecords = "records"
+	// EdgeUserAchievements holds the string denoting the user_achievements edge name in mutations.
+	EdgeUserAchievements = "user_achievements"
 	// EdgeUserPurchases holds the string denoting the user_purchases edge name in mutations.
 	EdgeUserPurchases = "user_purchases"
 	// Table holds the table name of the user in the database.
@@ -53,6 +84,13 @@ const (
 	RecordsInverseTable = "records"
 	// RecordsColumn is the table column denoting the records relation/edge.
 	RecordsColumn = "user_id"
+	// UserAchievementsTable is the table that holds the user_achievements relation/edge.
+	UserAchievementsTable = "user_achievements"
+	// UserAchievementsInverseTable is the table name for the UserAchievement entity.
+	// It exists in this package in order to avoid circular dependency with the "userachievement" package.
+	UserAchievementsInverseTable = "user_achievements"
+	// UserAchievementsColumn is the table column denoting the user_achievements relation/edge.
+	UserAchievementsColumn = "user_id"
 	// UserPurchasesTable is the table that holds the user_purchases relation/edge.
 	UserPurchasesTable = "user_purchases"
 	// UserPurchasesInverseTable is the table name for the UserPurchase entity.
@@ -67,13 +105,27 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldPlatformType,
+	FieldPlatformUserID,
+	FieldPlatformEmail,
+	FieldPlatformAvatarURL,
+	FieldPlatformDisplayName,
+	FieldLanguage,
+	FieldPlatformData,
+	FieldIsVerified,
 	FieldNickname,
-	FieldSteamID,
-	FieldSteamAvatarURL,
-	FieldSteamDefaultLanguage,
+	FieldDisplayName,
 	FieldLastLoginAt,
+	FieldLevel,
+	FieldExp,
+	FieldCoin,
+	FieldGem,
+	FieldSettings,
 	FieldCustomizeData,
 	FieldSaveData,
+	FieldIsBanned,
+	FieldBannedUntil,
+	FieldBanReason,
 }
 
 var (
@@ -99,17 +151,53 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultSteamDefaultLanguage holds the default value on creation for the "steam_default_language" field.
-	DefaultSteamDefaultLanguage string
+	// DefaultLanguage holds the default value on creation for the "language" field.
+	DefaultLanguage string
+	// DefaultIsVerified holds the default value on creation for the "is_verified" field.
+	DefaultIsVerified bool
 	// DefaultLastLoginAt holds the default value on creation for the "last_login_at" field.
 	DefaultLastLoginAt func() time.Time
+	// DefaultLevel holds the default value on creation for the "level" field.
+	DefaultLevel int
+	// DefaultExp holds the default value on creation for the "exp" field.
+	DefaultExp int
+	// DefaultCoin holds the default value on creation for the "coin" field.
+	DefaultCoin int
+	// DefaultGem holds the default value on creation for the "gem" field.
+	DefaultGem int
+	// DefaultSettings holds the default value on creation for the "settings" field.
+	DefaultSettings map[string]interface{}
 	// DefaultCustomizeData holds the default value on creation for the "customize_data" field.
-	DefaultCustomizeData string
+	DefaultCustomizeData map[string]interface{}
 	// DefaultSaveData holds the default value on creation for the "save_data" field.
-	DefaultSaveData string
+	DefaultSaveData map[string]interface{}
+	// DefaultIsBanned holds the default value on creation for the "is_banned" field.
+	DefaultIsBanned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
+
+// PlatformType defines the type for the "platform_type" enum field.
+type PlatformType string
+
+// PlatformType values.
+const (
+	PlatformTypeSteam PlatformType = "steam"
+)
+
+func (pt PlatformType) String() string {
+	return string(pt)
+}
+
+// PlatformTypeValidator is a validator for the "platform_type" field enum values. It is called by the builders before save.
+func PlatformTypeValidator(pt PlatformType) error {
+	switch pt {
+	case PlatformTypeSteam:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for platform_type field: %q", pt)
+	}
+}
 
 // OrderOption defines the ordering options for the User queries.
 type OrderOption func(*sql.Selector)
@@ -129,24 +217,49 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByPlatformType orders the results by the platform_type field.
+func ByPlatformType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformType, opts...).ToFunc()
+}
+
+// ByPlatformUserID orders the results by the platform_user_id field.
+func ByPlatformUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformUserID, opts...).ToFunc()
+}
+
+// ByPlatformEmail orders the results by the platform_email field.
+func ByPlatformEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformEmail, opts...).ToFunc()
+}
+
+// ByPlatformAvatarURL orders the results by the platform_avatar_url field.
+func ByPlatformAvatarURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformAvatarURL, opts...).ToFunc()
+}
+
+// ByPlatformDisplayName orders the results by the platform_display_name field.
+func ByPlatformDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformDisplayName, opts...).ToFunc()
+}
+
+// ByLanguage orders the results by the language field.
+func ByLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLanguage, opts...).ToFunc()
+}
+
+// ByIsVerified orders the results by the is_verified field.
+func ByIsVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsVerified, opts...).ToFunc()
+}
+
 // ByNickname orders the results by the nickname field.
 func ByNickname(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNickname, opts...).ToFunc()
 }
 
-// BySteamID orders the results by the steam_id field.
-func BySteamID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSteamID, opts...).ToFunc()
-}
-
-// BySteamAvatarURL orders the results by the steam_avatar_url field.
-func BySteamAvatarURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSteamAvatarURL, opts...).ToFunc()
-}
-
-// BySteamDefaultLanguage orders the results by the steam_default_language field.
-func BySteamDefaultLanguage(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSteamDefaultLanguage, opts...).ToFunc()
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
 // ByLastLoginAt orders the results by the last_login_at field.
@@ -154,14 +267,39 @@ func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
 }
 
-// ByCustomizeData orders the results by the customize_data field.
-func ByCustomizeData(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCustomizeData, opts...).ToFunc()
+// ByLevel orders the results by the level field.
+func ByLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLevel, opts...).ToFunc()
 }
 
-// BySaveData orders the results by the save_data field.
-func BySaveData(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSaveData, opts...).ToFunc()
+// ByExp orders the results by the exp field.
+func ByExp(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExp, opts...).ToFunc()
+}
+
+// ByCoin orders the results by the coin field.
+func ByCoin(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCoin, opts...).ToFunc()
+}
+
+// ByGem orders the results by the gem field.
+func ByGem(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGem, opts...).ToFunc()
+}
+
+// ByIsBanned orders the results by the is_banned field.
+func ByIsBanned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsBanned, opts...).ToFunc()
+}
+
+// ByBannedUntil orders the results by the banned_until field.
+func ByBannedUntil(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBannedUntil, opts...).ToFunc()
+}
+
+// ByBanReason orders the results by the ban_reason field.
+func ByBanReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBanReason, opts...).ToFunc()
 }
 
 // ByPurchasedProductsCount orders the results by purchased_products count.
@@ -192,6 +330,20 @@ func ByRecords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByUserAchievementsCount orders the results by user_achievements count.
+func ByUserAchievementsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserAchievementsStep(), opts...)
+	}
+}
+
+// ByUserAchievements orders the results by user_achievements terms.
+func ByUserAchievements(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserAchievementsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByUserPurchasesCount orders the results by user_purchases count.
 func ByUserPurchasesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -217,6 +369,13 @@ func newRecordsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RecordsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RecordsTable, RecordsColumn),
+	)
+}
+func newUserAchievementsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserAchievementsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserAchievementsTable, UserAchievementsColumn),
 	)
 }
 func newUserPurchasesStep() *sqlgraph.Step {

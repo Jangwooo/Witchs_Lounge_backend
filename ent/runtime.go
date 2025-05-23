@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent/achievement"
 	"github.com/witchs-lounge_backend/ent/character"
 	"github.com/witchs-lounge_backend/ent/item"
 	"github.com/witchs-lounge_backend/ent/music"
@@ -14,6 +15,7 @@ import (
 	"github.com/witchs-lounge_backend/ent/schema"
 	"github.com/witchs-lounge_backend/ent/stage"
 	"github.com/witchs-lounge_backend/ent/user"
+	"github.com/witchs-lounge_backend/ent/userachievement"
 	"github.com/witchs-lounge_backend/ent/userpurchase"
 )
 
@@ -21,6 +23,37 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	achievementMixin := schema.Achievement{}.Mixin()
+	achievementMixinFields0 := achievementMixin[0].Fields()
+	_ = achievementMixinFields0
+	achievementFields := schema.Achievement{}.Fields()
+	_ = achievementFields
+	// achievementDescCreatedAt is the schema descriptor for created_at field.
+	achievementDescCreatedAt := achievementMixinFields0[1].Descriptor()
+	// achievement.DefaultCreatedAt holds the default value on creation for the created_at field.
+	achievement.DefaultCreatedAt = achievementDescCreatedAt.Default.(func() time.Time)
+	// achievementDescUpdatedAt is the schema descriptor for updated_at field.
+	achievementDescUpdatedAt := achievementMixinFields0[2].Descriptor()
+	// achievement.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	achievement.DefaultUpdatedAt = achievementDescUpdatedAt.Default.(func() time.Time)
+	// achievement.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	achievement.UpdateDefaultUpdatedAt = achievementDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// achievementDescPoints is the schema descriptor for points field.
+	achievementDescPoints := achievementFields[6].Descriptor()
+	// achievement.DefaultPoints holds the default value on creation for the points field.
+	achievement.DefaultPoints = achievementDescPoints.Default.(int)
+	// achievementDescIsHidden is the schema descriptor for is_hidden field.
+	achievementDescIsHidden := achievementFields[7].Descriptor()
+	// achievement.DefaultIsHidden holds the default value on creation for the is_hidden field.
+	achievement.DefaultIsHidden = achievementDescIsHidden.Default.(bool)
+	// achievementDescIsActive is the schema descriptor for is_active field.
+	achievementDescIsActive := achievementFields[8].Descriptor()
+	// achievement.DefaultIsActive holds the default value on creation for the is_active field.
+	achievement.DefaultIsActive = achievementDescIsActive.Default.(bool)
+	// achievementDescID is the schema descriptor for id field.
+	achievementDescID := achievementMixinFields0[0].Descriptor()
+	// achievement.DefaultID holds the default value on creation for the id field.
+	achievement.DefaultID = achievementDescID.Default.(func() uuid.UUID)
 	characterMixin := schema.Character{}.Mixin()
 	characterMixinFields0 := characterMixin[0].Fields()
 	_ = characterMixinFields0
@@ -82,6 +115,22 @@ func init() {
 	music.DefaultUpdatedAt = musicDescUpdatedAt.Default.(func() time.Time)
 	// music.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	music.UpdateDefaultUpdatedAt = musicDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// musicDescIsFeatured is the schema descriptor for is_featured field.
+	musicDescIsFeatured := musicFields[9].Descriptor()
+	// music.DefaultIsFeatured holds the default value on creation for the is_featured field.
+	music.DefaultIsFeatured = musicDescIsFeatured.Default.(bool)
+	// musicDescIsFree is the schema descriptor for is_free field.
+	musicDescIsFree := musicFields[10].Descriptor()
+	// music.DefaultIsFree holds the default value on creation for the is_free field.
+	music.DefaultIsFree = musicDescIsFree.Default.(bool)
+	// musicDescUnlockLevel is the schema descriptor for unlock_level field.
+	musicDescUnlockLevel := musicFields[11].Descriptor()
+	// music.DefaultUnlockLevel holds the default value on creation for the unlock_level field.
+	music.DefaultUnlockLevel = musicDescUnlockLevel.Default.(int)
+	// musicDescIsActive is the schema descriptor for is_active field.
+	musicDescIsActive := musicFields[13].Descriptor()
+	// music.DefaultIsActive holds the default value on creation for the is_active field.
+	music.DefaultIsActive = musicDescIsActive.Default.(bool)
 	// musicDescID is the schema descriptor for id field.
 	musicDescID := musicMixinFields0[0].Descriptor()
 	// music.DefaultID holds the default value on creation for the id field.
@@ -144,14 +193,30 @@ func init() {
 	recordDescMissCount := recordFields[8].Descriptor()
 	// record.DefaultMissCount holds the default value on creation for the miss_count field.
 	record.DefaultMissCount = recordDescMissCount.Default.(int)
-	// recordDescPlayedAt is the schema descriptor for played_at field.
-	recordDescPlayedAt := recordFields[9].Descriptor()
-	// record.DefaultPlayedAt holds the default value on creation for the played_at field.
-	record.DefaultPlayedAt = recordDescPlayedAt.Default.(func() time.Time)
+	// recordDescMaxCombo is the schema descriptor for max_combo field.
+	recordDescMaxCombo := recordFields[9].Descriptor()
+	// record.DefaultMaxCombo holds the default value on creation for the max_combo field.
+	record.DefaultMaxCombo = recordDescMaxCombo.Default.(int)
 	// recordDescAccuracy is the schema descriptor for accuracy field.
 	recordDescAccuracy := recordFields[10].Descriptor()
 	// record.DefaultAccuracy holds the default value on creation for the accuracy field.
 	record.DefaultAccuracy = recordDescAccuracy.Default.(float64)
+	// recordDescIsFullCombo is the schema descriptor for is_full_combo field.
+	recordDescIsFullCombo := recordFields[12].Descriptor()
+	// record.DefaultIsFullCombo holds the default value on creation for the is_full_combo field.
+	record.DefaultIsFullCombo = recordDescIsFullCombo.Default.(bool)
+	// recordDescIsPerfectPlay is the schema descriptor for is_perfect_play field.
+	recordDescIsPerfectPlay := recordFields[13].Descriptor()
+	// record.DefaultIsPerfectPlay holds the default value on creation for the is_perfect_play field.
+	record.DefaultIsPerfectPlay = recordDescIsPerfectPlay.Default.(bool)
+	// recordDescPlayedAt is the schema descriptor for played_at field.
+	recordDescPlayedAt := recordFields[14].Descriptor()
+	// record.DefaultPlayedAt holds the default value on creation for the played_at field.
+	record.DefaultPlayedAt = recordDescPlayedAt.Default.(func() time.Time)
+	// recordDescIsValid is the schema descriptor for is_valid field.
+	recordDescIsValid := recordFields[17].Descriptor()
+	// record.DefaultIsValid holds the default value on creation for the is_valid field.
+	record.DefaultIsValid = recordDescIsValid.Default.(bool)
 	// recordDescID is the schema descriptor for id field.
 	recordDescID := recordMixinFields0[0].Descriptor()
 	// record.DefaultID holds the default value on creation for the id field.
@@ -176,13 +241,17 @@ func init() {
 	// stage.LevelNameValidator is a validator for the "level_name" field. It is called by the builders before save.
 	stage.LevelNameValidator = stageDescLevelName.Validators[0].(func(string) error)
 	// stageDescLevelAddress is the schema descriptor for level_address field.
-	stageDescLevelAddress := stageFields[2].Descriptor()
+	stageDescLevelAddress := stageFields[3].Descriptor()
 	// stage.LevelAddressValidator is a validator for the "level_address" field. It is called by the builders before save.
 	stage.LevelAddressValidator = stageDescLevelAddress.Validators[0].(func(string) error)
 	// stageDescJacketAddress is the schema descriptor for jacket_address field.
-	stageDescJacketAddress := stageFields[3].Descriptor()
+	stageDescJacketAddress := stageFields[4].Descriptor()
 	// stage.JacketAddressValidator is a validator for the "jacket_address" field. It is called by the builders before save.
 	stage.JacketAddressValidator = stageDescJacketAddress.Validators[0].(func(string) error)
+	// stageDescIsActive is the schema descriptor for is_active field.
+	stageDescIsActive := stageFields[7].Descriptor()
+	// stage.DefaultIsActive holds the default value on creation for the is_active field.
+	stage.DefaultIsActive = stageDescIsActive.Default.(bool)
 	// stageDescID is the schema descriptor for id field.
 	stageDescID := stageMixinFields0[0].Descriptor()
 	// stage.DefaultID holds the default value on creation for the id field.
@@ -202,26 +271,77 @@ func init() {
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// userDescSteamDefaultLanguage is the schema descriptor for steam_default_language field.
-	userDescSteamDefaultLanguage := userFields[3].Descriptor()
-	// user.DefaultSteamDefaultLanguage holds the default value on creation for the steam_default_language field.
-	user.DefaultSteamDefaultLanguage = userDescSteamDefaultLanguage.Default.(string)
+	// userDescLanguage is the schema descriptor for language field.
+	userDescLanguage := userFields[5].Descriptor()
+	// user.DefaultLanguage holds the default value on creation for the language field.
+	user.DefaultLanguage = userDescLanguage.Default.(string)
+	// userDescIsVerified is the schema descriptor for is_verified field.
+	userDescIsVerified := userFields[7].Descriptor()
+	// user.DefaultIsVerified holds the default value on creation for the is_verified field.
+	user.DefaultIsVerified = userDescIsVerified.Default.(bool)
 	// userDescLastLoginAt is the schema descriptor for last_login_at field.
-	userDescLastLoginAt := userFields[4].Descriptor()
+	userDescLastLoginAt := userFields[10].Descriptor()
 	// user.DefaultLastLoginAt holds the default value on creation for the last_login_at field.
 	user.DefaultLastLoginAt = userDescLastLoginAt.Default.(func() time.Time)
+	// userDescLevel is the schema descriptor for level field.
+	userDescLevel := userFields[11].Descriptor()
+	// user.DefaultLevel holds the default value on creation for the level field.
+	user.DefaultLevel = userDescLevel.Default.(int)
+	// userDescExp is the schema descriptor for exp field.
+	userDescExp := userFields[12].Descriptor()
+	// user.DefaultExp holds the default value on creation for the exp field.
+	user.DefaultExp = userDescExp.Default.(int)
+	// userDescCoin is the schema descriptor for coin field.
+	userDescCoin := userFields[13].Descriptor()
+	// user.DefaultCoin holds the default value on creation for the coin field.
+	user.DefaultCoin = userDescCoin.Default.(int)
+	// userDescGem is the schema descriptor for gem field.
+	userDescGem := userFields[14].Descriptor()
+	// user.DefaultGem holds the default value on creation for the gem field.
+	user.DefaultGem = userDescGem.Default.(int)
+	// userDescSettings is the schema descriptor for settings field.
+	userDescSettings := userFields[15].Descriptor()
+	// user.DefaultSettings holds the default value on creation for the settings field.
+	user.DefaultSettings = userDescSettings.Default.(map[string]interface{})
 	// userDescCustomizeData is the schema descriptor for customize_data field.
-	userDescCustomizeData := userFields[5].Descriptor()
+	userDescCustomizeData := userFields[16].Descriptor()
 	// user.DefaultCustomizeData holds the default value on creation for the customize_data field.
-	user.DefaultCustomizeData = userDescCustomizeData.Default.(string)
+	user.DefaultCustomizeData = userDescCustomizeData.Default.(map[string]interface{})
 	// userDescSaveData is the schema descriptor for save_data field.
-	userDescSaveData := userFields[6].Descriptor()
+	userDescSaveData := userFields[17].Descriptor()
 	// user.DefaultSaveData holds the default value on creation for the save_data field.
-	user.DefaultSaveData = userDescSaveData.Default.(string)
+	user.DefaultSaveData = userDescSaveData.Default.(map[string]interface{})
+	// userDescIsBanned is the schema descriptor for is_banned field.
+	userDescIsBanned := userFields[18].Descriptor()
+	// user.DefaultIsBanned holds the default value on creation for the is_banned field.
+	user.DefaultIsBanned = userDescIsBanned.Default.(bool)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userMixinFields0[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() uuid.UUID)
+	userachievementMixin := schema.UserAchievement{}.Mixin()
+	userachievementMixinFields0 := userachievementMixin[0].Fields()
+	_ = userachievementMixinFields0
+	userachievementFields := schema.UserAchievement{}.Fields()
+	_ = userachievementFields
+	// userachievementDescCreatedAt is the schema descriptor for created_at field.
+	userachievementDescCreatedAt := userachievementMixinFields0[1].Descriptor()
+	// userachievement.DefaultCreatedAt holds the default value on creation for the created_at field.
+	userachievement.DefaultCreatedAt = userachievementDescCreatedAt.Default.(func() time.Time)
+	// userachievementDescUpdatedAt is the schema descriptor for updated_at field.
+	userachievementDescUpdatedAt := userachievementMixinFields0[2].Descriptor()
+	// userachievement.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	userachievement.DefaultUpdatedAt = userachievementDescUpdatedAt.Default.(func() time.Time)
+	// userachievement.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	userachievement.UpdateDefaultUpdatedAt = userachievementDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userachievementDescUnlockedAt is the schema descriptor for unlocked_at field.
+	userachievementDescUnlockedAt := userachievementFields[2].Descriptor()
+	// userachievement.DefaultUnlockedAt holds the default value on creation for the unlocked_at field.
+	userachievement.DefaultUnlockedAt = userachievementDescUnlockedAt.Default.(func() time.Time)
+	// userachievementDescID is the schema descriptor for id field.
+	userachievementDescID := userachievementMixinFields0[0].Descriptor()
+	// userachievement.DefaultID holds the default value on creation for the id field.
+	userachievement.DefaultID = userachievementDescID.Default.(func() uuid.UUID)
 	userpurchaseMixin := schema.UserPurchase{}.Mixin()
 	userpurchaseMixinFields0 := userpurchaseMixin[0].Fields()
 	_ = userpurchaseMixinFields0

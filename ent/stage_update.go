@@ -65,6 +65,27 @@ func (su *StageUpdate) SetNillableLevelName(s *string) *StageUpdate {
 	return su
 }
 
+// SetDifficulty sets the "difficulty" field.
+func (su *StageUpdate) SetDifficulty(i int) *StageUpdate {
+	su.mutation.ResetDifficulty()
+	su.mutation.SetDifficulty(i)
+	return su
+}
+
+// SetNillableDifficulty sets the "difficulty" field if the given value is not nil.
+func (su *StageUpdate) SetNillableDifficulty(i *int) *StageUpdate {
+	if i != nil {
+		su.SetDifficulty(*i)
+	}
+	return su
+}
+
+// AddDifficulty adds i to the "difficulty" field.
+func (su *StageUpdate) AddDifficulty(i int) *StageUpdate {
+	su.mutation.AddDifficulty(i)
+	return su
+}
+
 // SetLevelAddress sets the "level_address" field.
 func (su *StageUpdate) SetLevelAddress(s string) *StageUpdate {
 	su.mutation.SetLevelAddress(s)
@@ -89,6 +110,62 @@ func (su *StageUpdate) SetJacketAddress(s string) *StageUpdate {
 func (su *StageUpdate) SetNillableJacketAddress(s *string) *StageUpdate {
 	if s != nil {
 		su.SetJacketAddress(*s)
+	}
+	return su
+}
+
+// SetTotalNotes sets the "total_notes" field.
+func (su *StageUpdate) SetTotalNotes(i int) *StageUpdate {
+	su.mutation.ResetTotalNotes()
+	su.mutation.SetTotalNotes(i)
+	return su
+}
+
+// SetNillableTotalNotes sets the "total_notes" field if the given value is not nil.
+func (su *StageUpdate) SetNillableTotalNotes(i *int) *StageUpdate {
+	if i != nil {
+		su.SetTotalNotes(*i)
+	}
+	return su
+}
+
+// AddTotalNotes adds i to the "total_notes" field.
+func (su *StageUpdate) AddTotalNotes(i int) *StageUpdate {
+	su.mutation.AddTotalNotes(i)
+	return su
+}
+
+// SetMaxCombo sets the "max_combo" field.
+func (su *StageUpdate) SetMaxCombo(i int) *StageUpdate {
+	su.mutation.ResetMaxCombo()
+	su.mutation.SetMaxCombo(i)
+	return su
+}
+
+// SetNillableMaxCombo sets the "max_combo" field if the given value is not nil.
+func (su *StageUpdate) SetNillableMaxCombo(i *int) *StageUpdate {
+	if i != nil {
+		su.SetMaxCombo(*i)
+	}
+	return su
+}
+
+// AddMaxCombo adds i to the "max_combo" field.
+func (su *StageUpdate) AddMaxCombo(i int) *StageUpdate {
+	su.mutation.AddMaxCombo(i)
+	return su
+}
+
+// SetIsActive sets the "is_active" field.
+func (su *StageUpdate) SetIsActive(b bool) *StageUpdate {
+	su.mutation.SetIsActive(b)
+	return su
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (su *StageUpdate) SetNillableIsActive(b *bool) *StageUpdate {
+	if b != nil {
+		su.SetIsActive(*b)
 	}
 	return su
 }
@@ -222,11 +299,32 @@ func (su *StageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.LevelName(); ok {
 		_spec.SetField(stage.FieldLevelName, field.TypeString, value)
 	}
+	if value, ok := su.mutation.Difficulty(); ok {
+		_spec.SetField(stage.FieldDifficulty, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedDifficulty(); ok {
+		_spec.AddField(stage.FieldDifficulty, field.TypeInt, value)
+	}
 	if value, ok := su.mutation.LevelAddress(); ok {
 		_spec.SetField(stage.FieldLevelAddress, field.TypeString, value)
 	}
 	if value, ok := su.mutation.JacketAddress(); ok {
 		_spec.SetField(stage.FieldJacketAddress, field.TypeString, value)
+	}
+	if value, ok := su.mutation.TotalNotes(); ok {
+		_spec.SetField(stage.FieldTotalNotes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedTotalNotes(); ok {
+		_spec.AddField(stage.FieldTotalNotes, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.MaxCombo(); ok {
+		_spec.SetField(stage.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.AddedMaxCombo(); ok {
+		_spec.AddField(stage.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := su.mutation.IsActive(); ok {
+		_spec.SetField(stage.FieldIsActive, field.TypeBool, value)
 	}
 	if su.mutation.MusicCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -356,6 +454,27 @@ func (suo *StageUpdateOne) SetNillableLevelName(s *string) *StageUpdateOne {
 	return suo
 }
 
+// SetDifficulty sets the "difficulty" field.
+func (suo *StageUpdateOne) SetDifficulty(i int) *StageUpdateOne {
+	suo.mutation.ResetDifficulty()
+	suo.mutation.SetDifficulty(i)
+	return suo
+}
+
+// SetNillableDifficulty sets the "difficulty" field if the given value is not nil.
+func (suo *StageUpdateOne) SetNillableDifficulty(i *int) *StageUpdateOne {
+	if i != nil {
+		suo.SetDifficulty(*i)
+	}
+	return suo
+}
+
+// AddDifficulty adds i to the "difficulty" field.
+func (suo *StageUpdateOne) AddDifficulty(i int) *StageUpdateOne {
+	suo.mutation.AddDifficulty(i)
+	return suo
+}
+
 // SetLevelAddress sets the "level_address" field.
 func (suo *StageUpdateOne) SetLevelAddress(s string) *StageUpdateOne {
 	suo.mutation.SetLevelAddress(s)
@@ -380,6 +499,62 @@ func (suo *StageUpdateOne) SetJacketAddress(s string) *StageUpdateOne {
 func (suo *StageUpdateOne) SetNillableJacketAddress(s *string) *StageUpdateOne {
 	if s != nil {
 		suo.SetJacketAddress(*s)
+	}
+	return suo
+}
+
+// SetTotalNotes sets the "total_notes" field.
+func (suo *StageUpdateOne) SetTotalNotes(i int) *StageUpdateOne {
+	suo.mutation.ResetTotalNotes()
+	suo.mutation.SetTotalNotes(i)
+	return suo
+}
+
+// SetNillableTotalNotes sets the "total_notes" field if the given value is not nil.
+func (suo *StageUpdateOne) SetNillableTotalNotes(i *int) *StageUpdateOne {
+	if i != nil {
+		suo.SetTotalNotes(*i)
+	}
+	return suo
+}
+
+// AddTotalNotes adds i to the "total_notes" field.
+func (suo *StageUpdateOne) AddTotalNotes(i int) *StageUpdateOne {
+	suo.mutation.AddTotalNotes(i)
+	return suo
+}
+
+// SetMaxCombo sets the "max_combo" field.
+func (suo *StageUpdateOne) SetMaxCombo(i int) *StageUpdateOne {
+	suo.mutation.ResetMaxCombo()
+	suo.mutation.SetMaxCombo(i)
+	return suo
+}
+
+// SetNillableMaxCombo sets the "max_combo" field if the given value is not nil.
+func (suo *StageUpdateOne) SetNillableMaxCombo(i *int) *StageUpdateOne {
+	if i != nil {
+		suo.SetMaxCombo(*i)
+	}
+	return suo
+}
+
+// AddMaxCombo adds i to the "max_combo" field.
+func (suo *StageUpdateOne) AddMaxCombo(i int) *StageUpdateOne {
+	suo.mutation.AddMaxCombo(i)
+	return suo
+}
+
+// SetIsActive sets the "is_active" field.
+func (suo *StageUpdateOne) SetIsActive(b bool) *StageUpdateOne {
+	suo.mutation.SetIsActive(b)
+	return suo
+}
+
+// SetNillableIsActive sets the "is_active" field if the given value is not nil.
+func (suo *StageUpdateOne) SetNillableIsActive(b *bool) *StageUpdateOne {
+	if b != nil {
+		suo.SetIsActive(*b)
 	}
 	return suo
 }
@@ -543,11 +718,32 @@ func (suo *StageUpdateOne) sqlSave(ctx context.Context) (_node *Stage, err error
 	if value, ok := suo.mutation.LevelName(); ok {
 		_spec.SetField(stage.FieldLevelName, field.TypeString, value)
 	}
+	if value, ok := suo.mutation.Difficulty(); ok {
+		_spec.SetField(stage.FieldDifficulty, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedDifficulty(); ok {
+		_spec.AddField(stage.FieldDifficulty, field.TypeInt, value)
+	}
 	if value, ok := suo.mutation.LevelAddress(); ok {
 		_spec.SetField(stage.FieldLevelAddress, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.JacketAddress(); ok {
 		_spec.SetField(stage.FieldJacketAddress, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.TotalNotes(); ok {
+		_spec.SetField(stage.FieldTotalNotes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedTotalNotes(); ok {
+		_spec.AddField(stage.FieldTotalNotes, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.MaxCombo(); ok {
+		_spec.SetField(stage.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.AddedMaxCombo(); ok {
+		_spec.AddField(stage.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := suo.mutation.IsActive(); ok {
+		_spec.SetField(stage.FieldIsActive, field.TypeBool, value)
 	}
 	if suo.mutation.MusicCleared() {
 		edge := &sqlgraph.EdgeSpec{

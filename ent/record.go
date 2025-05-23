@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -27,30 +28,42 @@ type Record struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Updated time
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// UserID holds the value of the "user_id" field.
+	// 유저 ID
 	UserID uuid.UUID `json:"user_id,omitempty"`
-	// MusicID holds the value of the "music_id" field.
+	// 음악 ID
 	MusicID uuid.UUID `json:"music_id,omitempty"`
-	// StageID holds the value of the "stage_id" field.
+	// 스테이지 ID
 	StageID uuid.UUID `json:"stage_id,omitempty"`
-	// CharacterID holds the value of the "character_id" field.
+	// 캐릭터 ID
 	CharacterID uuid.UUID `json:"character_id,omitempty"`
-	// Score holds the value of the "score" field.
+	// 점수
 	Score int `json:"score,omitempty"`
-	// PerfectCount holds the value of the "perfect_count" field.
+	// Perfect 개수
 	PerfectCount int `json:"perfect_count,omitempty"`
-	// GoodCount holds the value of the "good_count" field.
+	// Good 개수
 	GoodCount int `json:"good_count,omitempty"`
-	// BadCount holds the value of the "bad_count" field.
+	// Bad 개수
 	BadCount int `json:"bad_count,omitempty"`
-	// MissCount holds the value of the "miss_count" field.
+	// Miss 개수
 	MissCount int `json:"miss_count,omitempty"`
-	// PlayedAt holds the value of the "played_at" field.
-	PlayedAt time.Time `json:"played_at,omitempty"`
-	// Accuracy holds the value of the "accuracy" field.
+	// 최대 콤보
+	MaxCombo int `json:"max_combo,omitempty"`
+	// 정확도 (%)
 	Accuracy float64 `json:"accuracy,omitempty"`
-	// AdditionalInfo holds the value of the "additional_info" field.
-	AdditionalInfo string `json:"additional_info,omitempty"`
+	// 랭크
+	Rank record.Rank `json:"rank,omitempty"`
+	// 풀콤보 여부
+	IsFullCombo bool `json:"is_full_combo,omitempty"`
+	// 퍼펙트 플레이 여부
+	IsPerfectPlay bool `json:"is_perfect_play,omitempty"`
+	// 플레이 시간
+	PlayedAt time.Time `json:"played_at,omitempty"`
+	// 플레이 소요시간(초)
+	PlayDuration int `json:"play_duration,omitempty"`
+	// 추가 정보
+	AdditionalInfo map[string]interface{} `json:"additional_info,omitempty"`
+	// 유효한 기록 여부
+	IsValid bool `json:"is_valid,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RecordQuery when eager-loading is set.
 	Edges        RecordEdges `json:"edges"`
@@ -121,11 +134,15 @@ func (*Record) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case record.FieldAdditionalInfo:
+			values[i] = new([]byte)
+		case record.FieldIsFullCombo, record.FieldIsPerfectPlay, record.FieldIsValid:
+			values[i] = new(sql.NullBool)
 		case record.FieldAccuracy:
 			values[i] = new(sql.NullFloat64)
-		case record.FieldScore, record.FieldPerfectCount, record.FieldGoodCount, record.FieldBadCount, record.FieldMissCount:
+		case record.FieldScore, record.FieldPerfectCount, record.FieldGoodCount, record.FieldBadCount, record.FieldMissCount, record.FieldMaxCombo, record.FieldPlayDuration:
 			values[i] = new(sql.NullInt64)
-		case record.FieldAdditionalInfo:
+		case record.FieldRank:
 			values[i] = new(sql.NullString)
 		case record.FieldCreatedAt, record.FieldUpdatedAt, record.FieldPlayedAt:
 			values[i] = new(sql.NullTime)
@@ -218,11 +235,11 @@ func (r *Record) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.MissCount = int(value.Int64)
 			}
-		case record.FieldPlayedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field played_at", values[i])
+		case record.FieldMaxCombo:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field max_combo", values[i])
 			} else if value.Valid {
-				r.PlayedAt = value.Time
+				r.MaxCombo = int(value.Int64)
 			}
 		case record.FieldAccuracy:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
@@ -230,11 +247,49 @@ func (r *Record) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.Accuracy = value.Float64
 			}
-		case record.FieldAdditionalInfo:
+		case record.FieldRank:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field additional_info", values[i])
+				return fmt.Errorf("unexpected type %T for field rank", values[i])
 			} else if value.Valid {
-				r.AdditionalInfo = value.String
+				r.Rank = record.Rank(value.String)
+			}
+		case record.FieldIsFullCombo:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_full_combo", values[i])
+			} else if value.Valid {
+				r.IsFullCombo = value.Bool
+			}
+		case record.FieldIsPerfectPlay:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_perfect_play", values[i])
+			} else if value.Valid {
+				r.IsPerfectPlay = value.Bool
+			}
+		case record.FieldPlayedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field played_at", values[i])
+			} else if value.Valid {
+				r.PlayedAt = value.Time
+			}
+		case record.FieldPlayDuration:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field play_duration", values[i])
+			} else if value.Valid {
+				r.PlayDuration = int(value.Int64)
+			}
+		case record.FieldAdditionalInfo:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field additional_info", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &r.AdditionalInfo); err != nil {
+					return fmt.Errorf("unmarshal field additional_info: %w", err)
+				}
+			}
+		case record.FieldIsValid:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_valid", values[i])
+			} else if value.Valid {
+				r.IsValid = value.Bool
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -325,14 +380,32 @@ func (r *Record) String() string {
 	builder.WriteString("miss_count=")
 	builder.WriteString(fmt.Sprintf("%v", r.MissCount))
 	builder.WriteString(", ")
-	builder.WriteString("played_at=")
-	builder.WriteString(r.PlayedAt.Format(time.ANSIC))
+	builder.WriteString("max_combo=")
+	builder.WriteString(fmt.Sprintf("%v", r.MaxCombo))
 	builder.WriteString(", ")
 	builder.WriteString("accuracy=")
 	builder.WriteString(fmt.Sprintf("%v", r.Accuracy))
 	builder.WriteString(", ")
+	builder.WriteString("rank=")
+	builder.WriteString(fmt.Sprintf("%v", r.Rank))
+	builder.WriteString(", ")
+	builder.WriteString("is_full_combo=")
+	builder.WriteString(fmt.Sprintf("%v", r.IsFullCombo))
+	builder.WriteString(", ")
+	builder.WriteString("is_perfect_play=")
+	builder.WriteString(fmt.Sprintf("%v", r.IsPerfectPlay))
+	builder.WriteString(", ")
+	builder.WriteString("played_at=")
+	builder.WriteString(r.PlayedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("play_duration=")
+	builder.WriteString(fmt.Sprintf("%v", r.PlayDuration))
+	builder.WriteString(", ")
 	builder.WriteString("additional_info=")
-	builder.WriteString(r.AdditionalInfo)
+	builder.WriteString(fmt.Sprintf("%v", r.AdditionalInfo))
+	builder.WriteString(", ")
+	builder.WriteString("is_valid=")
+	builder.WriteString(fmt.Sprintf("%v", r.IsValid))
 	builder.WriteByte(')')
 	return builder.String()
 }

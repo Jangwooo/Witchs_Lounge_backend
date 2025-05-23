@@ -71,6 +71,16 @@ func Name(v string) predicate.Music {
 	return predicate.Music(sql.FieldEQ(FieldName, v))
 }
 
+// Artist applies equality check predicate on the "artist" field. It's identical to ArtistEQ.
+func Artist(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldArtist, v))
+}
+
+// Composer applies equality check predicate on the "composer" field. It's identical to ComposerEQ.
+func Composer(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldComposer, v))
+}
+
 // MusicSource applies equality check predicate on the "music_source" field. It's identical to MusicSourceEQ.
 func MusicSource(v string) predicate.Music {
 	return predicate.Music(sql.FieldEQ(FieldMusicSource, v))
@@ -86,9 +96,44 @@ func Duration(v float64) predicate.Music {
 	return predicate.Music(sql.FieldEQ(FieldDuration, v))
 }
 
-// Author applies equality check predicate on the "Author" field. It's identical to AuthorEQ.
-func Author(v string) predicate.Music {
-	return predicate.Music(sql.FieldEQ(FieldAuthor, v))
+// Bpm applies equality check predicate on the "bpm" field. It's identical to BpmEQ.
+func Bpm(v float64) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldBpm, v))
+}
+
+// Genre applies equality check predicate on the "genre" field. It's identical to GenreEQ.
+func Genre(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldGenre, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldDescription, v))
+}
+
+// IsFeatured applies equality check predicate on the "is_featured" field. It's identical to IsFeaturedEQ.
+func IsFeatured(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsFeatured, v))
+}
+
+// IsFree applies equality check predicate on the "is_free" field. It's identical to IsFreeEQ.
+func IsFree(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsFree, v))
+}
+
+// UnlockLevel applies equality check predicate on the "unlock_level" field. It's identical to UnlockLevelEQ.
+func UnlockLevel(v int) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldUnlockLevel, v))
+}
+
+// ReleaseDate applies equality check predicate on the "release_date" field. It's identical to ReleaseDateEQ.
+func ReleaseDate(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldReleaseDate, v))
+}
+
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsActive, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -234,6 +279,146 @@ func NameEqualFold(v string) predicate.Music {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.Music {
 	return predicate.Music(sql.FieldContainsFold(FieldName, v))
+}
+
+// ArtistEQ applies the EQ predicate on the "artist" field.
+func ArtistEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldArtist, v))
+}
+
+// ArtistNEQ applies the NEQ predicate on the "artist" field.
+func ArtistNEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldArtist, v))
+}
+
+// ArtistIn applies the In predicate on the "artist" field.
+func ArtistIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldArtist, vs...))
+}
+
+// ArtistNotIn applies the NotIn predicate on the "artist" field.
+func ArtistNotIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldArtist, vs...))
+}
+
+// ArtistGT applies the GT predicate on the "artist" field.
+func ArtistGT(v string) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldArtist, v))
+}
+
+// ArtistGTE applies the GTE predicate on the "artist" field.
+func ArtistGTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldArtist, v))
+}
+
+// ArtistLT applies the LT predicate on the "artist" field.
+func ArtistLT(v string) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldArtist, v))
+}
+
+// ArtistLTE applies the LTE predicate on the "artist" field.
+func ArtistLTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldArtist, v))
+}
+
+// ArtistContains applies the Contains predicate on the "artist" field.
+func ArtistContains(v string) predicate.Music {
+	return predicate.Music(sql.FieldContains(FieldArtist, v))
+}
+
+// ArtistHasPrefix applies the HasPrefix predicate on the "artist" field.
+func ArtistHasPrefix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasPrefix(FieldArtist, v))
+}
+
+// ArtistHasSuffix applies the HasSuffix predicate on the "artist" field.
+func ArtistHasSuffix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasSuffix(FieldArtist, v))
+}
+
+// ArtistEqualFold applies the EqualFold predicate on the "artist" field.
+func ArtistEqualFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldEqualFold(FieldArtist, v))
+}
+
+// ArtistContainsFold applies the ContainsFold predicate on the "artist" field.
+func ArtistContainsFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldContainsFold(FieldArtist, v))
+}
+
+// ComposerEQ applies the EQ predicate on the "composer" field.
+func ComposerEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldComposer, v))
+}
+
+// ComposerNEQ applies the NEQ predicate on the "composer" field.
+func ComposerNEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldComposer, v))
+}
+
+// ComposerIn applies the In predicate on the "composer" field.
+func ComposerIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldComposer, vs...))
+}
+
+// ComposerNotIn applies the NotIn predicate on the "composer" field.
+func ComposerNotIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldComposer, vs...))
+}
+
+// ComposerGT applies the GT predicate on the "composer" field.
+func ComposerGT(v string) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldComposer, v))
+}
+
+// ComposerGTE applies the GTE predicate on the "composer" field.
+func ComposerGTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldComposer, v))
+}
+
+// ComposerLT applies the LT predicate on the "composer" field.
+func ComposerLT(v string) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldComposer, v))
+}
+
+// ComposerLTE applies the LTE predicate on the "composer" field.
+func ComposerLTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldComposer, v))
+}
+
+// ComposerContains applies the Contains predicate on the "composer" field.
+func ComposerContains(v string) predicate.Music {
+	return predicate.Music(sql.FieldContains(FieldComposer, v))
+}
+
+// ComposerHasPrefix applies the HasPrefix predicate on the "composer" field.
+func ComposerHasPrefix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasPrefix(FieldComposer, v))
+}
+
+// ComposerHasSuffix applies the HasSuffix predicate on the "composer" field.
+func ComposerHasSuffix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasSuffix(FieldComposer, v))
+}
+
+// ComposerIsNil applies the IsNil predicate on the "composer" field.
+func ComposerIsNil() predicate.Music {
+	return predicate.Music(sql.FieldIsNull(FieldComposer))
+}
+
+// ComposerNotNil applies the NotNil predicate on the "composer" field.
+func ComposerNotNil() predicate.Music {
+	return predicate.Music(sql.FieldNotNull(FieldComposer))
+}
+
+// ComposerEqualFold applies the EqualFold predicate on the "composer" field.
+func ComposerEqualFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldEqualFold(FieldComposer, v))
+}
+
+// ComposerContainsFold applies the ContainsFold predicate on the "composer" field.
+func ComposerContainsFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldContainsFold(FieldComposer, v))
 }
 
 // MusicSourceEQ applies the EQ predicate on the "music_source" field.
@@ -406,69 +591,314 @@ func DurationLTE(v float64) predicate.Music {
 	return predicate.Music(sql.FieldLTE(FieldDuration, v))
 }
 
-// AuthorEQ applies the EQ predicate on the "Author" field.
-func AuthorEQ(v string) predicate.Music {
-	return predicate.Music(sql.FieldEQ(FieldAuthor, v))
+// BpmEQ applies the EQ predicate on the "bpm" field.
+func BpmEQ(v float64) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldBpm, v))
 }
 
-// AuthorNEQ applies the NEQ predicate on the "Author" field.
-func AuthorNEQ(v string) predicate.Music {
-	return predicate.Music(sql.FieldNEQ(FieldAuthor, v))
+// BpmNEQ applies the NEQ predicate on the "bpm" field.
+func BpmNEQ(v float64) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldBpm, v))
 }
 
-// AuthorIn applies the In predicate on the "Author" field.
-func AuthorIn(vs ...string) predicate.Music {
-	return predicate.Music(sql.FieldIn(FieldAuthor, vs...))
+// BpmIn applies the In predicate on the "bpm" field.
+func BpmIn(vs ...float64) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldBpm, vs...))
 }
 
-// AuthorNotIn applies the NotIn predicate on the "Author" field.
-func AuthorNotIn(vs ...string) predicate.Music {
-	return predicate.Music(sql.FieldNotIn(FieldAuthor, vs...))
+// BpmNotIn applies the NotIn predicate on the "bpm" field.
+func BpmNotIn(vs ...float64) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldBpm, vs...))
 }
 
-// AuthorGT applies the GT predicate on the "Author" field.
-func AuthorGT(v string) predicate.Music {
-	return predicate.Music(sql.FieldGT(FieldAuthor, v))
+// BpmGT applies the GT predicate on the "bpm" field.
+func BpmGT(v float64) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldBpm, v))
 }
 
-// AuthorGTE applies the GTE predicate on the "Author" field.
-func AuthorGTE(v string) predicate.Music {
-	return predicate.Music(sql.FieldGTE(FieldAuthor, v))
+// BpmGTE applies the GTE predicate on the "bpm" field.
+func BpmGTE(v float64) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldBpm, v))
 }
 
-// AuthorLT applies the LT predicate on the "Author" field.
-func AuthorLT(v string) predicate.Music {
-	return predicate.Music(sql.FieldLT(FieldAuthor, v))
+// BpmLT applies the LT predicate on the "bpm" field.
+func BpmLT(v float64) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldBpm, v))
 }
 
-// AuthorLTE applies the LTE predicate on the "Author" field.
-func AuthorLTE(v string) predicate.Music {
-	return predicate.Music(sql.FieldLTE(FieldAuthor, v))
+// BpmLTE applies the LTE predicate on the "bpm" field.
+func BpmLTE(v float64) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldBpm, v))
 }
 
-// AuthorContains applies the Contains predicate on the "Author" field.
-func AuthorContains(v string) predicate.Music {
-	return predicate.Music(sql.FieldContains(FieldAuthor, v))
+// GenreEQ applies the EQ predicate on the "genre" field.
+func GenreEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldGenre, v))
 }
 
-// AuthorHasPrefix applies the HasPrefix predicate on the "Author" field.
-func AuthorHasPrefix(v string) predicate.Music {
-	return predicate.Music(sql.FieldHasPrefix(FieldAuthor, v))
+// GenreNEQ applies the NEQ predicate on the "genre" field.
+func GenreNEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldGenre, v))
 }
 
-// AuthorHasSuffix applies the HasSuffix predicate on the "Author" field.
-func AuthorHasSuffix(v string) predicate.Music {
-	return predicate.Music(sql.FieldHasSuffix(FieldAuthor, v))
+// GenreIn applies the In predicate on the "genre" field.
+func GenreIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldGenre, vs...))
 }
 
-// AuthorEqualFold applies the EqualFold predicate on the "Author" field.
-func AuthorEqualFold(v string) predicate.Music {
-	return predicate.Music(sql.FieldEqualFold(FieldAuthor, v))
+// GenreNotIn applies the NotIn predicate on the "genre" field.
+func GenreNotIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldGenre, vs...))
 }
 
-// AuthorContainsFold applies the ContainsFold predicate on the "Author" field.
-func AuthorContainsFold(v string) predicate.Music {
-	return predicate.Music(sql.FieldContainsFold(FieldAuthor, v))
+// GenreGT applies the GT predicate on the "genre" field.
+func GenreGT(v string) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldGenre, v))
+}
+
+// GenreGTE applies the GTE predicate on the "genre" field.
+func GenreGTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldGenre, v))
+}
+
+// GenreLT applies the LT predicate on the "genre" field.
+func GenreLT(v string) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldGenre, v))
+}
+
+// GenreLTE applies the LTE predicate on the "genre" field.
+func GenreLTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldGenre, v))
+}
+
+// GenreContains applies the Contains predicate on the "genre" field.
+func GenreContains(v string) predicate.Music {
+	return predicate.Music(sql.FieldContains(FieldGenre, v))
+}
+
+// GenreHasPrefix applies the HasPrefix predicate on the "genre" field.
+func GenreHasPrefix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasPrefix(FieldGenre, v))
+}
+
+// GenreHasSuffix applies the HasSuffix predicate on the "genre" field.
+func GenreHasSuffix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasSuffix(FieldGenre, v))
+}
+
+// GenreIsNil applies the IsNil predicate on the "genre" field.
+func GenreIsNil() predicate.Music {
+	return predicate.Music(sql.FieldIsNull(FieldGenre))
+}
+
+// GenreNotNil applies the NotNil predicate on the "genre" field.
+func GenreNotNil() predicate.Music {
+	return predicate.Music(sql.FieldNotNull(FieldGenre))
+}
+
+// GenreEqualFold applies the EqualFold predicate on the "genre" field.
+func GenreEqualFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldEqualFold(FieldGenre, v))
+}
+
+// GenreContainsFold applies the ContainsFold predicate on the "genre" field.
+func GenreContainsFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldContainsFold(FieldGenre, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Music {
+	return predicate.Music(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Music {
+	return predicate.Music(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Music {
+	return predicate.Music(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Music {
+	return predicate.Music(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Music {
+	return predicate.Music(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// IsFeaturedEQ applies the EQ predicate on the "is_featured" field.
+func IsFeaturedEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsFeatured, v))
+}
+
+// IsFeaturedNEQ applies the NEQ predicate on the "is_featured" field.
+func IsFeaturedNEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldIsFeatured, v))
+}
+
+// IsFreeEQ applies the EQ predicate on the "is_free" field.
+func IsFreeEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsFree, v))
+}
+
+// IsFreeNEQ applies the NEQ predicate on the "is_free" field.
+func IsFreeNEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldIsFree, v))
+}
+
+// UnlockLevelEQ applies the EQ predicate on the "unlock_level" field.
+func UnlockLevelEQ(v int) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldUnlockLevel, v))
+}
+
+// UnlockLevelNEQ applies the NEQ predicate on the "unlock_level" field.
+func UnlockLevelNEQ(v int) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldUnlockLevel, v))
+}
+
+// UnlockLevelIn applies the In predicate on the "unlock_level" field.
+func UnlockLevelIn(vs ...int) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldUnlockLevel, vs...))
+}
+
+// UnlockLevelNotIn applies the NotIn predicate on the "unlock_level" field.
+func UnlockLevelNotIn(vs ...int) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldUnlockLevel, vs...))
+}
+
+// UnlockLevelGT applies the GT predicate on the "unlock_level" field.
+func UnlockLevelGT(v int) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldUnlockLevel, v))
+}
+
+// UnlockLevelGTE applies the GTE predicate on the "unlock_level" field.
+func UnlockLevelGTE(v int) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldUnlockLevel, v))
+}
+
+// UnlockLevelLT applies the LT predicate on the "unlock_level" field.
+func UnlockLevelLT(v int) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldUnlockLevel, v))
+}
+
+// UnlockLevelLTE applies the LTE predicate on the "unlock_level" field.
+func UnlockLevelLTE(v int) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldUnlockLevel, v))
+}
+
+// ReleaseDateEQ applies the EQ predicate on the "release_date" field.
+func ReleaseDateEQ(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldReleaseDate, v))
+}
+
+// ReleaseDateNEQ applies the NEQ predicate on the "release_date" field.
+func ReleaseDateNEQ(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldReleaseDate, v))
+}
+
+// ReleaseDateIn applies the In predicate on the "release_date" field.
+func ReleaseDateIn(vs ...time.Time) predicate.Music {
+	return predicate.Music(sql.FieldIn(FieldReleaseDate, vs...))
+}
+
+// ReleaseDateNotIn applies the NotIn predicate on the "release_date" field.
+func ReleaseDateNotIn(vs ...time.Time) predicate.Music {
+	return predicate.Music(sql.FieldNotIn(FieldReleaseDate, vs...))
+}
+
+// ReleaseDateGT applies the GT predicate on the "release_date" field.
+func ReleaseDateGT(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldGT(FieldReleaseDate, v))
+}
+
+// ReleaseDateGTE applies the GTE predicate on the "release_date" field.
+func ReleaseDateGTE(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldGTE(FieldReleaseDate, v))
+}
+
+// ReleaseDateLT applies the LT predicate on the "release_date" field.
+func ReleaseDateLT(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldLT(FieldReleaseDate, v))
+}
+
+// ReleaseDateLTE applies the LTE predicate on the "release_date" field.
+func ReleaseDateLTE(v time.Time) predicate.Music {
+	return predicate.Music(sql.FieldLTE(FieldReleaseDate, v))
+}
+
+// ReleaseDateIsNil applies the IsNil predicate on the "release_date" field.
+func ReleaseDateIsNil() predicate.Music {
+	return predicate.Music(sql.FieldIsNull(FieldReleaseDate))
+}
+
+// ReleaseDateNotNil applies the NotNil predicate on the "release_date" field.
+func ReleaseDateNotNil() predicate.Music {
+	return predicate.Music(sql.FieldNotNull(FieldReleaseDate))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.Music {
+	return predicate.Music(sql.FieldNEQ(FieldIsActive, v))
 }
 
 // HasStages applies the HasEdge predicate on the "stages" edge.

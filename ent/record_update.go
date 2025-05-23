@@ -200,17 +200,24 @@ func (ru *RecordUpdate) AddMissCount(i int) *RecordUpdate {
 	return ru
 }
 
-// SetPlayedAt sets the "played_at" field.
-func (ru *RecordUpdate) SetPlayedAt(t time.Time) *RecordUpdate {
-	ru.mutation.SetPlayedAt(t)
+// SetMaxCombo sets the "max_combo" field.
+func (ru *RecordUpdate) SetMaxCombo(i int) *RecordUpdate {
+	ru.mutation.ResetMaxCombo()
+	ru.mutation.SetMaxCombo(i)
 	return ru
 }
 
-// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
-func (ru *RecordUpdate) SetNillablePlayedAt(t *time.Time) *RecordUpdate {
-	if t != nil {
-		ru.SetPlayedAt(*t)
+// SetNillableMaxCombo sets the "max_combo" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillableMaxCombo(i *int) *RecordUpdate {
+	if i != nil {
+		ru.SetMaxCombo(*i)
 	}
+	return ru
+}
+
+// AddMaxCombo adds i to the "max_combo" field.
+func (ru *RecordUpdate) AddMaxCombo(i int) *RecordUpdate {
+	ru.mutation.AddMaxCombo(i)
 	return ru
 }
 
@@ -235,23 +242,118 @@ func (ru *RecordUpdate) AddAccuracy(f float64) *RecordUpdate {
 	return ru
 }
 
-// SetAdditionalInfo sets the "additional_info" field.
-func (ru *RecordUpdate) SetAdditionalInfo(s string) *RecordUpdate {
-	ru.mutation.SetAdditionalInfo(s)
+// SetRank sets the "rank" field.
+func (ru *RecordUpdate) SetRank(r record.Rank) *RecordUpdate {
+	ru.mutation.SetRank(r)
 	return ru
 }
 
-// SetNillableAdditionalInfo sets the "additional_info" field if the given value is not nil.
-func (ru *RecordUpdate) SetNillableAdditionalInfo(s *string) *RecordUpdate {
-	if s != nil {
-		ru.SetAdditionalInfo(*s)
+// SetNillableRank sets the "rank" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillableRank(r *record.Rank) *RecordUpdate {
+	if r != nil {
+		ru.SetRank(*r)
 	}
+	return ru
+}
+
+// ClearRank clears the value of the "rank" field.
+func (ru *RecordUpdate) ClearRank() *RecordUpdate {
+	ru.mutation.ClearRank()
+	return ru
+}
+
+// SetIsFullCombo sets the "is_full_combo" field.
+func (ru *RecordUpdate) SetIsFullCombo(b bool) *RecordUpdate {
+	ru.mutation.SetIsFullCombo(b)
+	return ru
+}
+
+// SetNillableIsFullCombo sets the "is_full_combo" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillableIsFullCombo(b *bool) *RecordUpdate {
+	if b != nil {
+		ru.SetIsFullCombo(*b)
+	}
+	return ru
+}
+
+// SetIsPerfectPlay sets the "is_perfect_play" field.
+func (ru *RecordUpdate) SetIsPerfectPlay(b bool) *RecordUpdate {
+	ru.mutation.SetIsPerfectPlay(b)
+	return ru
+}
+
+// SetNillableIsPerfectPlay sets the "is_perfect_play" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillableIsPerfectPlay(b *bool) *RecordUpdate {
+	if b != nil {
+		ru.SetIsPerfectPlay(*b)
+	}
+	return ru
+}
+
+// SetPlayedAt sets the "played_at" field.
+func (ru *RecordUpdate) SetPlayedAt(t time.Time) *RecordUpdate {
+	ru.mutation.SetPlayedAt(t)
+	return ru
+}
+
+// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillablePlayedAt(t *time.Time) *RecordUpdate {
+	if t != nil {
+		ru.SetPlayedAt(*t)
+	}
+	return ru
+}
+
+// SetPlayDuration sets the "play_duration" field.
+func (ru *RecordUpdate) SetPlayDuration(i int) *RecordUpdate {
+	ru.mutation.ResetPlayDuration()
+	ru.mutation.SetPlayDuration(i)
+	return ru
+}
+
+// SetNillablePlayDuration sets the "play_duration" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillablePlayDuration(i *int) *RecordUpdate {
+	if i != nil {
+		ru.SetPlayDuration(*i)
+	}
+	return ru
+}
+
+// AddPlayDuration adds i to the "play_duration" field.
+func (ru *RecordUpdate) AddPlayDuration(i int) *RecordUpdate {
+	ru.mutation.AddPlayDuration(i)
+	return ru
+}
+
+// ClearPlayDuration clears the value of the "play_duration" field.
+func (ru *RecordUpdate) ClearPlayDuration() *RecordUpdate {
+	ru.mutation.ClearPlayDuration()
+	return ru
+}
+
+// SetAdditionalInfo sets the "additional_info" field.
+func (ru *RecordUpdate) SetAdditionalInfo(m map[string]interface{}) *RecordUpdate {
+	ru.mutation.SetAdditionalInfo(m)
 	return ru
 }
 
 // ClearAdditionalInfo clears the value of the "additional_info" field.
 func (ru *RecordUpdate) ClearAdditionalInfo() *RecordUpdate {
 	ru.mutation.ClearAdditionalInfo()
+	return ru
+}
+
+// SetIsValid sets the "is_valid" field.
+func (ru *RecordUpdate) SetIsValid(b bool) *RecordUpdate {
+	ru.mutation.SetIsValid(b)
+	return ru
+}
+
+// SetNillableIsValid sets the "is_valid" field if the given value is not nil.
+func (ru *RecordUpdate) SetNillableIsValid(b *bool) *RecordUpdate {
+	if b != nil {
+		ru.SetIsValid(*b)
+	}
 	return ru
 }
 
@@ -342,6 +444,11 @@ func (ru *RecordUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ru *RecordUpdate) check() error {
+	if v, ok := ru.mutation.Rank(); ok {
+		if err := record.RankValidator(v); err != nil {
+			return &ValidationError{Name: "rank", err: fmt.Errorf(`ent: validator failed for field "Record.rank": %w`, err)}
+		}
+	}
 	if ru.mutation.UserCleared() && len(ru.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Record.user"`)
 	}
@@ -402,8 +509,11 @@ func (ru *RecordUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.AddedMissCount(); ok {
 		_spec.AddField(record.FieldMissCount, field.TypeInt, value)
 	}
-	if value, ok := ru.mutation.PlayedAt(); ok {
-		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
+	if value, ok := ru.mutation.MaxCombo(); ok {
+		_spec.SetField(record.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := ru.mutation.AddedMaxCombo(); ok {
+		_spec.AddField(record.FieldMaxCombo, field.TypeInt, value)
 	}
 	if value, ok := ru.mutation.Accuracy(); ok {
 		_spec.SetField(record.FieldAccuracy, field.TypeFloat64, value)
@@ -411,11 +521,38 @@ func (ru *RecordUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.AddedAccuracy(); ok {
 		_spec.AddField(record.FieldAccuracy, field.TypeFloat64, value)
 	}
+	if value, ok := ru.mutation.Rank(); ok {
+		_spec.SetField(record.FieldRank, field.TypeEnum, value)
+	}
+	if ru.mutation.RankCleared() {
+		_spec.ClearField(record.FieldRank, field.TypeEnum)
+	}
+	if value, ok := ru.mutation.IsFullCombo(); ok {
+		_spec.SetField(record.FieldIsFullCombo, field.TypeBool, value)
+	}
+	if value, ok := ru.mutation.IsPerfectPlay(); ok {
+		_spec.SetField(record.FieldIsPerfectPlay, field.TypeBool, value)
+	}
+	if value, ok := ru.mutation.PlayedAt(); ok {
+		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
+	}
+	if value, ok := ru.mutation.PlayDuration(); ok {
+		_spec.SetField(record.FieldPlayDuration, field.TypeInt, value)
+	}
+	if value, ok := ru.mutation.AddedPlayDuration(); ok {
+		_spec.AddField(record.FieldPlayDuration, field.TypeInt, value)
+	}
+	if ru.mutation.PlayDurationCleared() {
+		_spec.ClearField(record.FieldPlayDuration, field.TypeInt)
+	}
 	if value, ok := ru.mutation.AdditionalInfo(); ok {
-		_spec.SetField(record.FieldAdditionalInfo, field.TypeString, value)
+		_spec.SetField(record.FieldAdditionalInfo, field.TypeJSON, value)
 	}
 	if ru.mutation.AdditionalInfoCleared() {
-		_spec.ClearField(record.FieldAdditionalInfo, field.TypeString)
+		_spec.ClearField(record.FieldAdditionalInfo, field.TypeJSON)
+	}
+	if value, ok := ru.mutation.IsValid(); ok {
+		_spec.SetField(record.FieldIsValid, field.TypeBool, value)
 	}
 	if ru.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -720,17 +857,24 @@ func (ruo *RecordUpdateOne) AddMissCount(i int) *RecordUpdateOne {
 	return ruo
 }
 
-// SetPlayedAt sets the "played_at" field.
-func (ruo *RecordUpdateOne) SetPlayedAt(t time.Time) *RecordUpdateOne {
-	ruo.mutation.SetPlayedAt(t)
+// SetMaxCombo sets the "max_combo" field.
+func (ruo *RecordUpdateOne) SetMaxCombo(i int) *RecordUpdateOne {
+	ruo.mutation.ResetMaxCombo()
+	ruo.mutation.SetMaxCombo(i)
 	return ruo
 }
 
-// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
-func (ruo *RecordUpdateOne) SetNillablePlayedAt(t *time.Time) *RecordUpdateOne {
-	if t != nil {
-		ruo.SetPlayedAt(*t)
+// SetNillableMaxCombo sets the "max_combo" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillableMaxCombo(i *int) *RecordUpdateOne {
+	if i != nil {
+		ruo.SetMaxCombo(*i)
 	}
+	return ruo
+}
+
+// AddMaxCombo adds i to the "max_combo" field.
+func (ruo *RecordUpdateOne) AddMaxCombo(i int) *RecordUpdateOne {
+	ruo.mutation.AddMaxCombo(i)
 	return ruo
 }
 
@@ -755,23 +899,118 @@ func (ruo *RecordUpdateOne) AddAccuracy(f float64) *RecordUpdateOne {
 	return ruo
 }
 
-// SetAdditionalInfo sets the "additional_info" field.
-func (ruo *RecordUpdateOne) SetAdditionalInfo(s string) *RecordUpdateOne {
-	ruo.mutation.SetAdditionalInfo(s)
+// SetRank sets the "rank" field.
+func (ruo *RecordUpdateOne) SetRank(r record.Rank) *RecordUpdateOne {
+	ruo.mutation.SetRank(r)
 	return ruo
 }
 
-// SetNillableAdditionalInfo sets the "additional_info" field if the given value is not nil.
-func (ruo *RecordUpdateOne) SetNillableAdditionalInfo(s *string) *RecordUpdateOne {
-	if s != nil {
-		ruo.SetAdditionalInfo(*s)
+// SetNillableRank sets the "rank" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillableRank(r *record.Rank) *RecordUpdateOne {
+	if r != nil {
+		ruo.SetRank(*r)
 	}
+	return ruo
+}
+
+// ClearRank clears the value of the "rank" field.
+func (ruo *RecordUpdateOne) ClearRank() *RecordUpdateOne {
+	ruo.mutation.ClearRank()
+	return ruo
+}
+
+// SetIsFullCombo sets the "is_full_combo" field.
+func (ruo *RecordUpdateOne) SetIsFullCombo(b bool) *RecordUpdateOne {
+	ruo.mutation.SetIsFullCombo(b)
+	return ruo
+}
+
+// SetNillableIsFullCombo sets the "is_full_combo" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillableIsFullCombo(b *bool) *RecordUpdateOne {
+	if b != nil {
+		ruo.SetIsFullCombo(*b)
+	}
+	return ruo
+}
+
+// SetIsPerfectPlay sets the "is_perfect_play" field.
+func (ruo *RecordUpdateOne) SetIsPerfectPlay(b bool) *RecordUpdateOne {
+	ruo.mutation.SetIsPerfectPlay(b)
+	return ruo
+}
+
+// SetNillableIsPerfectPlay sets the "is_perfect_play" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillableIsPerfectPlay(b *bool) *RecordUpdateOne {
+	if b != nil {
+		ruo.SetIsPerfectPlay(*b)
+	}
+	return ruo
+}
+
+// SetPlayedAt sets the "played_at" field.
+func (ruo *RecordUpdateOne) SetPlayedAt(t time.Time) *RecordUpdateOne {
+	ruo.mutation.SetPlayedAt(t)
+	return ruo
+}
+
+// SetNillablePlayedAt sets the "played_at" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillablePlayedAt(t *time.Time) *RecordUpdateOne {
+	if t != nil {
+		ruo.SetPlayedAt(*t)
+	}
+	return ruo
+}
+
+// SetPlayDuration sets the "play_duration" field.
+func (ruo *RecordUpdateOne) SetPlayDuration(i int) *RecordUpdateOne {
+	ruo.mutation.ResetPlayDuration()
+	ruo.mutation.SetPlayDuration(i)
+	return ruo
+}
+
+// SetNillablePlayDuration sets the "play_duration" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillablePlayDuration(i *int) *RecordUpdateOne {
+	if i != nil {
+		ruo.SetPlayDuration(*i)
+	}
+	return ruo
+}
+
+// AddPlayDuration adds i to the "play_duration" field.
+func (ruo *RecordUpdateOne) AddPlayDuration(i int) *RecordUpdateOne {
+	ruo.mutation.AddPlayDuration(i)
+	return ruo
+}
+
+// ClearPlayDuration clears the value of the "play_duration" field.
+func (ruo *RecordUpdateOne) ClearPlayDuration() *RecordUpdateOne {
+	ruo.mutation.ClearPlayDuration()
+	return ruo
+}
+
+// SetAdditionalInfo sets the "additional_info" field.
+func (ruo *RecordUpdateOne) SetAdditionalInfo(m map[string]interface{}) *RecordUpdateOne {
+	ruo.mutation.SetAdditionalInfo(m)
 	return ruo
 }
 
 // ClearAdditionalInfo clears the value of the "additional_info" field.
 func (ruo *RecordUpdateOne) ClearAdditionalInfo() *RecordUpdateOne {
 	ruo.mutation.ClearAdditionalInfo()
+	return ruo
+}
+
+// SetIsValid sets the "is_valid" field.
+func (ruo *RecordUpdateOne) SetIsValid(b bool) *RecordUpdateOne {
+	ruo.mutation.SetIsValid(b)
+	return ruo
+}
+
+// SetNillableIsValid sets the "is_valid" field if the given value is not nil.
+func (ruo *RecordUpdateOne) SetNillableIsValid(b *bool) *RecordUpdateOne {
+	if b != nil {
+		ruo.SetIsValid(*b)
+	}
 	return ruo
 }
 
@@ -875,6 +1114,11 @@ func (ruo *RecordUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ruo *RecordUpdateOne) check() error {
+	if v, ok := ruo.mutation.Rank(); ok {
+		if err := record.RankValidator(v); err != nil {
+			return &ValidationError{Name: "rank", err: fmt.Errorf(`ent: validator failed for field "Record.rank": %w`, err)}
+		}
+	}
 	if ruo.mutation.UserCleared() && len(ruo.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Record.user"`)
 	}
@@ -952,8 +1196,11 @@ func (ruo *RecordUpdateOne) sqlSave(ctx context.Context) (_node *Record, err err
 	if value, ok := ruo.mutation.AddedMissCount(); ok {
 		_spec.AddField(record.FieldMissCount, field.TypeInt, value)
 	}
-	if value, ok := ruo.mutation.PlayedAt(); ok {
-		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
+	if value, ok := ruo.mutation.MaxCombo(); ok {
+		_spec.SetField(record.FieldMaxCombo, field.TypeInt, value)
+	}
+	if value, ok := ruo.mutation.AddedMaxCombo(); ok {
+		_spec.AddField(record.FieldMaxCombo, field.TypeInt, value)
 	}
 	if value, ok := ruo.mutation.Accuracy(); ok {
 		_spec.SetField(record.FieldAccuracy, field.TypeFloat64, value)
@@ -961,11 +1208,38 @@ func (ruo *RecordUpdateOne) sqlSave(ctx context.Context) (_node *Record, err err
 	if value, ok := ruo.mutation.AddedAccuracy(); ok {
 		_spec.AddField(record.FieldAccuracy, field.TypeFloat64, value)
 	}
+	if value, ok := ruo.mutation.Rank(); ok {
+		_spec.SetField(record.FieldRank, field.TypeEnum, value)
+	}
+	if ruo.mutation.RankCleared() {
+		_spec.ClearField(record.FieldRank, field.TypeEnum)
+	}
+	if value, ok := ruo.mutation.IsFullCombo(); ok {
+		_spec.SetField(record.FieldIsFullCombo, field.TypeBool, value)
+	}
+	if value, ok := ruo.mutation.IsPerfectPlay(); ok {
+		_spec.SetField(record.FieldIsPerfectPlay, field.TypeBool, value)
+	}
+	if value, ok := ruo.mutation.PlayedAt(); ok {
+		_spec.SetField(record.FieldPlayedAt, field.TypeTime, value)
+	}
+	if value, ok := ruo.mutation.PlayDuration(); ok {
+		_spec.SetField(record.FieldPlayDuration, field.TypeInt, value)
+	}
+	if value, ok := ruo.mutation.AddedPlayDuration(); ok {
+		_spec.AddField(record.FieldPlayDuration, field.TypeInt, value)
+	}
+	if ruo.mutation.PlayDurationCleared() {
+		_spec.ClearField(record.FieldPlayDuration, field.TypeInt)
+	}
 	if value, ok := ruo.mutation.AdditionalInfo(); ok {
-		_spec.SetField(record.FieldAdditionalInfo, field.TypeString, value)
+		_spec.SetField(record.FieldAdditionalInfo, field.TypeJSON, value)
 	}
 	if ruo.mutation.AdditionalInfoCleared() {
-		_spec.ClearField(record.FieldAdditionalInfo, field.TypeString)
+		_spec.ClearField(record.FieldAdditionalInfo, field.TypeJSON)
+	}
+	if value, ok := ruo.mutation.IsValid(); ok {
+		_spec.SetField(record.FieldIsValid, field.TypeBool, value)
 	}
 	if ruo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{

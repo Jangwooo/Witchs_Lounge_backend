@@ -111,9 +111,9 @@ func MissCount(v int) predicate.Record {
 	return predicate.Record(sql.FieldEQ(FieldMissCount, v))
 }
 
-// PlayedAt applies equality check predicate on the "played_at" field. It's identical to PlayedAtEQ.
-func PlayedAt(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldEQ(FieldPlayedAt, v))
+// MaxCombo applies equality check predicate on the "max_combo" field. It's identical to MaxComboEQ.
+func MaxCombo(v int) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldMaxCombo, v))
 }
 
 // Accuracy applies equality check predicate on the "accuracy" field. It's identical to AccuracyEQ.
@@ -121,9 +121,29 @@ func Accuracy(v float64) predicate.Record {
 	return predicate.Record(sql.FieldEQ(FieldAccuracy, v))
 }
 
-// AdditionalInfo applies equality check predicate on the "additional_info" field. It's identical to AdditionalInfoEQ.
-func AdditionalInfo(v string) predicate.Record {
-	return predicate.Record(sql.FieldEQ(FieldAdditionalInfo, v))
+// IsFullCombo applies equality check predicate on the "is_full_combo" field. It's identical to IsFullComboEQ.
+func IsFullCombo(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsFullCombo, v))
+}
+
+// IsPerfectPlay applies equality check predicate on the "is_perfect_play" field. It's identical to IsPerfectPlayEQ.
+func IsPerfectPlay(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsPerfectPlay, v))
+}
+
+// PlayedAt applies equality check predicate on the "played_at" field. It's identical to PlayedAtEQ.
+func PlayedAt(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldPlayedAt, v))
+}
+
+// PlayDuration applies equality check predicate on the "play_duration" field. It's identical to PlayDurationEQ.
+func PlayDuration(v int) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldPlayDuration, v))
+}
+
+// IsValid applies equality check predicate on the "is_valid" field. It's identical to IsValidEQ.
+func IsValid(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsValid, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -486,44 +506,44 @@ func MissCountLTE(v int) predicate.Record {
 	return predicate.Record(sql.FieldLTE(FieldMissCount, v))
 }
 
-// PlayedAtEQ applies the EQ predicate on the "played_at" field.
-func PlayedAtEQ(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldEQ(FieldPlayedAt, v))
+// MaxComboEQ applies the EQ predicate on the "max_combo" field.
+func MaxComboEQ(v int) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldMaxCombo, v))
 }
 
-// PlayedAtNEQ applies the NEQ predicate on the "played_at" field.
-func PlayedAtNEQ(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldNEQ(FieldPlayedAt, v))
+// MaxComboNEQ applies the NEQ predicate on the "max_combo" field.
+func MaxComboNEQ(v int) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldMaxCombo, v))
 }
 
-// PlayedAtIn applies the In predicate on the "played_at" field.
-func PlayedAtIn(vs ...time.Time) predicate.Record {
-	return predicate.Record(sql.FieldIn(FieldPlayedAt, vs...))
+// MaxComboIn applies the In predicate on the "max_combo" field.
+func MaxComboIn(vs ...int) predicate.Record {
+	return predicate.Record(sql.FieldIn(FieldMaxCombo, vs...))
 }
 
-// PlayedAtNotIn applies the NotIn predicate on the "played_at" field.
-func PlayedAtNotIn(vs ...time.Time) predicate.Record {
-	return predicate.Record(sql.FieldNotIn(FieldPlayedAt, vs...))
+// MaxComboNotIn applies the NotIn predicate on the "max_combo" field.
+func MaxComboNotIn(vs ...int) predicate.Record {
+	return predicate.Record(sql.FieldNotIn(FieldMaxCombo, vs...))
 }
 
-// PlayedAtGT applies the GT predicate on the "played_at" field.
-func PlayedAtGT(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldGT(FieldPlayedAt, v))
+// MaxComboGT applies the GT predicate on the "max_combo" field.
+func MaxComboGT(v int) predicate.Record {
+	return predicate.Record(sql.FieldGT(FieldMaxCombo, v))
 }
 
-// PlayedAtGTE applies the GTE predicate on the "played_at" field.
-func PlayedAtGTE(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldGTE(FieldPlayedAt, v))
+// MaxComboGTE applies the GTE predicate on the "max_combo" field.
+func MaxComboGTE(v int) predicate.Record {
+	return predicate.Record(sql.FieldGTE(FieldMaxCombo, v))
 }
 
-// PlayedAtLT applies the LT predicate on the "played_at" field.
-func PlayedAtLT(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldLT(FieldPlayedAt, v))
+// MaxComboLT applies the LT predicate on the "max_combo" field.
+func MaxComboLT(v int) predicate.Record {
+	return predicate.Record(sql.FieldLT(FieldMaxCombo, v))
 }
 
-// PlayedAtLTE applies the LTE predicate on the "played_at" field.
-func PlayedAtLTE(v time.Time) predicate.Record {
-	return predicate.Record(sql.FieldLTE(FieldPlayedAt, v))
+// MaxComboLTE applies the LTE predicate on the "max_combo" field.
+func MaxComboLTE(v int) predicate.Record {
+	return predicate.Record(sql.FieldLTE(FieldMaxCombo, v))
 }
 
 // AccuracyEQ applies the EQ predicate on the "accuracy" field.
@@ -566,59 +586,144 @@ func AccuracyLTE(v float64) predicate.Record {
 	return predicate.Record(sql.FieldLTE(FieldAccuracy, v))
 }
 
-// AdditionalInfoEQ applies the EQ predicate on the "additional_info" field.
-func AdditionalInfoEQ(v string) predicate.Record {
-	return predicate.Record(sql.FieldEQ(FieldAdditionalInfo, v))
+// RankEQ applies the EQ predicate on the "rank" field.
+func RankEQ(v Rank) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldRank, v))
 }
 
-// AdditionalInfoNEQ applies the NEQ predicate on the "additional_info" field.
-func AdditionalInfoNEQ(v string) predicate.Record {
-	return predicate.Record(sql.FieldNEQ(FieldAdditionalInfo, v))
+// RankNEQ applies the NEQ predicate on the "rank" field.
+func RankNEQ(v Rank) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldRank, v))
 }
 
-// AdditionalInfoIn applies the In predicate on the "additional_info" field.
-func AdditionalInfoIn(vs ...string) predicate.Record {
-	return predicate.Record(sql.FieldIn(FieldAdditionalInfo, vs...))
+// RankIn applies the In predicate on the "rank" field.
+func RankIn(vs ...Rank) predicate.Record {
+	return predicate.Record(sql.FieldIn(FieldRank, vs...))
 }
 
-// AdditionalInfoNotIn applies the NotIn predicate on the "additional_info" field.
-func AdditionalInfoNotIn(vs ...string) predicate.Record {
-	return predicate.Record(sql.FieldNotIn(FieldAdditionalInfo, vs...))
+// RankNotIn applies the NotIn predicate on the "rank" field.
+func RankNotIn(vs ...Rank) predicate.Record {
+	return predicate.Record(sql.FieldNotIn(FieldRank, vs...))
 }
 
-// AdditionalInfoGT applies the GT predicate on the "additional_info" field.
-func AdditionalInfoGT(v string) predicate.Record {
-	return predicate.Record(sql.FieldGT(FieldAdditionalInfo, v))
+// RankIsNil applies the IsNil predicate on the "rank" field.
+func RankIsNil() predicate.Record {
+	return predicate.Record(sql.FieldIsNull(FieldRank))
 }
 
-// AdditionalInfoGTE applies the GTE predicate on the "additional_info" field.
-func AdditionalInfoGTE(v string) predicate.Record {
-	return predicate.Record(sql.FieldGTE(FieldAdditionalInfo, v))
+// RankNotNil applies the NotNil predicate on the "rank" field.
+func RankNotNil() predicate.Record {
+	return predicate.Record(sql.FieldNotNull(FieldRank))
 }
 
-// AdditionalInfoLT applies the LT predicate on the "additional_info" field.
-func AdditionalInfoLT(v string) predicate.Record {
-	return predicate.Record(sql.FieldLT(FieldAdditionalInfo, v))
+// IsFullComboEQ applies the EQ predicate on the "is_full_combo" field.
+func IsFullComboEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsFullCombo, v))
 }
 
-// AdditionalInfoLTE applies the LTE predicate on the "additional_info" field.
-func AdditionalInfoLTE(v string) predicate.Record {
-	return predicate.Record(sql.FieldLTE(FieldAdditionalInfo, v))
+// IsFullComboNEQ applies the NEQ predicate on the "is_full_combo" field.
+func IsFullComboNEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldIsFullCombo, v))
 }
 
-// AdditionalInfoContains applies the Contains predicate on the "additional_info" field.
-func AdditionalInfoContains(v string) predicate.Record {
-	return predicate.Record(sql.FieldContains(FieldAdditionalInfo, v))
+// IsPerfectPlayEQ applies the EQ predicate on the "is_perfect_play" field.
+func IsPerfectPlayEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsPerfectPlay, v))
 }
 
-// AdditionalInfoHasPrefix applies the HasPrefix predicate on the "additional_info" field.
-func AdditionalInfoHasPrefix(v string) predicate.Record {
-	return predicate.Record(sql.FieldHasPrefix(FieldAdditionalInfo, v))
+// IsPerfectPlayNEQ applies the NEQ predicate on the "is_perfect_play" field.
+func IsPerfectPlayNEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldIsPerfectPlay, v))
 }
 
-// AdditionalInfoHasSuffix applies the HasSuffix predicate on the "additional_info" field.
-func AdditionalInfoHasSuffix(v string) predicate.Record {
-	return predicate.Record(sql.FieldHasSuffix(FieldAdditionalInfo, v))
+// PlayedAtEQ applies the EQ predicate on the "played_at" field.
+func PlayedAtEQ(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldPlayedAt, v))
+}
+
+// PlayedAtNEQ applies the NEQ predicate on the "played_at" field.
+func PlayedAtNEQ(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldPlayedAt, v))
+}
+
+// PlayedAtIn applies the In predicate on the "played_at" field.
+func PlayedAtIn(vs ...time.Time) predicate.Record {
+	return predicate.Record(sql.FieldIn(FieldPlayedAt, vs...))
+}
+
+// PlayedAtNotIn applies the NotIn predicate on the "played_at" field.
+func PlayedAtNotIn(vs ...time.Time) predicate.Record {
+	return predicate.Record(sql.FieldNotIn(FieldPlayedAt, vs...))
+}
+
+// PlayedAtGT applies the GT predicate on the "played_at" field.
+func PlayedAtGT(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldGT(FieldPlayedAt, v))
+}
+
+// PlayedAtGTE applies the GTE predicate on the "played_at" field.
+func PlayedAtGTE(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldGTE(FieldPlayedAt, v))
+}
+
+// PlayedAtLT applies the LT predicate on the "played_at" field.
+func PlayedAtLT(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldLT(FieldPlayedAt, v))
+}
+
+// PlayedAtLTE applies the LTE predicate on the "played_at" field.
+func PlayedAtLTE(v time.Time) predicate.Record {
+	return predicate.Record(sql.FieldLTE(FieldPlayedAt, v))
+}
+
+// PlayDurationEQ applies the EQ predicate on the "play_duration" field.
+func PlayDurationEQ(v int) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldPlayDuration, v))
+}
+
+// PlayDurationNEQ applies the NEQ predicate on the "play_duration" field.
+func PlayDurationNEQ(v int) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldPlayDuration, v))
+}
+
+// PlayDurationIn applies the In predicate on the "play_duration" field.
+func PlayDurationIn(vs ...int) predicate.Record {
+	return predicate.Record(sql.FieldIn(FieldPlayDuration, vs...))
+}
+
+// PlayDurationNotIn applies the NotIn predicate on the "play_duration" field.
+func PlayDurationNotIn(vs ...int) predicate.Record {
+	return predicate.Record(sql.FieldNotIn(FieldPlayDuration, vs...))
+}
+
+// PlayDurationGT applies the GT predicate on the "play_duration" field.
+func PlayDurationGT(v int) predicate.Record {
+	return predicate.Record(sql.FieldGT(FieldPlayDuration, v))
+}
+
+// PlayDurationGTE applies the GTE predicate on the "play_duration" field.
+func PlayDurationGTE(v int) predicate.Record {
+	return predicate.Record(sql.FieldGTE(FieldPlayDuration, v))
+}
+
+// PlayDurationLT applies the LT predicate on the "play_duration" field.
+func PlayDurationLT(v int) predicate.Record {
+	return predicate.Record(sql.FieldLT(FieldPlayDuration, v))
+}
+
+// PlayDurationLTE applies the LTE predicate on the "play_duration" field.
+func PlayDurationLTE(v int) predicate.Record {
+	return predicate.Record(sql.FieldLTE(FieldPlayDuration, v))
+}
+
+// PlayDurationIsNil applies the IsNil predicate on the "play_duration" field.
+func PlayDurationIsNil() predicate.Record {
+	return predicate.Record(sql.FieldIsNull(FieldPlayDuration))
+}
+
+// PlayDurationNotNil applies the NotNil predicate on the "play_duration" field.
+func PlayDurationNotNil() predicate.Record {
+	return predicate.Record(sql.FieldNotNull(FieldPlayDuration))
 }
 
 // AdditionalInfoIsNil applies the IsNil predicate on the "additional_info" field.
@@ -631,14 +736,14 @@ func AdditionalInfoNotNil() predicate.Record {
 	return predicate.Record(sql.FieldNotNull(FieldAdditionalInfo))
 }
 
-// AdditionalInfoEqualFold applies the EqualFold predicate on the "additional_info" field.
-func AdditionalInfoEqualFold(v string) predicate.Record {
-	return predicate.Record(sql.FieldEqualFold(FieldAdditionalInfo, v))
+// IsValidEQ applies the EQ predicate on the "is_valid" field.
+func IsValidEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldEQ(FieldIsValid, v))
 }
 
-// AdditionalInfoContainsFold applies the ContainsFold predicate on the "additional_info" field.
-func AdditionalInfoContainsFold(v string) predicate.Record {
-	return predicate.Record(sql.FieldContainsFold(FieldAdditionalInfo, v))
+// IsValidNEQ applies the NEQ predicate on the "is_valid" field.
+func IsValidNEQ(v bool) predicate.Record {
+	return predicate.Record(sql.FieldNEQ(FieldIsValid, v))
 }
 
 // HasUser applies the HasEdge predicate on the "user" edge.

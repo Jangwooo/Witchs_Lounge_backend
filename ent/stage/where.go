@@ -76,6 +76,11 @@ func LevelName(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldEQ(FieldLevelName, v))
 }
 
+// Difficulty applies equality check predicate on the "difficulty" field. It's identical to DifficultyEQ.
+func Difficulty(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldDifficulty, v))
+}
+
 // LevelAddress applies equality check predicate on the "level_address" field. It's identical to LevelAddressEQ.
 func LevelAddress(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldEQ(FieldLevelAddress, v))
@@ -84,6 +89,21 @@ func LevelAddress(v string) predicate.Stage {
 // JacketAddress applies equality check predicate on the "jacket_address" field. It's identical to JacketAddressEQ.
 func JacketAddress(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldEQ(FieldJacketAddress, v))
+}
+
+// TotalNotes applies equality check predicate on the "total_notes" field. It's identical to TotalNotesEQ.
+func TotalNotes(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldTotalNotes, v))
+}
+
+// MaxCombo applies equality check predicate on the "max_combo" field. It's identical to MaxComboEQ.
+func MaxCombo(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldMaxCombo, v))
+}
+
+// IsActive applies equality check predicate on the "is_active" field. It's identical to IsActiveEQ.
+func IsActive(v bool) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldIsActive, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -251,6 +271,46 @@ func LevelNameContainsFold(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldContainsFold(FieldLevelName, v))
 }
 
+// DifficultyEQ applies the EQ predicate on the "difficulty" field.
+func DifficultyEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldDifficulty, v))
+}
+
+// DifficultyNEQ applies the NEQ predicate on the "difficulty" field.
+func DifficultyNEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldNEQ(FieldDifficulty, v))
+}
+
+// DifficultyIn applies the In predicate on the "difficulty" field.
+func DifficultyIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldIn(FieldDifficulty, vs...))
+}
+
+// DifficultyNotIn applies the NotIn predicate on the "difficulty" field.
+func DifficultyNotIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldNotIn(FieldDifficulty, vs...))
+}
+
+// DifficultyGT applies the GT predicate on the "difficulty" field.
+func DifficultyGT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGT(FieldDifficulty, v))
+}
+
+// DifficultyGTE applies the GTE predicate on the "difficulty" field.
+func DifficultyGTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGTE(FieldDifficulty, v))
+}
+
+// DifficultyLT applies the LT predicate on the "difficulty" field.
+func DifficultyLT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLT(FieldDifficulty, v))
+}
+
+// DifficultyLTE applies the LTE predicate on the "difficulty" field.
+func DifficultyLTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLTE(FieldDifficulty, v))
+}
+
 // LevelAddressEQ applies the EQ predicate on the "level_address" field.
 func LevelAddressEQ(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldEQ(FieldLevelAddress, v))
@@ -379,6 +439,96 @@ func JacketAddressEqualFold(v string) predicate.Stage {
 // JacketAddressContainsFold applies the ContainsFold predicate on the "jacket_address" field.
 func JacketAddressContainsFold(v string) predicate.Stage {
 	return predicate.Stage(sql.FieldContainsFold(FieldJacketAddress, v))
+}
+
+// TotalNotesEQ applies the EQ predicate on the "total_notes" field.
+func TotalNotesEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldTotalNotes, v))
+}
+
+// TotalNotesNEQ applies the NEQ predicate on the "total_notes" field.
+func TotalNotesNEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldNEQ(FieldTotalNotes, v))
+}
+
+// TotalNotesIn applies the In predicate on the "total_notes" field.
+func TotalNotesIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldIn(FieldTotalNotes, vs...))
+}
+
+// TotalNotesNotIn applies the NotIn predicate on the "total_notes" field.
+func TotalNotesNotIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldNotIn(FieldTotalNotes, vs...))
+}
+
+// TotalNotesGT applies the GT predicate on the "total_notes" field.
+func TotalNotesGT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGT(FieldTotalNotes, v))
+}
+
+// TotalNotesGTE applies the GTE predicate on the "total_notes" field.
+func TotalNotesGTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGTE(FieldTotalNotes, v))
+}
+
+// TotalNotesLT applies the LT predicate on the "total_notes" field.
+func TotalNotesLT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLT(FieldTotalNotes, v))
+}
+
+// TotalNotesLTE applies the LTE predicate on the "total_notes" field.
+func TotalNotesLTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLTE(FieldTotalNotes, v))
+}
+
+// MaxComboEQ applies the EQ predicate on the "max_combo" field.
+func MaxComboEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldMaxCombo, v))
+}
+
+// MaxComboNEQ applies the NEQ predicate on the "max_combo" field.
+func MaxComboNEQ(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldNEQ(FieldMaxCombo, v))
+}
+
+// MaxComboIn applies the In predicate on the "max_combo" field.
+func MaxComboIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldIn(FieldMaxCombo, vs...))
+}
+
+// MaxComboNotIn applies the NotIn predicate on the "max_combo" field.
+func MaxComboNotIn(vs ...int) predicate.Stage {
+	return predicate.Stage(sql.FieldNotIn(FieldMaxCombo, vs...))
+}
+
+// MaxComboGT applies the GT predicate on the "max_combo" field.
+func MaxComboGT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGT(FieldMaxCombo, v))
+}
+
+// MaxComboGTE applies the GTE predicate on the "max_combo" field.
+func MaxComboGTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldGTE(FieldMaxCombo, v))
+}
+
+// MaxComboLT applies the LT predicate on the "max_combo" field.
+func MaxComboLT(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLT(FieldMaxCombo, v))
+}
+
+// MaxComboLTE applies the LTE predicate on the "max_combo" field.
+func MaxComboLTE(v int) predicate.Stage {
+	return predicate.Stage(sql.FieldLTE(FieldMaxCombo, v))
+}
+
+// IsActiveEQ applies the EQ predicate on the "is_active" field.
+func IsActiveEQ(v bool) predicate.Stage {
+	return predicate.Stage(sql.FieldEQ(FieldIsActive, v))
+}
+
+// IsActiveNEQ applies the NEQ predicate on the "is_active" field.
+func IsActiveNEQ(v bool) predicate.Stage {
+	return predicate.Stage(sql.FieldNEQ(FieldIsActive, v))
 }
 
 // HasMusic applies the HasEdge predicate on the "music" edge.

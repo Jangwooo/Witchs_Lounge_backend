@@ -8,6 +8,44 @@ import (
 )
 
 var (
+	// AchievementsColumns holds the columns for the "achievements" table.
+	AchievementsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString, Size: 2147483647},
+		{Name: "description", Type: field.TypeString, Size: 2147483647},
+		{Name: "icon_url", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"score", "combo", "accuracy", "play_count", "special"}},
+		{Name: "conditions", Type: field.TypeJSON},
+		{Name: "rewards", Type: field.TypeJSON},
+		{Name: "points", Type: field.TypeInt, Default: 0},
+		{Name: "is_hidden", Type: field.TypeBool, Default: false},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
+	}
+	// AchievementsTable holds the schema information for the "achievements" table.
+	AchievementsTable = &schema.Table{
+		Name:       "achievements",
+		Columns:    AchievementsColumns,
+		PrimaryKey: []*schema.Column{AchievementsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "achievement_type",
+				Unique:  false,
+				Columns: []*schema.Column{AchievementsColumns[6]},
+			},
+			{
+				Name:    "achievement_is_active",
+				Unique:  false,
+				Columns: []*schema.Column{AchievementsColumns[11]},
+			},
+			{
+				Name:    "achievement_is_hidden",
+				Unique:  false,
+				Columns: []*schema.Column{AchievementsColumns[10]},
+			},
+		},
+	}
 	// CharactersColumns holds the columns for the "characters" table.
 	CharactersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -46,10 +84,19 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString, Size: 2147483647},
+		{Name: "artist", Type: field.TypeString, Size: 2147483647},
+		{Name: "composer", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "music_source", Type: field.TypeString, Size: 2147483647},
 		{Name: "jacket_source", Type: field.TypeString, Size: 2147483647},
 		{Name: "duration", Type: field.TypeFloat64},
-		{Name: "author", Type: field.TypeString, Size: 2147483647},
+		{Name: "bpm", Type: field.TypeFloat64},
+		{Name: "genre", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "is_featured", Type: field.TypeBool, Default: false},
+		{Name: "is_free", Type: field.TypeBool, Default: true},
+		{Name: "unlock_level", Type: field.TypeInt, Default: 1},
+		{Name: "release_date", Type: field.TypeTime, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
 	}
 	// MusicsTable holds the schema information for the "musics" table.
 	MusicsTable = &schema.Table{
@@ -99,9 +146,15 @@ var (
 		{Name: "good_count", Type: field.TypeInt, Default: 0},
 		{Name: "bad_count", Type: field.TypeInt, Default: 0},
 		{Name: "miss_count", Type: field.TypeInt, Default: 0},
-		{Name: "played_at", Type: field.TypeTime},
+		{Name: "max_combo", Type: field.TypeInt, Default: 0},
 		{Name: "accuracy", Type: field.TypeFloat64, Default: 0},
-		{Name: "additional_info", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "rank", Type: field.TypeEnum, Nullable: true, Enums: []string{"F", "D", "C", "B", "A", "S", "SS", "SSS"}},
+		{Name: "is_full_combo", Type: field.TypeBool, Default: false},
+		{Name: "is_perfect_play", Type: field.TypeBool, Default: false},
+		{Name: "played_at", Type: field.TypeTime},
+		{Name: "play_duration", Type: field.TypeInt, Nullable: true},
+		{Name: "additional_info", Type: field.TypeJSON, Nullable: true},
+		{Name: "is_valid", Type: field.TypeBool, Default: true},
 		{Name: "character_id", Type: field.TypeUUID},
 		{Name: "music_id", Type: field.TypeUUID},
 		{Name: "stage_id", Type: field.TypeUUID},
@@ -115,25 +168,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "records_characters_records",
-				Columns:    []*schema.Column{RecordsColumns[11]},
+				Columns:    []*schema.Column{RecordsColumns[17]},
 				RefColumns: []*schema.Column{CharactersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_musics_records",
-				Columns:    []*schema.Column{RecordsColumns[12]},
+				Columns:    []*schema.Column{RecordsColumns[18]},
 				RefColumns: []*schema.Column{MusicsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_stages_records",
-				Columns:    []*schema.Column{RecordsColumns[13]},
+				Columns:    []*schema.Column{RecordsColumns[19]},
 				RefColumns: []*schema.Column{StagesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "records_users_records",
-				Columns:    []*schema.Column{RecordsColumns[14]},
+				Columns:    []*schema.Column{RecordsColumns[20]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -142,27 +195,27 @@ var (
 			{
 				Name:    "record_user_id_music_id_stage_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[14], RecordsColumns[12], RecordsColumns[13]},
+				Columns: []*schema.Column{RecordsColumns[20], RecordsColumns[18], RecordsColumns[19]},
 			},
 			{
 				Name:    "record_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[14]},
+				Columns: []*schema.Column{RecordsColumns[20]},
 			},
 			{
 				Name:    "record_music_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[12]},
+				Columns: []*schema.Column{RecordsColumns[18]},
 			},
 			{
 				Name:    "record_stage_id",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[13]},
+				Columns: []*schema.Column{RecordsColumns[19]},
 			},
 			{
 				Name:    "record_played_at",
 				Unique:  false,
-				Columns: []*schema.Column{RecordsColumns[8]},
+				Columns: []*schema.Column{RecordsColumns[13]},
 			},
 		},
 	}
@@ -172,8 +225,12 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "level_name", Type: field.TypeString, Size: 2147483647},
+		{Name: "difficulty", Type: field.TypeInt},
 		{Name: "level_address", Type: field.TypeString, Size: 2147483647},
 		{Name: "jacket_address", Type: field.TypeString, Size: 2147483647},
+		{Name: "total_notes", Type: field.TypeInt},
+		{Name: "max_combo", Type: field.TypeInt},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "music_id", Type: field.TypeUUID},
 	}
 	// StagesTable holds the schema information for the "stages" table.
@@ -184,7 +241,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stages_musics_stages",
-				Columns:    []*schema.Column{StagesColumns[6]},
+				Columns:    []*schema.Column{StagesColumns[10]},
 				RefColumns: []*schema.Column{MusicsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -195,13 +252,27 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "platform_type", Type: field.TypeEnum, Enums: []string{"steam"}},
+		{Name: "platform_user_id", Type: field.TypeString, Size: 2147483647},
+		{Name: "platform_email", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "platform_avatar_url", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "platform_display_name", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "language", Type: field.TypeString, Size: 2147483647, Default: "ko"},
+		{Name: "platform_data", Type: field.TypeJSON, Nullable: true},
+		{Name: "is_verified", Type: field.TypeBool, Default: false},
 		{Name: "nickname", Type: field.TypeString, Size: 2147483647},
-		{Name: "steam_id", Type: field.TypeString, Unique: true, Size: 2147483647},
-		{Name: "steam_avatar_url", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "steam_default_language", Type: field.TypeString, Size: 2147483647, Default: "ko"},
+		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "last_login_at", Type: field.TypeTime},
-		{Name: "customize_data", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: "{}"},
-		{Name: "save_data", Type: field.TypeString, Nullable: true, Size: 2147483647, Default: "{}"},
+		{Name: "level", Type: field.TypeInt, Default: 1},
+		{Name: "exp", Type: field.TypeInt, Default: 0},
+		{Name: "coin", Type: field.TypeInt, Default: 0},
+		{Name: "gem", Type: field.TypeInt, Default: 0},
+		{Name: "settings", Type: field.TypeJSON},
+		{Name: "customize_data", Type: field.TypeJSON},
+		{Name: "save_data", Type: field.TypeJSON},
+		{Name: "is_banned", Type: field.TypeBool, Default: false},
+		{Name: "banned_until", Type: field.TypeTime, Nullable: true},
+		{Name: "ban_reason", Type: field.TypeString, Nullable: true, Size: 2147483647},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -210,9 +281,66 @@ var (
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "user_steam_id",
+				Name:    "user_platform_type_platform_user_id",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[3], UsersColumns[4]},
+			},
+			{
+				Name:    "user_nickname",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[11]},
+			},
+			{
+				Name:    "user_level",
 				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[4]},
+				Columns: []*schema.Column{UsersColumns[14]},
+			},
+			{
+				Name:    "user_last_login_at",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[13]},
+			},
+		},
+	}
+	// UserAchievementsColumns holds the columns for the "user_achievements" table.
+	UserAchievementsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "unlocked_at", Type: field.TypeTime},
+		{Name: "progress_data", Type: field.TypeJSON, Nullable: true},
+		{Name: "achievement_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
+	}
+	// UserAchievementsTable holds the schema information for the "user_achievements" table.
+	UserAchievementsTable = &schema.Table{
+		Name:       "user_achievements",
+		Columns:    UserAchievementsColumns,
+		PrimaryKey: []*schema.Column{UserAchievementsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_achievements_achievements_user_achievements",
+				Columns:    []*schema.Column{UserAchievementsColumns[5]},
+				RefColumns: []*schema.Column{AchievementsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "user_achievements_users_user_achievements",
+				Columns:    []*schema.Column{UserAchievementsColumns[6]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "userachievement_user_id_achievement_id",
+				Unique:  true,
+				Columns: []*schema.Column{UserAchievementsColumns[6], UserAchievementsColumns[5]},
+			},
+			{
+				Name:    "userachievement_unlocked_at",
+				Unique:  false,
+				Columns: []*schema.Column{UserAchievementsColumns[3]},
 			},
 		},
 	}
@@ -254,6 +382,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AchievementsTable,
 		CharactersTable,
 		ItemsTable,
 		MusicsTable,
@@ -261,6 +390,7 @@ var (
 		RecordsTable,
 		StagesTable,
 		UsersTable,
+		UserAchievementsTable,
 		UserPurchasesTable,
 	}
 )
@@ -273,6 +403,8 @@ func init() {
 	RecordsTable.ForeignKeys[2].RefTable = StagesTable
 	RecordsTable.ForeignKeys[3].RefTable = UsersTable
 	StagesTable.ForeignKeys[0].RefTable = MusicsTable
+	UserAchievementsTable.ForeignKeys[0].RefTable = AchievementsTable
+	UserAchievementsTable.ForeignKeys[1].RefTable = UsersTable
 	UserPurchasesTable.ForeignKeys[0].RefTable = UsersTable
 	UserPurchasesTable.ForeignKeys[1].RefTable = ProductsTable
 }
