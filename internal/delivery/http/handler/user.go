@@ -8,7 +8,7 @@ import (
 
 // PlatformSignInRequest 플랫폼별 로그인 요청 구조체
 type PlatformSignInRequest struct {
-	PlatformType string `json:"platform_type" validate:"required,oneof=steam"`
+	PlatformType string `json:"platform_type" validate:"required,oneof=steam stove"`
 	AppID        string `json:"app_id" validate:"required"`
 	Ticket       string `json:"ticket" validate:"required"`
 }

@@ -19,6 +19,8 @@ func (f *PlatformAuthFactoryImpl) GetStrategy(platformType string) (strategy.Pla
 	switch platformType {
 	case "steam":
 		return NewSteamAuthStrategy(), nil
+	case "stove":
+		return NewStoveAuthStrategy(), nil
 	default:
 		return nil, fmt.Errorf("지원되지 않는 플랫폼입니다: %s", platformType)
 	}
