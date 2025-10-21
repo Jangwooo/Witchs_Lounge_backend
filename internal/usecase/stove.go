@@ -2,24 +2,30 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/witchs-lounge_backend/ent"
 	"github.com/witchs-lounge_backend/internal/domain/entity"
 	"github.com/witchs-lounge_backend/internal/domain/repository"
 	"github.com/witchs-lounge_backend/internal/infrastructure/session"
 )
 
+type StoveInfo struct {
+	ID          string
+	Email       string
+	AvatarUrl   string
+	DisplayName string
+}
+
 // StoveUseCase Stove 인증 전용 UseCase
 type StoveUseCase interface {
-	VerifyToken(ctx context.Context, token string) (*entity.SessionResponse, error)
+	SignInWithStove(ctx context.Context, info StoveInfo) (*entity.SessionResponse, error)
 	FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error)
 }
 
 type stoveUseCase struct {
 	userRepo     repository.UserRepository
 	sessionStore session.SessionStore
-	// TODO: Stove 인증 전략 추가 필요
 }
 
 // NewStoveUseCase Stove UseCase 생성자
@@ -31,9 +37,29 @@ func NewStoveUseCase(userRepo repository.UserRepository, sessionStore session.Se
 }
 
 // VerifyToken Stove 토큰 검증 및 세션 생성 (로직 비움)
-func (u *stoveUseCase) VerifyToken(ctx context.Context, token string) (*entity.SessionResponse, error) {
-	// TODO: Stove 인증 로직 구현 필요
-	return nil, fmt.Errorf("Stove 인증이 아직 구현되지 않았습니다")
+func (u *stoveUseCase) SignInWithStove(ctx context.Context, info StoveInfo) (*entity.SessionResponse, error) {
+	user, err := u.userRepo.FindByPlatformUserID(ctx, "stove", info.ID)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			user, err = u.userRepo.Create(ctx, &entity.CreateUserRequest{
+				PlatformType:        "stove",
+				PlatformUserID:      info.ID,
+				PlatformEmail:       info.Email,
+				PlatformAvatarURL:   info.AvatarUrl,
+				PlatformDisplayName: info.DisplayName,
+			})
+
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	sid, err := u.sessionStore.Create(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	return user.ToSessionResponse(sid), nil
 }
 
 // FindByID ID로 사용자 조회

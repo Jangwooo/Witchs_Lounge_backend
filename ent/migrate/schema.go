@@ -252,7 +252,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "platform_type", Type: field.TypeEnum, Enums: []string{"steam"}},
+		{Name: "platform_type", Type: field.TypeEnum, Enums: []string{"steam", "stove"}},
 		{Name: "platform_user_id", Type: field.TypeString, Size: 2147483647},
 		{Name: "platform_email", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "platform_avatar_url", Type: field.TypeString, Nullable: true, Size: 2147483647},

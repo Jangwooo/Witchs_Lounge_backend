@@ -49,7 +49,6 @@ func (r *userRepository) Create(ctx context.Context, req *entity.CreateUserReque
 	create := r.client.User.Create().
 		SetPlatformType(user.PlatformType(req.PlatformType)).
 		SetPlatformUserID(req.PlatformUserID).
-		SetLanguage(req.Language).
 		SetIsVerified(req.IsVerified).
 		SetNickname(req.Nickname)
 
@@ -59,6 +58,9 @@ func (r *userRepository) Create(ctx context.Context, req *entity.CreateUserReque
 	}
 	if req.PlatformAvatarURL != "" {
 		create = create.SetPlatformAvatarURL(req.PlatformAvatarURL)
+	}
+	if req.Language != "" {
+		create = create.SetLanguage(req.Language)
 	}
 	if req.PlatformDisplayName != "" {
 		create = create.SetPlatformDisplayName(req.PlatformDisplayName)

@@ -40,7 +40,7 @@ func main() {
 	defer dbClient.Close()
 
 	// 2. Redis 초기화
-	_, sessionStore, err := bootstrap.SetupRedis("redis:6379", "", 0)
+	_, sessionStore, err := bootstrap.SetupRedis(*mode)
 	if err != nil {
 		log.Printf("Redis 초기화 실패: %v", err)
 	}

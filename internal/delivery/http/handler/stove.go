@@ -7,7 +7,19 @@ import (
 
 // StoveSignInRequest Stove 로그인 요청 구조체
 type StoveSignInRequest struct {
-	Token string `json:"token" validate:"required"`
+	ID          string `validate:"required" json:"id,omitempty"`
+	Email       string `validate:"required" json:"email,omitempty"`
+	AvatarUrl   string `validate:"required" json:"avatar_url,omitempty"`
+	DisplayName string `validate:"required" json:"display_name,omitempty"`
+}
+
+func (r StoveSignInRequest) ConvertToStoveInfo() usecase.StoveInfo {
+	return usecase.StoveInfo{
+		ID:          r.ID,
+		Email:       r.Email,
+		AvatarUrl:   r.AvatarUrl,
+		DisplayName: r.DisplayName,
+	}
 }
 
 // StoveHandler Stove 전용 핸들러
@@ -31,15 +43,8 @@ func (h *StoveHandler) SignIn(c *fiber.Ctx) error {
 		})
 	}
 
-	// 필수 필드 검증
-	if req.Token == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "토큰이 필요합니다",
-		})
-	}
-
 	// Stove 로그인 처리
-	sessionResp, err := h.stoveUseCase.VerifyToken(c.Context(), req.Token)
+	sessionResp, err := h.stoveUseCase.SignInWithStove(c.Context(), req.ConvertToStoveInfo())
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

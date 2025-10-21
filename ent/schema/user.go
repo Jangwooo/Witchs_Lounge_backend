@@ -25,7 +25,7 @@ func (User) Mixin() []ent.Mixin {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.Enum("platform_type").Values("steam").
+		field.Enum("platform_type").Values("steam", "stove").
 			Comment("플랫폼 타입"),
 		field.Text("platform_user_id").
 			Comment("플랫폼에서의 유저 ID"),

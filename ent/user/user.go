@@ -183,6 +183,7 @@ type PlatformType string
 // PlatformType values.
 const (
 	PlatformTypeSteam PlatformType = "steam"
+	PlatformTypeStove PlatformType = "stove"
 )
 
 func (pt PlatformType) String() string {
@@ -192,7 +193,7 @@ func (pt PlatformType) String() string {
 // PlatformTypeValidator is a validator for the "platform_type" field enum values. It is called by the builders before save.
 func PlatformTypeValidator(pt PlatformType) error {
 	switch pt {
-	case PlatformTypeSteam:
+	case PlatformTypeSteam, PlatformTypeStove:
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for platform_type field: %q", pt)

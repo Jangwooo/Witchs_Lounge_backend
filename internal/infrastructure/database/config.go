@@ -13,6 +13,10 @@ type Config struct {
 	Password string
 	DBName   string
 	SSLMode  string
+
+	RedisHost     string
+	RedisPassword string
+	RedisDB       int
 }
 
 func LoadConfig(mode *string) (*Config, error) {
@@ -38,6 +42,10 @@ func LoadConfig(mode *string) (*Config, error) {
 		Password: viper.GetString("DB_PASSWORD"),
 		DBName:   viper.GetString("DB_NAME"),
 		SSLMode:  viper.GetString("DB_SSLMODE"),
+
+		RedisHost:     viper.GetString("REDIS_HOST"),
+		RedisPassword: viper.GetString("REDIS_PASSWORD"),
+		RedisDB:       viper.GetInt("REDIS_DB"),
 	}
 
 	return config, nil

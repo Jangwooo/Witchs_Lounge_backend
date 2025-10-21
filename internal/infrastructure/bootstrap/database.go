@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"context"
 	"log"
 
 	"github.com/witchs-lounge_backend/ent"
@@ -19,6 +20,10 @@ func SetupDatabase(mode string) (*ent.Client, error) {
 	client, err := database.NewEntClient(dbConfig)
 	if err != nil {
 		return nil, err
+	}
+
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("데이터베이스 마이그레이션 실패: %v", err)
 	}
 
 	log.Printf("✅ 데이터베이스 연결 성공 (모드: %s)", mode)
