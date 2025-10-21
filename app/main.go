@@ -1,22 +1,14 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"log"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
-	"github.com/witchs-lounge_backend/internal/delivery/http/handler"
-	"github.com/witchs-lounge_backend/internal/delivery/http/router"
-	"github.com/witchs-lounge_backend/internal/infrastructure/database"
-	redisClient "github.com/witchs-lounge_backend/internal/infrastructure/redis"
-	"github.com/witchs-lounge_backend/internal/infrastructure/session"
-	"github.com/witchs-lounge_backend/internal/repository"
-	"github.com/witchs-lounge_backend/internal/strategy"
-	"github.com/witchs-lounge_backend/internal/usecase"
+	v1 "github.com/witchs-lounge_backend/internal/delivery/http/router/v1"
+	"github.com/witchs-lounge_backend/internal/infrastructure/bootstrap"
 )
 
 // @title           Witch's Lounge API
@@ -34,79 +26,61 @@ import (
 // @description Type "Bearer" followed by a space and JWT token.
 
 func main() {
-	// Load database configuration
-	mode := flag.String("mode", "prod", "mode")
+	// Parse command line flags
+	mode := flag.String("mode", "prod", "server mode (dev/prod)")
 	flag.Parse()
 
-	log.Printf("Current mode is: %s\n", *mode)
+	log.Printf("서버 시작 중... (모드: %s)", *mode)
 
-	dbConfig, err := database.LoadConfig(mode)
+	// 1. Database 초기화
+	dbClient, err := bootstrap.SetupDatabase(*mode)
 	if err != nil {
-		log.Fatalf("Failed to load database config: %v", err)
+		log.Fatalf("데이터베이스 초기화 실패: %v", err)
+	}
+	defer dbClient.Close()
+
+	// 2. Redis 초기화
+	_, sessionStore, err := bootstrap.SetupRedis("redis:6379", "", 0)
+	if err != nil {
+		log.Printf("Redis 초기화 실패: %v", err)
 	}
 
-	// Initialize database connection
-	client, err := database.NewEntClient(dbConfig)
-	if err != nil {
-		log.Fatalf("Failed to create database client: %v", err)
-	}
-	defer client.Close()
+	// 3. 애플리케이션 의존성 초기화
+	deps := bootstrap.SetupAppDependencies(dbClient, sessionStore)
 
-	// Redis 연결 설정
-	redisAddr := "redis:6379" // 스탠드얼론 Redis 주소
+	// 4. Fiber 앱 생성
+	app := fiber.New(fiber.Config{
+		AppName: "Witch's Lounge API",
+	})
 
-	log.Printf("Redis에 연결 중: %s", redisAddr)
+	// 5. 미들웨어 설정
+	app.Use(logger.New(logger.Config{
+		Format: "[${time}] ${status} - ${method} ${path} (${latency})\n",
+	}))
 
-	// Redis 클라이언트 생성
-	redisClient := redisClient.NewRedisClient(redisAddr, "", 0)
-
-	// Redis 연결 테스트
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	_, err = redisClient.Ping(ctx).Result()
-	if err != nil {
-		log.Printf("⚠️ Redis 연결 실패: %v", err)
-		log.Printf("⚠️ 세션 기능이 작동하지 않을 수 있습니다.")
-	} else {
-		log.Printf("Redis 연결 성공!")
-	}
-
-	// 세션 스토어 초기화 (스탠드얼론 모드)
-	sessionStore := session.NewRedisSessionStore(redisClient, 24*time.Hour)
-
-	// Initialize repositories
-	userRepo := repository.NewUserRepository(client)
-
-	// Initialize platform auth factory
-	authFactory := strategy.NewPlatformAuthFactory()
-
-	// Initialize use cases
-	userUseCase := usecase.NewUserUseCase(userRepo, sessionStore, authFactory)
-
-	// Initialize handlers
-	userHandler := handler.NewUserHandler(userUseCase)
-
-	// Create Fiber app
-	app := fiber.New()
-
-	app.Use(logger.New())
-
-	// Swagger documentation
+	// 6. Swagger 문서
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	// Health check
+	// 7. Health check
 	app.Get("/api/v1/health", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"status":      "ok",
 			"server_mode": *mode,
-			"redis_mode":  "standalone",
+			"version":     "1.0.0",
 		})
 	})
 
-	// Initialize routers
-	router.NewUserRouter(app, userHandler, sessionStore)
+	// 8. 라우터 설정
+	v1.SetupRoutes(app, &v1.RouterConfig{
+		SessionStore: deps.SessionStore,
+		StoveHandler: deps.StoveHandler,
+		UserHandler:  deps.UserHandler,
+	})
 
-	// Start server
-	log.Fatal(app.Listen(":8080"))
+	// 9. 서버 시작
+	log.Printf("서버 준비 완료!")
+
+	if err := app.Listen(":8080"); err != nil {
+		log.Fatalf("서버 시작 실패: %v", err)
+	}
 }
