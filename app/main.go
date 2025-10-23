@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
 	v1 "github.com/witchs-lounge_backend/internal/delivery/http/router/v1"
 	"github.com/witchs-lounge_backend/internal/infrastructure/bootstrap"
@@ -54,6 +55,8 @@ func main() {
 	})
 
 	// 5. 미들웨어 설정
+	app.Use(recover.New())
+
 	app.Use(logger.New(logger.Config{
 		Format: "[${time}] ${status} - ${method} ${path} (${latency})\n",
 	}))

@@ -63,6 +63,14 @@ type SessionResponse struct {
 	User      UserResponse `json:"user"`
 }
 
+// StoveSignInRequest Stove 로그인 요청 구조체
+type StoveSignInRequest struct {
+	ID          string `validate:"required" json:"id"`
+	Email       string `validate:"required" json:"email"`
+	AvatarUrl   string `validate:"required" json:"avatar_url"`
+	DisplayName string `validate:"required" json:"display_name"`
+}
+
 // NewUser creates a new User instance
 func NewUser(entUser *ent.User) *User {
 	return &User{

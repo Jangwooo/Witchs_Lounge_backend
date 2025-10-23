@@ -10,16 +10,14 @@ import (
 	"github.com/witchs-lounge_backend/internal/infrastructure/session"
 )
 
-type StoveInfo struct {
-	ID          string
-	Email       string
-	AvatarUrl   string
-	DisplayName string
-}
-
 // StoveUseCase Stove 인증 전용 UseCase
 type StoveUseCase interface {
-	SignInWithStove(ctx context.Context, info StoveInfo) (*entity.SessionResponse, error)
+	SignInWithStove(ctx context.Context, info struct {
+		ID          string
+		Email       string
+		AvatarUrl   string
+		DisplayName string
+	}) (*entity.SessionResponse, error)
 	FindByID(ctx context.Context, id uuid.UUID) (*entity.UserResponse, error)
 }
 
@@ -36,8 +34,13 @@ func NewStoveUseCase(userRepo repository.UserRepository, sessionStore session.Se
 	}
 }
 
-// VerifyToken Stove 토큰 검증 및 세션 생성 (로직 비움)
-func (u *stoveUseCase) SignInWithStove(ctx context.Context, info StoveInfo) (*entity.SessionResponse, error) {
+// SignInWithStove 유저 검증 및 세션 생성
+func (u *stoveUseCase) SignInWithStove(ctx context.Context, info struct {
+	ID          string
+	Email       string
+	AvatarUrl   string
+	DisplayName string
+}) (*entity.SessionResponse, error) {
 	user, err := u.userRepo.FindByPlatformUserID(ctx, "stove", info.ID)
 	if err != nil {
 		if ent.IsNotFound(err) {
