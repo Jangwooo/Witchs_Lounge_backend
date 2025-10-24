@@ -2,7 +2,7 @@ services:
   app:
     image: "kjw2262/witchs_lounge_backend:latest"
     ports:
-      - "8080:8080"
+      - "3030:8080"
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
@@ -29,7 +29,6 @@ services:
     restart: unless-stopped
 
   redis:
-    platform: linux/x86 # m1 MacOS의 경우
     image: redis:6.2
     container_name: redis
     environment:

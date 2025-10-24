@@ -286,19 +286,9 @@ var (
 				Columns: []*schema.Column{UsersColumns[3], UsersColumns[4]},
 			},
 			{
-				Name:    "user_nickname",
-				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[11]},
-			},
-			{
 				Name:    "user_level",
 				Unique:  false,
 				Columns: []*schema.Column{UsersColumns[14]},
-			},
-			{
-				Name:    "user_last_login_at",
-				Unique:  false,
-				Columns: []*schema.Column{UsersColumns[13]},
 			},
 		},
 	}

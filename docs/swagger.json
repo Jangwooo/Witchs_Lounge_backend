@@ -14,7 +14,195 @@
     },
     "host": "localhost:8080",
     "basePath": "/api/v1",
-    "paths": {},
+    "paths": {
+        "/stove/signin": {
+            "post": {
+                "description": "Stove 플랫폼 사용자 정보로 로그인 처리 및 세션 생성",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stove"
+                ],
+                "summary": "Stove 플랫폼으로 로그인",
+                "parameters": [
+                    {
+                        "description": "Stove 로그인 요청 정보",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.StoveSignInRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "로그인 성공 및 세션 정보",
+                        "schema": {
+                            "$ref": "#/definitions/entity.SessionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "요청 데이터 검증 실패",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "서버 내부 오류",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "세션 정보를 통해 현재 인증된 사용자의 상세 정보를 반환",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "현재 사용자 정보 조회",
+                "responses": {
+                    "200": {
+                        "description": "사용자 정보",
+                        "schema": {
+                            "$ref": "#/definitions/entity.UserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "인증 정보 없음",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "서버 내부 오류",
+                        "schema": {
+                            "$ref": "#/definitions/entity.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "details": {},
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.SessionResponse": {
+            "type": "object",
+            "properties": {
+                "session_id": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.UserResponse"
+                }
+            }
+        },
+        "entity.StoveSignInRequest": {
+            "type": "object",
+            "required": [
+                "avatar_url",
+                "display_name",
+                "email",
+                "id"
+            ],
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.UserResponse": {
+            "type": "object",
+            "properties": {
+                "coin": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "exp": {
+                    "type": "integer"
+                },
+                "gem": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_verified": {
+                    "type": "boolean"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "platform_avatar_url": {
+                    "type": "string"
+                },
+                "platform_display_name": {
+                    "type": "string"
+                },
+                "platform_email": {
+                    "type": "string"
+                },
+                "platform_type": {
+                    "type": "string"
+                },
+                "platform_user_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
     "securityDefinitions": {
         "BearerAuth": {
             "description": "Type \"Bearer\" followed by a space and JWT token.",
