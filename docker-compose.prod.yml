@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     image: "kjw2262/witchs_lounge_backend:latest"
@@ -31,7 +29,7 @@ services:
     restart: unless-stopped
 
   redis:
-    platform: linux/x86_64 # m1 MacOS의 경우
+    platform: linux/x86 # m1 MacOS의 경우
     image: redis:6.2
     container_name: redis
     environment:
